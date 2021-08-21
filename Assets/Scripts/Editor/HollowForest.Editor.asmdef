@@ -1,0 +1,16 @@
+{
+    "name": "HollowForest.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f1a4299331417574bb3da7954573a910"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
