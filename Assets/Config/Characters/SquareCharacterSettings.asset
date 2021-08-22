@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36fb83d11b5f4212af5f4af1a1808531, type: 3}
-  m_Name: PlayerCharacterSettings
+  m_Name: SquareCharacterSettings
   m_EditorClassIdentifier: 
   physicsSettings:
     moveSpeed: 10
+    roll: 0
     gravity: -60
     maxFallSpeed: -50
     jumpSettings:
@@ -47,4 +48,4 @@ MonoBehaviour:
       earlyJumpLeway: 0.1
       lateJumpLeway: 0.1
   afflictionSettings:
-    fallRecoveryTime: 0.5
+    fallRecoveryTime: 0.2

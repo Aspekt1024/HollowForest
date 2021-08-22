@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace HollowForest
 {
@@ -19,12 +20,15 @@ namespace HollowForest
         public void RegisterCharacter(Character character)
         {
             trackedCharacters.Add(new TrackedCharacter(character));
+            character.Physics.OnGoundHit += OnGoundHit;
         }
 
         public void UnregisterCharacter(Character character)
         {
             var index = trackedCharacters.FindIndex(c => c.Character == character);
             if (index < 0) return;
+            
+            trackedCharacters[index].Character.Physics.OnGoundHit -= OnGoundHit;
             trackedCharacters.RemoveAt(index);
         }
 
@@ -34,6 +38,11 @@ namespace HollowForest
             {
                 character.Character.Physics.Tick_Fixed();
             }
+        }
+
+        private void OnGoundHit(Character character, Vector3 hitPos, float fallHeight)
+        {
+            character.Effects.OnGroundHit(hitPos, fallHeight);
         }
     }
 }

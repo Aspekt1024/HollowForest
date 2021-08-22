@@ -23,34 +23,29 @@ namespace HollowForest.Effects
         {
             this.settings = settings;
             body = character.Rigidbody;
-
-            character.State.RegisterStateObserver(CharacterStates.Grounded, OnGroundedStateChanged);
         }
 
-        private void OnGroundedStateChanged(bool isGrounded)
+        public void OnGroundHit(Vector3 hitPosition, float fallHeight)
         {
-            if (isGrounded)
+            if (fallHeight > 2f)
             {
-                OnGrounded();
+                settings.model.rotation = Quaternion.identity;
+                body.angularVelocity = 0f;
+                settings.landedEffect.transform.position = hitPosition;
+                settings.landedEffect.Play();
             }
-        }
-
-        private void OnGrounded()
-        {
-            settings.model.rotation = Quaternion.identity;
-            body.angularVelocity = 0f;
             
-            settings.landedEffect.Play();
-        }
-
-        public void FallMinor()
-        {
-            settings.animator.Play(SmallSquishAnim, 0, 0f);
-        }
-
-        public void FallMajor()
-        {
-            settings.animator.Play(BigSquishAnim, 0, 0f);
+            if (fallHeight > 3f)
+            {
+                if (fallHeight > 6f)
+                {
+                    settings.animator.Play(BigSquishAnim, 0, 0f);
+                }
+                else
+                {
+                    settings.animator.Play(SmallSquishAnim, 0, 0f);
+                }
+            }
         }
     }
 }

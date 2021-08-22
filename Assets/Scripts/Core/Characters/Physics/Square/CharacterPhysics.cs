@@ -11,6 +11,7 @@ namespace HollowForest
         {
             [Header("Horizontal Movement")]
             public float moveSpeed = 10f;
+            public bool roll;
             
             [Header("Vertical Movement")]
             public float gravity = -60f;
@@ -28,14 +29,18 @@ namespace HollowForest
 
         private HorizontalInput horizontal;
         private bool canMove;
-        
+
         private Vector2 velocity;
         private float fallStartHeight;
+
+        public event Action<Character, Vector3, float> OnGoundHit = delegate { }; 
 
         private readonly Character character;
         private readonly Settings settings;
 
         private readonly JumpPhysics jump;
+        private readonly RollingPhysics rolling;
+        
         public CollisionSensor Collision { get; }
 
         public CharacterPhysics(Character character, Settings settings)
@@ -45,6 +50,7 @@ namespace HollowForest
 
             Collision = new CollisionSensor(character);
             jump = new JumpPhysics(character, settings.jumpSettings, Collision);
+            rolling = new RollingPhysics(character);
 
             character.State.RegisterStateObserver(CharacterStates.Jumping, OnJumpStateChanged);
             character.State.RegisterStateObserver(CharacterStates.Grounded, OnGroundedStateChanged);
@@ -69,26 +75,13 @@ namespace HollowForest
 
         public void Tick_Fixed()
         {
-            var pos = character.Transform.position;
+            var startPos = character.Rigidbody.position;
+            var pos = startPos;
+            velocity = character.Rigidbody.velocity;
             
-            // TODO lerp movement speed
             if (canMove)
             {
-                switch (horizontal)
-                {
-                    case HorizontalInput.None:
-                        velocity.x = 0;
-                        break;
-                    case HorizontalInput.Left:
-                        velocity.x = -settings.moveSpeed;
-                        break;
-                    case HorizontalInput.Right:
-                        velocity.x = settings.moveSpeed;
-                        break;
-                    default:
-                        velocity.x = 0;
-                        break;
-                }
+                CalculateHorizontalMovementVelocity();
             }
             else
             {
@@ -109,9 +102,35 @@ namespace HollowForest
                 pos.y += velocity.y * Time.fixedDeltaTime;
             }
 
-            pos = Collision.ValidatePosition(pos);
+            pos = Collision.ProcessBounds(pos);
+            velocity = (pos - startPos) / Time.fixedDeltaTime;
+
+            character.Rigidbody.velocity = velocity;
+        }
+
+        private void CalculateHorizontalMovementVelocity()
+        {
+            // TODO lerp movement speed
+            var newVelocity = velocity;
+            switch (horizontal)
+            {
+                case HorizontalInput.Left:
+                    newVelocity.x = -settings.moveSpeed;
+                    break;
+                case HorizontalInput.Right:
+                    newVelocity.x = settings.moveSpeed;
+                    break;
+                default:
+                    newVelocity.x = 0f;
+                    break;
+            }
             
-            character.Rigidbody.MovePosition(pos);
+            if (settings.roll)
+            {
+                newVelocity = rolling.CalculateVelocity(velocity, newVelocity, Collision.CurrentGradient);
+            }
+
+            velocity = newVelocity;
         }
 
         public void MoveLeft()
@@ -144,21 +163,17 @@ namespace HollowForest
         
         private void OnGroundedStateChanged(bool isGrounded)
         {
-            UpdateFallingState(character.State.GetState(CharacterStates.Jumping), isGrounded);
-
             if (isGrounded)
             {
-                var fallHeight = fallStartHeight - character.Transform.position.y;
+                var fallHeight = character.State.GetState(CharacterStates.IsFalling) ? fallStartHeight - character.Transform.position.y : 0f;
+                OnGoundHit?.Invoke(character, Collision.CurrentGroundPoint, fallHeight);
                 if (fallHeight > 6f)
                 {
-                    character.Effects.FallMajor();
                     character.Afflictions.BeginFallRecovery();
                 }
-                else if (fallHeight > 3f)
-                {
-                    character.Effects.FallMinor();
-                }
             }
+            
+            UpdateFallingState(character.State.GetState(CharacterStates.Jumping), isGrounded);
         }
 
         private void UpdateFallingState(bool isJumping, bool isGrounded)
@@ -169,8 +184,8 @@ namespace HollowForest
                 {
                     velocity.y = 0f;
                     fallStartHeight = character.Transform.position.y;
-                    character.State.SetState(CharacterStates.IsFalling, true);
                 }
+                character.State.SetState(CharacterStates.IsFalling, !isGrounded);
             }
             else
             {
