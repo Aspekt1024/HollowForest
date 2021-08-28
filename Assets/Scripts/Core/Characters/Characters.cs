@@ -21,6 +21,7 @@ namespace HollowForest
         {
             trackedCharacters.Add(new TrackedCharacter(character));
             character.Physics.OnGoundHit += OnGoundHit;
+            character.Physics.OnAttachedToWall += OnAttachedToWall;
         }
 
         public void UnregisterCharacter(Character character)
@@ -29,6 +30,7 @@ namespace HollowForest
             if (index < 0) return;
             
             trackedCharacters[index].Character.Physics.OnGoundHit -= OnGoundHit;
+            trackedCharacters[index].Character.Physics.OnAttachedToWall -= OnAttachedToWall;
             trackedCharacters.RemoveAt(index);
         }
 
@@ -42,7 +44,13 @@ namespace HollowForest
 
         private void OnGoundHit(Character character, Vector3 hitPos, float fallHeight)
         {
+            // TODO setup ground landing particle effect in some manager
             character.Effects.OnGroundHit(hitPos, fallHeight);
+        }
+
+        private void OnAttachedToWall(Character character, Vector3 attachPos)
+        {
+            character.Effects.OnAttachedToWall(attachPos);
         }
     }
 }

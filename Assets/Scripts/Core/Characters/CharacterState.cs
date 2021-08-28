@@ -5,10 +5,11 @@ namespace HollowForest
 {
     public enum CharacterStates
     {
-        Grounded,
-        Jumping,
+        IsGrounded,
+        IsJumping,
         IsFalling,
         IsRecovering,
+        IsAttachedToWall,
     }
     
     public class CharacterState

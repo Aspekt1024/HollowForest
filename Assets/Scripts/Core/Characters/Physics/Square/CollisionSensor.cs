@@ -10,12 +10,21 @@ namespace HollowForest.Physics
         private readonly Character character;
 
         public event Action OnCeilingHit = delegate { };
+        public event Action<Vector3> OnWallHit = delegate { };
 
         public bool IsGrounded { get; private set; }
         public float TimeUngrounded { get; private set; }
         public float CurrentGradient { get; private set; }
         public Vector3 CurrentGroundPoint { get; private set; }
 
+        private struct GroundHit
+        {
+            public bool isGrounded;
+            public float height;
+            public float gradient;
+            public Vector2 groundPoint;
+        }
+        
         public CollisionSensor(Character character)
         {
             this.character = character;
@@ -34,6 +43,7 @@ namespace HollowForest.Physics
                 if (hitRight.collider != null)
                 {
                     pos.x = hitRight.point.x - colliderExtents.x;
+                    OnWallHit?.Invoke(hitRight.point);
                 }
             }
             else
@@ -42,6 +52,7 @@ namespace HollowForest.Physics
                 if (hitLeft.collider != null)
                 {
                     pos.x = hitLeft.point.x + colliderExtents.x;
+                    OnWallHit?.Invoke(hitLeft.point);
                 }
             }
 
@@ -65,14 +76,6 @@ namespace HollowForest.Physics
             }
             
             return pos;
-        }
-
-        private struct GroundHit
-        {
-            public bool isGrounded;
-            public float height;
-            public float gradient;
-            public Vector2 groundPoint;
         }
 
         private GroundHit CalculateGroundHit(Vector3 currentPos, Vector3 diff)
@@ -151,11 +154,11 @@ namespace HollowForest.Physics
             if (!isOnGround && IsGrounded)
             {
                 TimeUngrounded = Time.time;
-                character.State.SetState(CharacterStates.Grounded, false);
+                character.State.SetState(CharacterStates.IsGrounded, false);
             }
             else if (isOnGround && !IsGrounded)
             {
-                character.State.SetState(CharacterStates.Grounded, true);
+                character.State.SetState(CharacterStates.IsGrounded, true);
             }
 
             IsGrounded = isOnGround;

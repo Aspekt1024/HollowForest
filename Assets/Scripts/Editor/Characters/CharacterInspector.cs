@@ -36,10 +36,10 @@ namespace HollowForest.Characters
             if (characterState == null) return;
             
             var stateDict = characterState.GetStateCopy();
-            foreach (var characterState in stateDict.Keys)
+            foreach (var state in stateDict.Keys)
             {
-                var s = stateDict[characterState];
-                var label = new Label(characterState + ": " + s);
+                var s = stateDict[state];
+                var label = new Label(state + ": " + s);
                 stateDisplay.Add(label);
             }
         }

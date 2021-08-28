@@ -13,38 +13,21 @@ namespace HollowForest.Physics
         {
             this.character = character;
             
-            character.State.RegisterStateObserver(CharacterStates.Grounded, OnGroundedStateChanged);
+            character.State.RegisterStateObserver(CharacterStates.IsGrounded, OnGroundedStateChanged);
         }
 
         public Vector2 CalculateVelocity(Vector2 currentVelocity, Vector2 requestedVelocity, float gradient)
         {
-            var newVelocity = requestedVelocity;
-            if (isGrounded)
+            var velocity = currentVelocity;
+            if (requestedVelocity.x > 0.1f)
             {
-                if (Mathf.Abs(gradient) > 0.1f)
-                {
-                    newVelocity.x += currentVelocity.x - gradient;
-                    newVelocity.y += currentVelocity.y + gradient;
-                }
+                velocity.x = Mathf.Max(Mathf.Abs(velocity.x), Mathf.Abs(requestedVelocity.x)) * Mathf.Sign(requestedVelocity.x);
             }
-
-            if (Mathf.Abs(newVelocity.x) < Mathf.Abs(currentVelocity.x))
+            else if (Mathf.Abs(gradient) < 0.05f)
             {
-                newVelocity.x = Mathf.Lerp(currentVelocity.x, newVelocity.x, Time.fixedDeltaTime * 5);
+                velocity.x = Mathf.Lerp(velocity.x, requestedVelocity.x, Time.fixedDeltaTime * 0.8f);
             }
-
-            if (isGrounded)
-            {
-                angularVelocity = -Mathf.Sign(newVelocity.x) * 2 * Mathf.PI * newVelocity.x * newVelocity.x;
-            }
-            else
-            {
-                angularVelocity = Mathf.Lerp(angularVelocity, 0f, Time.fixedDeltaTime * 0.1f);
-            }
-            
-            character.Rigidbody.angularVelocity = angularVelocity;
-
-            return newVelocity;
+            return velocity;
         }
 
         private void OnGroundedStateChanged(bool isGrounded)

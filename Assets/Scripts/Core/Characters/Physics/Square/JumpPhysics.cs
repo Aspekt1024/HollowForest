@@ -44,15 +44,16 @@ namespace HollowForest.Physics
             canJump = true;
             timeStartedJumping = -1000;
             
-            character.State.RegisterStateObserver(CharacterStates.Grounded, OnGroundStateChanged);
+            character.State.RegisterStateObserver(CharacterStates.IsGrounded, OnGroundStateChanged);
             character.State.RegisterStateObserver(CharacterStates.IsRecovering, OnRecoveryStateChanged);
+            character.State.RegisterStateObserver(CharacterStates.IsAttachedToWall, OnAttachedToWallStateChanged);
             collision.OnCeilingHit += OnCeilingHit;
         }
 
         public void JumpRequested()
         {
             isJumpHeld = true;
-            if (canJump && (collision.IsGrounded || Time.time < collision.TimeUngrounded + settings.lateJumpLeway))
+            if (IsJumpAllowed())
             {
                 BeginJump();
             }
@@ -60,6 +61,15 @@ namespace HollowForest.Physics
             {
                 timeJumpRequested = Time.time;
             }
+        }
+
+        private bool IsJumpAllowed()
+        {
+            if (!canJump) return false;
+            
+            if (character.State.GetState(CharacterStates.IsAttachedToWall)) return true;
+            
+            return collision.IsGrounded || Time.time < collision.TimeUngrounded + settings.lateJumpLeway;
         }
 
         public void JumpReleased()
@@ -72,7 +82,7 @@ namespace HollowForest.Physics
             if (isJumpActive && Time.time > timeStartedJumping + settings.maxAirTime)
             {
                 isJumpActive = false;
-                character.State.SetState(CharacterStates.Jumping, false);
+                character.State.SetState(CharacterStates.IsJumping, false);
                 return character.Transform.position.y;
             }
 
@@ -86,7 +96,7 @@ namespace HollowForest.Physics
             }
             
             isJumpActive = false;
-            character.State.SetState(CharacterStates.Jumping, false);
+            character.State.SetState(CharacterStates.IsJumping, false);
             return character.Transform.position.y;
         }
 
@@ -94,8 +104,13 @@ namespace HollowForest.Physics
         {
             if (isJumpActive) return;
             
+            if (character.State.GetState(CharacterStates.IsAttachedToWall))
+            {
+                character.State.SetState(CharacterStates.IsAttachedToWall, false);
+            }
+            
             isJumpActive = true;
-            character.State.SetState(CharacterStates.Jumping, true);
+            character.State.SetState(CharacterStates.IsJumping, true);
             timeStartedJumping = Time.time;
             initialHeight = character.Transform.position.y;
         }
@@ -122,12 +137,22 @@ namespace HollowForest.Physics
             }
         }
 
-        private void OnCeilingHit()
+        private void OnCeilingHit() => CancelJump();
+
+        private void OnAttachedToWallStateChanged(bool isAttachedToWall)
+        {
+            if (isAttachedToWall)
+            {
+                CancelJump();
+            }
+        }
+
+        private void CancelJump()
         {
             if (isJumpActive)
             {
                 isJumpActive = false;
-                character.State.SetState(CharacterStates.Jumping, false);
+                character.State.SetState(CharacterStates.IsJumping, false);
             }
         }
     }

@@ -47,5 +47,10 @@ namespace HollowForest.Effects
                 }
             }
         }
+
+        public void OnAttachedToWall(Vector3 hitPosition)
+        {
+            
+        }
     }
 }

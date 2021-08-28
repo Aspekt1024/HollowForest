@@ -1,4 +1,5 @@
 using System;
+using Core.Characters.Physics.Square;
 using HollowForest.Physics;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ namespace HollowForest
             public float maxFallSpeed = -50f;
 
             public JumpPhysics.Settings jumpSettings;
+            public WallPhysics.Settings wallSettings;
         }
 
         private enum HorizontalInput
@@ -34,12 +36,17 @@ namespace HollowForest
         private float fallStartHeight;
 
         public event Action<Character, Vector3, float> OnGoundHit = delegate { }; 
+        public event Action<Character, Vector3> OnAttachedToWall = delegate { }; 
 
         private readonly Character character;
         private readonly Settings settings;
 
         private readonly JumpPhysics jump;
+        private readonly WallPhysics wall;
         private readonly RollingPhysics rolling;
+
+        private float timeHorizontalVelocityOverrideEnds;
+        private float horizontalVelocityOverride;
         
         public CollisionSensor Collision { get; }
 
@@ -50,10 +57,12 @@ namespace HollowForest
 
             Collision = new CollisionSensor(character);
             jump = new JumpPhysics(character, settings.jumpSettings, Collision);
+            wall = new WallPhysics(character, settings.wallSettings, Collision);
+            
             rolling = new RollingPhysics(character);
 
-            character.State.RegisterStateObserver(CharacterStates.Jumping, OnJumpStateChanged);
-            character.State.RegisterStateObserver(CharacterStates.Grounded, OnGroundedStateChanged);
+            character.State.RegisterStateObserver(CharacterStates.IsJumping, OnJumpStateChanged);
+            character.State.RegisterStateObserver(CharacterStates.IsGrounded, OnGroundedStateChanged);
             character.State.RegisterStateObserver(CharacterStates.IsRecovering, OnRecoverStateChanged);
 
             // Set initial conditions
@@ -74,14 +83,21 @@ namespace HollowForest
         }
 
         public void Tick_Fixed()
-        {
+        {   
             var startPos = character.Rigidbody.position;
             var pos = startPos;
             velocity = character.Rigidbody.velocity;
-            
-            if (canMove)
+
+            if (canMove && !wall.IsAttachedToWall)
             {
-                CalculateHorizontalMovementVelocity();
+                if (Time.time >= timeHorizontalVelocityOverrideEnds)
+                {
+                    CalculateHorizontalMovementVelocity();
+                }
+                else
+                {
+                    velocity.x = horizontalVelocityOverride;
+                }
             }
             else
             {
@@ -94,7 +110,7 @@ namespace HollowForest
             {
                 pos.y = jump.CalculateHeight();
             }
-            else
+            else if (!wall.IsAttachedToWall)
             {
                 if (velocity.y > 0) velocity.y = 0;
                 velocity.y += settings.gravity * Time.fixedDeltaTime;
@@ -103,9 +119,20 @@ namespace HollowForest
             }
 
             pos = Collision.ProcessBounds(pos);
+            
             velocity = (pos - startPos) / Time.fixedDeltaTime;
 
             character.Rigidbody.velocity = velocity;
+            if (settings.roll)
+            {
+                character.Rigidbody.angularVelocity = -Mathf.Sign(velocity.x) * 2 * Mathf.PI * velocity.x * velocity.x;
+            }
+        }
+
+        public void SetHorizontalVelocity(float xVelocity, float duration)
+        {
+            timeHorizontalVelocityOverrideEnds = Time.time + duration;
+            horizontalVelocityOverride = xVelocity;
         }
 
         private void CalculateHorizontalMovementVelocity()
@@ -158,7 +185,7 @@ namespace HollowForest
         
         private void OnJumpStateChanged(bool isJumping)
         {
-            UpdateFallingState(isJumping, character.State.GetState(CharacterStates.Grounded));
+            UpdateFallingState(isJumping, character.State.GetState(CharacterStates.IsGrounded));
         }
         
         private void OnGroundedStateChanged(bool isGrounded)
@@ -173,7 +200,7 @@ namespace HollowForest
                 }
             }
             
-            UpdateFallingState(character.State.GetState(CharacterStates.Jumping), isGrounded);
+            UpdateFallingState(character.State.GetState(CharacterStates.IsJumping), isGrounded);
         }
 
         private void UpdateFallingState(bool isJumping, bool isGrounded)
