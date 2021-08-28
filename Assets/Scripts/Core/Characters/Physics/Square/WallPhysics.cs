@@ -48,12 +48,15 @@ namespace Core.Characters.Physics.Square
         {
             if (IsAttachedToWall) return;
 
+            if (!character.State.GetState(CharacterStates.IsGrappling)) return;
             if (character.State.GetState(CharacterStates.IsGrounded)) return;
             
             if (Time.time >= timeUnattached + settings.wallAttachmentCooldown)
             {
                 WallPosition = position;
                 character.State.SetState(CharacterStates.IsAttachedToWall, true);
+                
+                character.Effects.OnAttachedToWall(position);
             }
         }
 

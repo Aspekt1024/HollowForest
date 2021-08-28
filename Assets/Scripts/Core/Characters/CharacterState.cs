@@ -10,6 +10,7 @@ namespace HollowForest
         IsFalling,
         IsRecovering,
         IsAttachedToWall,
+        IsGrappling,
     }
     
     public class CharacterState

@@ -11,6 +11,7 @@ namespace HollowForest.Effects
             public Animator animator;
             public Transform model;
             public ParticleSystem landedEffect;
+            public ParticleSystem wallAttachEffect;
         }
 
         private readonly Settings settings;
@@ -50,7 +51,11 @@ namespace HollowForest.Effects
 
         public void OnAttachedToWall(Vector3 hitPosition)
         {
+            settings.model.rotation = Quaternion.identity;
+            body.angularVelocity = 0f;
             
+            settings.wallAttachEffect.transform.position = hitPosition;
+            settings.wallAttachEffect.Play();
         }
     }
 }

@@ -24,5 +24,15 @@ namespace HollowForest
 
         public void JumpPressed() => physics.JumpPressed();
         public void JumpReleased() => physics.JumpReleased();
+
+        public void GrapplePressed()
+        {
+            character.State.SetState(CharacterStates.IsGrappling, true);
+        }
+
+        public void GrappleReleased()
+        {
+            character.State.SetState(CharacterStates.IsGrappling, false);
+        }
     }
 }

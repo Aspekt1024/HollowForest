@@ -40,7 +40,18 @@ namespace HollowForest
             {
                 controllerCharacter.Director.JumpReleased();
             }
+        }
 
+        private void OnGrapple(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                controllerCharacter.Director.GrapplePressed();
+            }
+            else
+            {
+                controllerCharacter.Director.GrappleReleased();
+            }
         }
     }
 }
