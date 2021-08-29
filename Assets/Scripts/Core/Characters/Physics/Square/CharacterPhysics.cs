@@ -84,45 +84,7 @@ namespace HollowForest
 
         public void Tick_Fixed()
         {   
-            var startPos = character.Rigidbody.position;
-            var pos = startPos;
-            velocity = character.Rigidbody.velocity;
-
-            if (canMove && !wall.IsAttachedToWall)
-            {
-                if (Time.time >= timeHorizontalVelocityOverrideEnds)
-                {
-                    CalculateHorizontalMovementVelocity();
-                }
-                else
-                {
-                    velocity.x = horizontalVelocityOverride;
-                }
-            }
-            else
-            {
-                velocity.x = 0;
-            }
-
-            pos.x += velocity.x * Time.fixedDeltaTime;
-            
-            if (jump.IsJumping)
-            {
-                pos.y = jump.CalculateHeight();
-            }
-            else if (!wall.IsAttachedToWall)
-            {
-                if (velocity.y > 0) velocity.y = 0;
-                velocity.y += settings.gravity * Time.fixedDeltaTime;
-                velocity.y = Mathf.Max(settings.maxFallSpeed, velocity.y);
-                pos.y += velocity.y * Time.fixedDeltaTime;
-            }
-
-            pos = Collision.ProcessBounds(pos);
-            
-            velocity = (pos - startPos) / Time.fixedDeltaTime;
-
-            character.Rigidbody.velocity = velocity;
+            character.Rigidbody.velocity = CalculateVelocity();
             if (settings.roll)
             {
                 character.Rigidbody.angularVelocity = -Mathf.Sign(velocity.x) * 2 * Mathf.PI * velocity.x * velocity.x;
@@ -135,8 +97,54 @@ namespace HollowForest
             horizontalVelocityOverride = xVelocity;
         }
 
-        private void CalculateHorizontalMovementVelocity()
+        private Vector3 CalculateVelocity()
         {
+            var startPos = character.Rigidbody.position;
+            var pos = startPos;
+            velocity = character.Rigidbody.velocity;
+
+            velocity = CalculateHorizontalInfluencedVelocity(velocity);
+
+            pos.x += velocity.x * Time.fixedDeltaTime;
+            pos.y = CalculateHeight(velocity, pos);
+
+            pos = Collision.ProcessBounds(pos);
+            velocity = (pos - startPos) / Time.fixedDeltaTime;
+            
+            return velocity;
+        }
+
+        private float CalculateHeight(Vector3 velocity, Vector3 pos)
+        {
+            if (jump.IsJumping)
+            {
+                pos.y = jump.CalculateHeight();
+            }
+            else if (!wall.IsAttachedToWall)
+            {
+                if (velocity.y > 0) velocity.y = 0;
+                velocity.y += settings.gravity * Time.fixedDeltaTime;
+                velocity.y = Mathf.Max(settings.maxFallSpeed, velocity.y);
+                pos.y += velocity.y * Time.fixedDeltaTime;
+            }
+
+            return pos.y;
+        }
+
+        private Vector3 CalculateHorizontalInfluencedVelocity(Vector3 velocity)
+        {
+            if (!canMove || wall.IsAttachedToWall)
+            {
+                velocity.x = 0;
+                return velocity;
+            }
+            
+            if (Time.time < timeHorizontalVelocityOverrideEnds)
+            {
+                velocity.x = horizontalVelocityOverride;
+                return velocity;
+            }
+            
             // TODO lerp movement speed
             var newVelocity = velocity;
             switch (horizontal)
@@ -157,7 +165,7 @@ namespace HollowForest
                 newVelocity = rolling.CalculateVelocity(velocity, newVelocity, Collision.CurrentGradient);
             }
 
-            velocity = newVelocity;
+            return newVelocity;
         }
 
         public void MoveLeft()
