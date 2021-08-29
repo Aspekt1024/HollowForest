@@ -1,6 +1,3 @@
-using System;
-using UnityEngine;
-
 namespace HollowForest
 {
     /// <summary>
@@ -33,6 +30,11 @@ namespace HollowForest
         public void GrappleReleased()
         {
             character.State.SetState(CharacterStates.IsGrappling, false);
+        }
+
+        public void Interact()
+        {
+            character.Interaction.Interact();
         }
     }
 }

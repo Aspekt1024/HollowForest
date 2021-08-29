@@ -36,7 +36,6 @@ namespace HollowForest
         private float fallStartHeight;
 
         public event Action<Character, Vector3, float> OnGoundHit = delegate { }; 
-        public event Action<Character, Vector3> OnAttachedToWall = delegate { }; 
 
         private readonly Character character;
         private readonly Settings settings;
