@@ -99,12 +99,10 @@ namespace HollowForest
 
         private Vector3 CalculateVelocity()
         {
+            velocity = CalculateHorizontalInfluencedVelocity(character.Rigidbody.velocity);
+
             var startPos = character.Rigidbody.position;
             var pos = startPos;
-            velocity = character.Rigidbody.velocity;
-
-            velocity = CalculateHorizontalInfluencedVelocity(velocity);
-
             pos.x += velocity.x * Time.fixedDeltaTime;
             pos.y = CalculateHeight(velocity, pos);
 

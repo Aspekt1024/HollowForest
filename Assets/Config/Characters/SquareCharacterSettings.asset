@@ -47,5 +47,9 @@ MonoBehaviour:
       maxAirTime: 0.4
       earlyJumpLeway: 0.1
       lateJumpLeway: 0.1
+    wallSettings:
+      wallAttachmentCooldown: 0.2
+      wallJumpHorizontalVelocity: 10
+      wallJumpDuration: 0.12
   afflictionSettings:
     fallRecoveryTime: 0.2
