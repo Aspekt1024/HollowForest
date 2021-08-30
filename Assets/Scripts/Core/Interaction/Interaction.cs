@@ -19,16 +19,16 @@ namespace HollowForest.Interactivity
 
         public void SetInteractive(IInteractive interactive)
         {
-            lastInteractive?.OnUntargeted();
+            lastInteractive?.OnOverlapEnd(character);
             lastInteractive = interactive;
-            interactive.OnTargeted();
+            interactive.OnOverlap(character);
         }
 
         public void UnsetInteractive(IInteractive interactive)
         {
             if (interactive != lastInteractive) return;
             
-            interactive.OnUntargeted();
+            interactive.OnOverlapEnd(character);
             lastInteractive = null;
         }
     }

@@ -1,3 +1,5 @@
+using HollowForest.Data;
+using HollowForest.Events;
 using HollowForest.UI;
 using UnityEngine;
 
@@ -10,14 +12,21 @@ namespace HollowForest
         public UserInterface ui;
 
         public Character player;
+        public Configuration configuration;
 
         [HideInInspector] public Dialogue.Dialogue dialogue;
         [HideInInspector] public Characters characters;
+        [HideInInspector] public Objects.Objects objects;
+        [HideInInspector] public Data.Data data;
+        [HideInInspector] public GameplayEvents events;
 
         private void Awake()
         {
             characters = new Characters(this);
+            objects = new Objects.Objects(this);
             dialogue = new Dialogue.Dialogue();
+            data = new Data.Data(configuration);
+            events = new GameplayEvents(data);
             
             Initialise();
         }

@@ -3,7 +3,7 @@ namespace HollowForest.Interactivity
     public interface IInteractive
     {
         void OnInteract(Character character);
-        void OnTargeted();
-        void OnUntargeted();
+        void OnOverlap(Character character);
+        void OnOverlapEnd(Character character);
     }
 }

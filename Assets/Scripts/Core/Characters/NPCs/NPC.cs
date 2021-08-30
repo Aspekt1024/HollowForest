@@ -21,11 +21,11 @@ namespace HollowForest
             OnInteractedWith?.Invoke(character, characterID);
         }
 
-        public void OnTargeted()
+        public void OnOverlap(Character character)
         {
         }
 
-        public void OnUntargeted()
+        public void OnOverlapEnd(Character character)
         {
         }
     }

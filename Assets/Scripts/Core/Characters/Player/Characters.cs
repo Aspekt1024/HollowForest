@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using HollowForest.Dialogue;
 using UnityEngine;
 
 namespace HollowForest
@@ -74,13 +75,20 @@ namespace HollowForest
 
         private void OnInteractedWith(Character interactingCharacter, CharacterID characterIDInteractedWith)
         {
-            // TODO determine dialogue for given character-to-character interaction
-            var testDialogue = new List<string>()
+            var dialogue = game.configuration.dialogue;
+            dialogue.GetConversationAsync(interactingCharacter, characterIDInteractedWith, conversation =>
             {
-                characterIDInteractedWith + " says hello.",
-                "Goodbye now."
-            };
-            game.dialogue.BeginDialogue(testDialogue);
+                if (conversation.dialogueEvent == DialogueEvent.None)
+                {
+                    Debug.LogError($"No conversation found for {interactingCharacter} speaking to " +
+                                        $"{characterIDInteractedWith} given current state");
+                    return;
+                }
+                game.dialogue.BeginDialogue(conversation.dialogueLines, () =>
+                {
+                    game.events.DialogueEventAchieved(conversation.dialogueEvent);
+                });
+            });
         }
     }
 }
