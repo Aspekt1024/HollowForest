@@ -1,0 +1,4 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement name="NodeEditor" class="node-editor">
+    </VisualElement>
+</UXML>

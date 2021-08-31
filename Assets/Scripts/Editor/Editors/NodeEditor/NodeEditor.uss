@@ -1,0 +1,13 @@
+.node-editor {
+    position: relative;
+    background-color: black;
+}
+
+.node {
+    position: absolute;
+    background-color: white;
+}
+
+.node-selected {
+    
+}
