@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using HollowForest.Events;
 using UnityEngine;
 
 namespace HollowForest.Dialogue
@@ -10,19 +9,28 @@ namespace HollowForest.Dialogue
     public class DialogueConfig : ScriptableObject
     {
         [Serializable]
-        public struct Conversation
+        public class ConversationSet
         {
-            public CharacterID characterID;
+            public string sequenceGuid;
+            public string sequenceName;
+            public string interactedCharacter;
+            public List<int> requiredEvents;
+            public List<int> invalidatingEvents;
+            public List<Conversation> conversations;
+        }
+        
+        [Serializable]
+        public class Conversation
+        {
+            public string conversationGuid;
+            public string character;
+            public int achievedEventID;
+            public List<int> requiredEvents;
+            public List<int> invalidatingEvents;
             public List<string> dialogueLines;
-            public List<GameplayEvent> requiredGameplayEvents;
-            public List<DialogueEvent> requiredDialogueEvents;
-            public List<GameplayEvent> invalidatingGameplayEvents;
-            public List<DialogueEvent> invalidatingDialogueEvents;
-            public DialogueEvent dialogueEvent;
-            public bool isRepeatable;
         }
 
-        public List<Conversation> Conversations;
+        public List<ConversationSet> ConversationSets;
 
         private Data.Data data;
 
@@ -31,69 +39,60 @@ namespace HollowForest.Dialogue
             this.data = data;
         }
         
-        public async void GetConversationAsync(Character interactingCharacter, CharacterID characterInteractedWith, Action<Conversation> callback)
+        public async void GetConversationAsync(Character interactingCharacter, CharacterProfile characterInteractedWith, Action<Conversation> callback)
         {
             var dialogue = await GetConversation(interactingCharacter, characterInteractedWith);
             callback?.Invoke(dialogue);
         }
 
-        private Task<Conversation> GetConversation(Character interactingCharacter, CharacterID characterInteractedWith)
+        private Task<Conversation> GetConversation(Character interactingCharacter, CharacterProfile characterInteractedWith)
         {
-            foreach (var conversation in Conversations)
+            foreach (var set in ConversationSets)
             {
-                if (conversation.characterID != characterInteractedWith) continue;
-                if (!conversation.isRepeatable && data.GameData.achievedDialogueEvents.Contains(conversation.dialogueEvent)) continue;
-
-                var isRequirementMet = true;
-                foreach (var invalidatingGameplayEvent in conversation.invalidatingGameplayEvents)
-                {
-                    if (data.GameData.achievedGameplayEvents.Contains(invalidatingGameplayEvent))
-                    {
-                        isRequirementMet = false;
-                        break;
-                    }
-                }
+                if (!IsConditionsMet(set, characterInteractedWith)) continue;
                 
-                if (!isRequirementMet) continue;
-                
-                foreach (var invalidatingDialogueEvent in conversation.invalidatingDialogueEvents)
+                foreach (var conversation in set.conversations)
                 {
-                    if (data.GameData.achievedDialogueEvents.Contains(invalidatingDialogueEvent))
+                    if (IsConditionsMet(conversation))
                     {
-                        isRequirementMet = false;
-                        break;
+                        return Task.FromResult(conversation);
                     }
-                }
-                
-                if (!isRequirementMet) continue;
-
-                foreach (var gameplayEvent in conversation.requiredGameplayEvents)
-                {
-                    if (!data.GameData.achievedGameplayEvents.Contains(gameplayEvent))
-                    {
-                        isRequirementMet = false;
-                        break;
-                    }
-                }
-
-                if (!isRequirementMet) continue;
-
-                foreach (var dialogueEvent in conversation.requiredDialogueEvents)
-                {
-                    if (!data.GameData.achievedDialogueEvents.Contains(dialogueEvent))
-                    {
-                        isRequirementMet = false;
-                        break;
-                    }
-                }
-
-                if (isRequirementMet)
-                {
-                    return Task.FromResult(conversation);
                 }
             }
 
-            return null;
+            return Task.FromResult<Conversation>(null);
+        }
+
+        private bool IsConditionsMet(ConversationSet set, CharacterProfile characterProfile)
+        {
+            if (characterProfile.characterName != set.interactedCharacter) return false;
+            
+            foreach (var requiredEvent in set.requiredEvents)
+            {
+                if (!data.GameData.achievedEvents.Contains(requiredEvent)) return false;
+            }
+
+            foreach (var invalidatingEvent in set.invalidatingEvents)
+            {
+                if (data.GameData.achievedEvents.Contains(invalidatingEvent)) return false;
+            }
+
+            return true;
+        }
+
+        private bool IsConditionsMet(Conversation conversation)
+        {
+            foreach (var requiredEvent in conversation.requiredEvents)
+            {
+                if (!data.GameData.achievedEvents.Contains(requiredEvent)) return false;
+            }
+
+            foreach (var invalidatingEvent in conversation.invalidatingEvents)
+            {
+                if (data.GameData.achievedEvents.Contains(invalidatingEvent)) return false;
+            }
+
+            return true;
         }
     }
 }

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using HollowForest.Dialogue;
+using HollowForest.Events;
 using UnityEngine;
 
 namespace HollowForest.Data
@@ -7,6 +9,7 @@ namespace HollowForest.Data
     public class Configuration : ScriptableObject
     {
         public DialogueConfig dialogue;
+        public List<GameplayEvent> events;
 
         public void InitAwake(Data data)
         {

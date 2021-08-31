@@ -1,0 +1,13 @@
+.top-panel {
+    height: 30px;
+    width: 100%;
+    background-color: grey;
+}
+
+.dialogue-node {
+    background-color: grey;
+}
+
+.dialogue-node Label {
+    color: black;
+}

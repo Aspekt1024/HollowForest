@@ -22,7 +22,7 @@ namespace HollowForest.Objects
 
         public void OnOverlap(Character character)
         {
-            game.events.GameplayEventAchieved(gameplayevent);
+            game.events.EventAchieved(gameplayevent.eventID);
             game.objects.RegisterItem(this);
             Destroy(gameObject);
         }

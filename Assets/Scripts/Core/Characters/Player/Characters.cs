@@ -73,22 +73,9 @@ namespace HollowForest
             character.Effects.OnGroundHit(hitPos, fallHeight);
         }
 
-        private void OnInteractedWith(Character interactingCharacter, CharacterID characterIDInteractedWith)
+        private void OnInteractedWith(Character interactingCharacter, CharacterProfile characterIDInteractedWith)
         {
-            var dialogue = game.configuration.dialogue;
-            dialogue.GetConversationAsync(interactingCharacter, characterIDInteractedWith, conversation =>
-            {
-                if (conversation.dialogueEvent == DialogueEvent.None)
-                {
-                    Debug.LogError($"No conversation found for {interactingCharacter} speaking to " +
-                                        $"{characterIDInteractedWith} given current state");
-                    return;
-                }
-                game.dialogue.BeginDialogue(conversation.dialogueLines, () =>
-                {
-                    game.events.DialogueEventAchieved(conversation.dialogueEvent);
-                });
-            });
+            game.dialogue.InitiateDialogue(interactingCharacter, characterIDInteractedWith, null);
         }
     }
 }

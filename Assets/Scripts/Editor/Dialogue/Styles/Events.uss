@@ -1,0 +1,37 @@
+.event {
+    display: flex;
+    flex-direction: row;
+    
+    border-width: 1px;
+    border-color: dimgray;
+    border-radius: 3px;
+}
+
+.event-id {
+    border-width: 1px;
+    border-color: grey;
+    background-color: #3d374f;
+    
+    width: 55px;
+    
+    -unity-text-align: middle-center;
+}
+
+.event-contents {
+}
+
+.event-details {
+    display: flex;
+    flex-direction: row;
+}
+
+.event-name {
+    width: 120px;
+}
+
+.event-description {
+    width: 250px;
+}
+
+.event-button {
+}

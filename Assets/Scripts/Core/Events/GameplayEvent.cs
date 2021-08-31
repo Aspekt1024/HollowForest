@@ -1,8 +1,12 @@
+using System;
+
 namespace HollowForest.Events
 {
-    public enum GameplayEvent
+    [Serializable]
+    public class GameplayEvent
     {
-        None = 0,
-        TestEvent = 1000,
+        public int eventID;
+        public string eventName;
+        public string description;
     }
 }

@@ -12,34 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b400503be6f47e28e5729ca57078cbf, type: 3}
   m_Name: DialogueConfig
   m_EditorClassIdentifier: 
-  Conversations:
-  - characterID: 1000
-    dialogueLines:
-    - Hello, I am Test NPC.
-    - So um... anyway bye!
-    requiredGameplayEvents: 
-    requiredDialogueEvents: 
-    invalidatingGameplayEvents: 
-    invalidatingDialogueEvents: 
-    dialogueEvent: 1000
-    isRepeatable: 0
-  - characterID: 1000
-    dialogueLines:
-    - Oh, you're still here...
-    - heh.
-    requiredGameplayEvents: 
-    requiredDialogueEvents: e8030000
-    invalidatingGameplayEvents: e8030000
-    invalidatingDialogueEvents: 
-    dialogueEvent: 1001
-    isRepeatable: 1
-  - characterID: 1000
-    dialogueLines:
-    - You found my lucky coin!
-    - You're the best!
-    requiredGameplayEvents: e8030000
-    requiredDialogueEvents: e8030000
-    invalidatingGameplayEvents: 
-    invalidatingDialogueEvents: 
-    dialogueEvent: 1002
-    isRepeatable: 1
+  ConversationSets:
+  - sequenceGuid: 
+    sequenceName: 
+    interactedCharacter: 
+    requiredEvents: 
+    invalidatingEvents: 
+    conversations: []

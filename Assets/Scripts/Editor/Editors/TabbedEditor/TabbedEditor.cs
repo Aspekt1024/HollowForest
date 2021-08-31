@@ -17,6 +17,7 @@ namespace Aspekt.Editors
 
         private readonly List<Page<T, D>> pages = new List<Page<T, D>>();
 
+        protected virtual void OnPreEnable() { }
         protected virtual void OnPostEnable() { }
         protected abstract void AddPages(VisualElement root);
         
@@ -24,6 +25,7 @@ namespace Aspekt.Editors
         {
             var window = GetWindow<T>();
             window.titleContent = new GUIContent(WindowName);
+            
             
             root = rootVisualElement;
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{EditorRoot}/Templates/TabbedEditor.uxml");
@@ -33,6 +35,9 @@ namespace Aspekt.Editors
             root.styleSheets.Add(styleSheet);
 
             Data ??= new D().Load();
+            
+            OnPreEnable();
+            
             toolbar = new Toolbar<T, D>(root, Data);
             
             AddPages(root);

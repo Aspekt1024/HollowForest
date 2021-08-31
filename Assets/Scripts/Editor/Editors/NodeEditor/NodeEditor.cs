@@ -43,17 +43,16 @@ namespace Aspekt.Editors
 
         public void AddNode(Node node)
         {
-            var serializedNode = GetNode(node.guid);
-            if (serializedNode == null)
+            node.Init(this);
+            
+            var serializedNode = GetNode(new Guid(node.serializableGuid));
+            if (serializedNode != null)
             {
-                nodes.Add(node);
-            }
-            else
-            {
-                node = serializedNode;
+                node.SetBaseData(serializedNode);
+                RemoveNode(serializedNode);
             }
             
-            node.Init(this);
+            nodes.Add(node);
             element.Add(node.GetElement());
         }
 
@@ -61,21 +60,26 @@ namespace Aspekt.Editors
         {
             if (nodes.Contains(node))
             {
-                element.Remove(node.GetElement());
                 nodes.Remove(node);
             }
         }
 
         private Node GetNode(Guid guid)
         {
-            foreach (var node in nodes)
+            for (int i = nodes.Count - 1; i >= 0; i--)
             {
-                if (node.guid == guid)
+                if (string.IsNullOrEmpty(nodes[i].serializableGuid))
                 {
-                    return node;
+                    nodes.RemoveAt(i);
+                    continue;
+                }
+                
+                if (new Guid(nodes[i].serializableGuid) == guid)
+                {
+                    return nodes[i];
                 }
             }
-
+            
             return null;
         }
     }

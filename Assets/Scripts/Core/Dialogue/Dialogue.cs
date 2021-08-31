@@ -1,32 +1,53 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using HollowForest.Events;
 using HollowForest.UI;
+using UnityEngine;
 
 namespace HollowForest.Dialogue
 {
     public class Dialogue : DialogueUI.IObserver
     {
         private UserInterface ui;
+        private GameplayEvents events;
+        private DialogueConfig config;
 
         private bool isShowingDialogue;
-        private Queue<string> dialogueQueue = new Queue<string>();
+        private DialogueConfig.Conversation currentConversation;
+        private int currentConversationLineIndex;
 
         private Action onDialogueCompleteCallback;
 
-        public void InitAwake(UserInterface ui)
+        public void InitAwake(GameplayEvents events, UserInterface ui, DialogueConfig config)
         {
             this.ui = ui;
-            
+            this.events = events;
+            this.config = config;
             ui.GetUI<DialogueUI>().RegisterObserver(this);
         }
 
-        public void BeginDialogue(List<string> dialogueLines, Action onDialogueCompleteCallback)
+        public void InitiateDialogue(Character interactingCharacter, CharacterProfile characterInteractedWith, Action onDialogueCompleteCallback)
+        {
+            this.onDialogueCompleteCallback = onDialogueCompleteCallback;
+            config.GetConversationAsync(interactingCharacter, characterInteractedWith, conversation =>
+            {
+                if (conversation == null)
+                {
+                    Debug.LogError($"No conversation found for {interactingCharacter} speaking to " +
+                                   $"{characterInteractedWith} given current game state");
+                    onDialogueCompleteCallback?.Invoke();
+                    return;
+                }
+                BeginDialogue(conversation);
+            });
+            
+        }
+
+        private void BeginDialogue(DialogueConfig.Conversation conversation)
         {
             isShowingDialogue = true;
-            this.onDialogueCompleteCallback = onDialogueCompleteCallback;
             
-            dialogueQueue = new Queue<string>(dialogueLines);
+            currentConversation = conversation;
+            currentConversationLineIndex = 0;
             
             ShowNextDialogue();
             ui.Show<DialogueUI>();
@@ -46,16 +67,19 @@ namespace HollowForest.Dialogue
 
         private void ShowNextDialogue()
         {
-            if (!dialogueQueue.Any())
+            if (currentConversationLineIndex >= currentConversation.dialogueLines.Count)
             {
                 isShowingDialogue = false;
                 ui.Hide<DialogueUI>();
+                
+                events.EventAchieved(currentConversation.achievedEventID);
                 onDialogueCompleteCallback?.Invoke();
                 return;
             }
             
             var dialogueUI = ui.GetUI<DialogueUI>();
-            dialogueUI.SetText(dialogueQueue.Dequeue());
+            dialogueUI.SetText(currentConversation.dialogueLines[currentConversationLineIndex]);
+            currentConversationLineIndex++;
         }
     }
 }

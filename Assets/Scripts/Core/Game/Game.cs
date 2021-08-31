@@ -36,7 +36,7 @@ namespace HollowForest
             // Order of initialisation is critical here to avoid race conditions
             ui.InitAwake();
             inputManager.InitAwake(ui);
-            dialogue.InitAwake(ui);
+            dialogue.InitAwake(events, ui, data.Config.dialogue);
         }
 
         private void Start()

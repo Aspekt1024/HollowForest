@@ -1,15 +1,5 @@
 {
-    "currentPage": "Nodes",
-    "nodes": [
-        {
-            "position": {
-                "x": 195.0,
-                "y": 118.0
-            },
-            "size": {
-                "x": 100.0,
-                "y": 40.0
-            }
-        }
-    ]
+    "currentPage": "Events",
+    "configPath": "Assets/Data/Configuration.asset",
+    "nodes": []
 }

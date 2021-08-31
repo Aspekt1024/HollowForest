@@ -7,13 +7,13 @@ namespace Aspekt.Editors
     [Serializable]
     public class Node : MouseManipulator
     {
+        public string serializableGuid;
+        [SerializeField] private Vector2 position;
+        [SerializeField] private Vector2 size;
+
         private VisualElement element;
         private NodeEditor parent;
-
-        [SerializeField] public Guid guid;
-        [SerializeField] public Vector2 position;
-        [SerializeField] public Vector2 size;
-
+        
         private bool isSelected;
         private bool isMouseDown;
         private Vector2 initialMousePos;
@@ -21,7 +21,7 @@ namespace Aspekt.Editors
 
         protected Node(Guid guid)
         {
-            this.guid = guid;
+            serializableGuid = guid.ToString();
         }
 
         public void Init(NodeEditor parent)
@@ -39,9 +39,7 @@ namespace Aspekt.Editors
                 element = new VisualElement();
                 element.AddToClassList("node");
 
-                element.style.width = size.x;
-                element.style.height = size.y;
-                SetPosition(position);
+                SetBaseData(this);
 
                 Populate(element);
                 
@@ -49,6 +47,13 @@ namespace Aspekt.Editors
             }
 
             return element;
+        }
+
+        public void SetBaseData(Node data)
+        {
+            serializableGuid = data.serializableGuid;
+            SetPosition(data.position);
+            SetSize(data.size);
         }
 
         public virtual Vector2 GetConnectingPosition(Vector2 fromPos)

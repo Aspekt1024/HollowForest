@@ -12,13 +12,13 @@ namespace HollowForest
     
     public class NPC : MonoBehaviour, IInteractive
     {
-        public CharacterID characterID;
+        public CharacterProfile profile;
         
-        public event Action<Character, CharacterID> OnInteractedWith = delegate { };
+        public event Action<Character, CharacterProfile> OnInteractedWith = delegate { };
 
         public void OnInteract(Character character)
         {
-            OnInteractedWith?.Invoke(character, characterID);
+            OnInteractedWith?.Invoke(character, profile);
         }
 
         public void OnOverlap(Character character)
