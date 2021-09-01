@@ -22,12 +22,16 @@ namespace HollowForest.Dialogue
         [Serializable]
         public class Conversation
         {
-            public string conversationGuid;
+            public string dialogueGuid;
             public string character;
-            public int achievedEventID;
-            public List<int> requiredEvents;
-            public List<int> invalidatingEvents;
-            public List<string> dialogueLines;
+            public List<int> requiredEvents = new List<int>();
+            public List<int> invalidatingEvents = new List<int>();
+            public List<string> dialogueLines = new List<string>();
+
+            public Conversation()
+            {
+                dialogueGuid = Guid.NewGuid().ToString();
+            }
         }
 
         public List<ConversationSet> ConversationSets;

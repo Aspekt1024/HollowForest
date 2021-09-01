@@ -1,5 +1,17 @@
 {
-    "currentPage": "Events",
+    "currentPage": "Nodes",
     "configPath": "Assets/Data/Configuration.asset",
-    "nodes": []
+    "nodes": [
+        {
+            "serializableGuid": "1631afd5-8a46-4099-b1c2-e7ccdf293082",
+            "position": {
+                "x": 108.0,
+                "y": 95.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        }
+    ]
 }

@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Aspekt.Editors;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,6 +21,8 @@ namespace HollowForest.Dialogue.Pages
 
         public override void UpdateContents()
         {
+            nodeEditor.Clear();
+            
             if (Editor.Config == null || Editor.Config.dialogue == null) return;
             var config = Editor.Config.dialogue;
 
@@ -30,13 +31,27 @@ namespace HollowForest.Dialogue.Pages
 
             foreach (var conversation in config.ConversationSets[setIndex].conversations)
             {
-                if (string.IsNullOrEmpty(conversation.conversationGuid))
+                if (string.IsNullOrEmpty(conversation.dialogueGuid))
                 {
-                    conversation.conversationGuid = Guid.NewGuid().ToString();
+                    conversation.dialogueGuid = Guid.NewGuid().ToString();
                 }
-                var node = new DialogueNode(conversation);
+                var node = new DialogueNode(this, conversation);
                 nodeEditor.AddNode(node);
             }
+        }
+
+        public void RemoveConversation(DialogueConfig.Conversation conversation)
+        {
+            var index = Editor.Config.dialogue.ConversationSets[setIndex].conversations
+                .FindIndex(c => c.dialogueGuid == conversation.dialogueGuid);
+
+            if (index >= 0)
+            {
+                Editor.RecordUndo(Editor.Config, "Remove Dialogue");
+                Editor.Config.dialogue.ConversationSets[setIndex].conversations.RemoveAt(index);
+            }
+            
+            nodeEditor.RemoveNode(conversation.dialogueGuid);
         }
 
         protected override void SetupUI(VisualElement root)
@@ -48,7 +63,21 @@ namespace HollowForest.Dialogue.Pages
             nodeEditor.SetNodeList(Editor.Data.nodes);
             root.Add(nodeEditor.GetElement());
             
+            nodeEditor.AddContextMenuItem("Create Dialogue", CreateNewDialogue);
+            
             UpdateContents();
+        }
+
+        private void CreateNewDialogue(object mousePos)
+        {
+            var newConversation = new DialogueConfig.Conversation();
+            Editor.RecordUndo(Editor.Config, "Add new dialogue");
+            
+            Editor.Config.dialogue.ConversationSets[setIndex].conversations.Add(newConversation);
+            
+            var node = new DialogueNode(this, newConversation);
+            nodeEditor.AddNode(node);
+            node.SetPosition((Vector2)mousePos);
         }
     }
 }

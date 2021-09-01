@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,21 +13,26 @@ namespace Aspekt.Editors
         [SerializeField] private Vector2 size;
 
         private VisualElement element;
-        private NodeEditor parent;
+        protected NodeEditor Parent;
         
         private bool isSelected;
         private bool isMouseDown;
         private Vector2 initialMousePos;
         private Vector2 initialNodePos;
+        
+        private readonly ContextMenu contextMenu;
+        
+        public bool HasElement => element != null;
 
         protected Node(Guid guid)
         {
+            contextMenu = new ContextMenu();
             serializableGuid = guid.ToString();
         }
 
         public void Init(NodeEditor parent)
         {
-            this.parent = parent;
+            Parent = parent;
             GetElement();
         }
 
@@ -48,6 +54,8 @@ namespace Aspekt.Editors
 
             return element;
         }
+        
+        public void AddContextMenuItem(string label, GenericMenu.MenuFunction2 function) => contextMenu.AddContextMenuItem(label, function);
 
         public void SetBaseData(Node data)
         {
@@ -84,11 +92,11 @@ namespace Aspekt.Editors
             return pos;
         }
 
-        protected void SetPosition(Vector2 newPos)
+        public void SetPosition(Vector2 newPos)
         {
             position = newPos;
-            position.x = Mathf.Clamp(position.x, 0, parent.Size.x - size.x);
-            position.y = Mathf.Clamp(position.y, 0, parent.Size.y - size.y);
+            position.x = Mathf.Clamp(position.x, 0, Parent.Size.x - size.x);
+            position.y = Mathf.Clamp(position.y, 0, Parent.Size.y - size.y);
             
             element.style.left = position.x;
             element.style.top = position.y;
@@ -143,6 +151,11 @@ namespace Aspekt.Editors
             {
                 isMouseDown = false;
                 target.ReleaseMouse();
+                e.StopPropagation();
+            }
+            else if (e.button == 1)
+            {
+                contextMenu.ShowContextMenu(e.mousePosition);
                 e.StopPropagation();
             }
         }

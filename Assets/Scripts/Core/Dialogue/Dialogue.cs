@@ -72,7 +72,7 @@ namespace HollowForest.Dialogue
                 isShowingDialogue = false;
                 ui.Hide<DialogueUI>();
                 
-                events.EventAchieved(currentConversation.achievedEventID);
+                events.DialogueComplete(currentConversation.dialogueGuid);
                 onDialogueCompleteCallback?.Invoke();
                 return;
             }
