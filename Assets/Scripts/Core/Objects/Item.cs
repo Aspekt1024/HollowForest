@@ -6,7 +6,7 @@ namespace HollowForest.Objects
 {
     public class Item : MonoBehaviour, IInteractive
     {
-        public GameplayEvent gameplayevent;
+        public GameplayEvent gameplayEvent;
         
         private Game game;
 
@@ -22,7 +22,7 @@ namespace HollowForest.Objects
 
         public void OnOverlap(Character character)
         {
-            game.events.EventAchieved(gameplayevent.eventID);
+            game.events.EventAchieved(gameplayEvent.eventID);
             game.objects.RegisterItem(this);
             Destroy(gameObject);
         }

@@ -15,5 +15,12 @@ namespace HollowForest.Data
         {
             dialogue.InitAwake(data);
         }
+
+#if UNITY_EDITOR
+        public static Configuration LoadConfigurationInEditor()
+        {
+            return UnityEditor.AssetDatabase.LoadAssetAtPath<Configuration>("Assets/Data/Configuration.asset");
+        }
+#endif
     }
 }

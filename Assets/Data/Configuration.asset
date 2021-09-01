@@ -15,5 +15,11 @@ MonoBehaviour:
   dialogue: {fileID: 11400000, guid: b3233afc3aca6c543ab54d1819fe4a95, type: 2}
   events:
   - eventID: 10000
-    eventName: Untitled Event
-    description: 
+    eventName: Get Lucky Coin
+    description: Find and collect the lucky coin
+  - eventID: 10001
+    eventName: Another event
+    description: Another test event
+  - eventID: 10002
+    eventName: Test event
+    description: A test event

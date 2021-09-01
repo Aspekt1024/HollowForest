@@ -66,7 +66,7 @@ namespace HollowForest.Dialogue.Pages
             
             var eventDescription = new TextField() {value = gameplayEvent.description};
             eventDescription.AddToClassList("event-description");
-            eventName.RegisterValueChangedCallback(e => EventDescriptionUpdated(gameplayEvent, e.newValue));
+            eventDescription.RegisterValueChangedCallback(e => EventDescriptionUpdated(gameplayEvent, e.newValue));
             eventDetails.Add(eventDescription);
             
             eventContents.Add(eventDetails);

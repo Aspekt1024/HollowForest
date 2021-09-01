@@ -5225,7 +5225,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 494bc9543df3439ba4d762622474822a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameplayevent: 1000
+  gameplayEvent:
+    eventID: 10000
+    eventName: Get Lucky Coin
+    description: Find and collect the lucky coin
 --- !u!4 &362110986
 Transform:
   m_ObjectHideFlags: 0
@@ -6289,7 +6292,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2860b098ae194a9c9806be984a5df365, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterID: 1000
+  profile:
+    guid: 
+    characterName: 
 --- !u!1 &1500699587
 GameObject:
   m_ObjectHideFlags: 0
