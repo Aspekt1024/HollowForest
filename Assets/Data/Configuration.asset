@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: Configuration
   m_EditorClassIdentifier: 
   dialogue: {fileID: 11400000, guid: b3233afc3aca6c543ab54d1819fe4a95, type: 2}
-  events: []
+  events:
+  - eventID: 10000
+    eventName: Untitled Event
+    description: 

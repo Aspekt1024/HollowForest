@@ -57,6 +57,7 @@ namespace Aspekt.Editors
         {
             Undo.RecordObject(data, undoMessage);
             toolbar.ShowModified();
+            EditorUtility.SetDirty(data);
         }
 
         private void DataFilesUpdated()
