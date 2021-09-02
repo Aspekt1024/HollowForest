@@ -1,0 +1,27 @@
+.profile {
+    display: flex;
+    flex-direction: row;
+
+    border-width: 1px;
+    border-color: dimgray;
+    border-radius: 3px;
+}
+
+.profile-contents {
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-name {
+    width: 120px;
+}
+
+.profile-description {
+    width: 250px;
+}
+
+.profile-button {
+}

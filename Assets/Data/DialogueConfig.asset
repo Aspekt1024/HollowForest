@@ -13,9 +13,26 @@ MonoBehaviour:
   m_Name: DialogueConfig
   m_EditorClassIdentifier: 
   ConversationSets:
-  - sequenceGuid: 
-    sequenceName: 
-    interactedCharacter: 
+  - setGuid: 
+    setName: Test Conversation
+    interactedCharacter:
+      guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
+      characterName: Test character
+      description: A test character
     requiredEvents: 
     invalidatingEvents: 
-    conversations: []
+    conversations:
+    - dialogueGuid: 1631afd5-8a46-4099-b1c2-e7ccdf293082
+      character: 
+      requiredEvents: 
+      invalidatingEvents: 
+      dialogueLines:
+      - Hi there, hello!
+      - I'm a blue square.
+      - I lost my lucky coin :(
+    - dialogueGuid: 09784d42-8ccf-4cdf-9c91-44d241fc117b
+      character: 
+      requiredEvents: 
+      invalidatingEvents: 
+      dialogueLines:
+      - Have you seen my lucky coin?

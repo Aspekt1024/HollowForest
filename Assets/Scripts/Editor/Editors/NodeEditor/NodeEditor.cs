@@ -69,6 +69,9 @@ namespace Aspekt.Editors
             }
             
             nodes.Add(node);
+            node.OnMove += OnNodeMoved;
+            node.OnSelect += OnNodeSelected;
+            
             element.Add(node.GetElement());
         }
 
@@ -77,7 +80,7 @@ namespace Aspekt.Editors
             var index = nodes.FindIndex(n => n.serializableGuid == guid);
             if (index >= 0)
             {
-                if (nodes[index].HasElement)
+                if (nodes[index].HasElement && element.Contains(nodes[index].GetElement()))
                 {
                     element.Remove(nodes[index].GetElement());
                 }
@@ -129,6 +132,20 @@ namespace Aspekt.Editors
                 contextMenu.ShowContextMenu(e.mousePosition); // TODO account for nodeEditor position, which is not at 0,0
                 e.StopPropagation();
             }
+        }
+
+        private void OnNodeSelected(Node node)
+        {
+            foreach (var n in nodes)
+            {
+                if (n == node) continue;
+                n.ShowUnselected();
+            }
+        }
+
+        private void OnNodeMoved(Node node)
+        {
+            
         }
         
     }

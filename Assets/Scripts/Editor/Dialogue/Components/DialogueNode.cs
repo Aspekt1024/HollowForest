@@ -10,24 +10,79 @@ namespace HollowForest.Dialogue
     public class DialogueNode : Node
     {
         private readonly DialogueConfig.Conversation conversation;
-        
-        public DialogueNode(NodePage nodePage, DialogueConfig.Conversation conversation) : base(new Guid(conversation.dialogueGuid))
+
+        private readonly DialoguePage dialoguePage;
+        private readonly int conversationIndex;
+
+        private static readonly StyleProfile Styles = new StyleProfile
         {
+            baseStyle = "dialogue-node",
+            selectedStyle = "dialogue-node-selected",
+            unselectedStyle = "dialogue-node-unselected",
+        };
+        
+        public DialogueNode(DialoguePage dialoguePage, DialogueConfig.Conversation conversation, int index) : base(new Guid(conversation.dialogueGuid), Styles)
+        {   
+            this.dialoguePage = dialoguePage;
             this.conversation = conversation;
+            conversationIndex = index;
             
-            AddContextMenuItem("Remove item", mousePos => nodePage.RemoveConversation(conversation));
+            AddContextMenuItem("Delete", mousePos => dialoguePage.RemoveConversation(conversation));
         }
 
-        protected override void Populate(VisualElement element)
+        protected override void Populate(VisualElement content)
         {
+            content.Clear();
+            
             SetSize(new Vector2(200, 120));
-            element.AddToClassList("dialogue-node");
+            content.AddToClassList("dialogue-node");
 
-            element.Add(new Label(conversation.dialogueGuid));
-            foreach (var dialogueLine in conversation.dialogueLines)
+            if (conversationIndex == 0)
             {
-                element.Add(new Label("> " + dialogueLine));
+                content.AddToClassList("first-conversation");
             }
+            
+            for (int i = 0; i < conversation.dialogueLines.Count; i++)
+            {
+                content.Add(CreateDialogueLineDisplay(content, conversation.dialogueLines[i], i));
+            }
+
+            var addLineButton = new Button {text = "Add line"};
+            addLineButton.clicked += () =>
+            {
+                dialoguePage.RecordDialogueUndo("Add dialogue line");
+                conversation.dialogueLines.Add("");
+                Populate(content);
+            };
+            content.Add(addLineButton);
+        }
+
+        private VisualElement CreateDialogueLineDisplay(VisualElement content, string text, int lineIndex)
+        {
+            var dialogueLine = new VisualElement();
+            dialogueLine.AddToClassList("dialogue-line");
+
+            var textField = new TextField {value = text, multiline = true};
+            textField.AddToClassList("dialogue-line-text");
+            textField.RegisterValueChangedCallback(e =>
+            {
+                dialoguePage.RecordDialogueUndo("Modify dialogue");
+                conversation.dialogueLines[lineIndex] = e.newValue;
+            });
+
+            dialogueLine.Add(textField);
+            
+            var removeLineButton = new Button {text = "x"};
+            removeLineButton.clicked += () =>
+            {
+                dialoguePage.RecordDialogueUndo("Remove dialogue line");
+                conversation.dialogueLines.RemoveAt(lineIndex);
+                Populate(content);
+            };
+            
+            dialogueLine.Add(removeLineButton);
+            
+            return dialogueLine;
         }
     }
 }

@@ -11,9 +11,9 @@ namespace HollowForest.Dialogue
         [Serializable]
         public class ConversationSet
         {
-            public string sequenceGuid;
-            public string sequenceName;
-            public string interactedCharacter;
+            public string setGuid;
+            public string setName;
+            public CharacterProfile interactedCharacter;
             public List<int> requiredEvents;
             public List<int> invalidatingEvents;
             public List<Conversation> conversations;
@@ -69,7 +69,7 @@ namespace HollowForest.Dialogue
 
         private bool IsConditionsMet(ConversationSet set, CharacterProfile characterProfile)
         {
-            if (characterProfile.characterName != set.interactedCharacter) return false;
+            if (characterProfile.guid != set.interactedCharacter.guid) return false;
             
             foreach (var requiredEvent in set.requiredEvents)
             {

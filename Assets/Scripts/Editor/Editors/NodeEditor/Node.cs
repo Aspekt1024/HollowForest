@@ -12,6 +12,13 @@ namespace Aspekt.Editors
         [SerializeField] private Vector2 position;
         [SerializeField] private Vector2 size;
 
+        public struct StyleProfile
+        {
+            public string baseStyle;
+            public string selectedStyle;
+            public string unselectedStyle;
+        }
+
         private VisualElement element;
         protected NodeEditor Parent;
         
@@ -19,13 +26,19 @@ namespace Aspekt.Editors
         private bool isMouseDown;
         private Vector2 initialMousePos;
         private Vector2 initialNodePos;
+
+        public event Action<Node> OnSelect = delegate { };
+        public event Action<Node> OnMove = delegate { };
         
         private readonly ContextMenu contextMenu;
+        private readonly StyleProfile styles;
         
         public bool HasElement => element != null;
 
-        protected Node(Guid guid)
+        protected Node(Guid guid, StyleProfile styles)
         {
+            this.styles = styles;
+            
             contextMenu = new ContextMenu();
             serializableGuid = guid.ToString();
         }
@@ -44,10 +57,14 @@ namespace Aspekt.Editors
             {
                 element = new VisualElement();
                 element.AddToClassList("node");
+                element.AddToClassList(styles.baseStyle);
+                element.AddToClassList(styles.unselectedStyle);
 
                 SetBaseData(this);
 
-                Populate(element);
+                var nodeContent = new VisualElement();
+                Populate(nodeContent);
+                element.Add(nodeContent);
                 
                 element.AddManipulator(this);
             }
@@ -110,6 +127,20 @@ namespace Aspekt.Editors
             element.style.height = size.y;
         }
 
+        public void ShowUnselected()
+        {
+            isSelected = false;
+            element?.RemoveFromClassList(styles.selectedStyle);
+            element?.AddToClassList(styles.unselectedStyle);
+        }
+
+        public void ShowSelected()
+        {
+            isSelected = true;
+            element?.AddToClassList(styles.selectedStyle);
+            element?.RemoveFromClassList(styles.unselectedStyle);
+        }
+
         protected override void RegisterCallbacksOnTarget()
         {
             target.RegisterCallback<MouseMoveEvent>(OnMouseMoved);
@@ -130,6 +161,7 @@ namespace Aspekt.Editors
             {
                 var delta = e.mousePosition - initialMousePos;
                 SetPosition(initialNodePos + delta);
+                OnMove?.Invoke(this);
             }
         }
 
@@ -142,6 +174,9 @@ namespace Aspekt.Editors
                 initialNodePos = position;
                 target.CaptureMouse();
                 e.StopPropagation();
+
+                ShowSelected();
+                OnSelect?.Invoke(this);
             }
         }
 

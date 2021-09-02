@@ -6293,8 +6293,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile:
-    guid: 
-    characterName: 
+    guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
+    characterName: Test character
+    description: A test character
 --- !u!1 &1500699587
 GameObject:
   m_ObjectHideFlags: 0

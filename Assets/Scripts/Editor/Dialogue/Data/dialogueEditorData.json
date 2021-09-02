@@ -5,8 +5,19 @@
         {
             "serializableGuid": "1631afd5-8a46-4099-b1c2-e7ccdf293082",
             "position": {
-                "x": 108.0,
-                "y": 95.0
+                "x": 128.0,
+                "y": 51.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        },
+        {
+            "serializableGuid": "09784d42-8ccf-4cdf-9c91-44d241fc117b",
+            "position": {
+                "x": 204.0,
+                "y": 240.0
             },
             "size": {
                 "x": 200.0,

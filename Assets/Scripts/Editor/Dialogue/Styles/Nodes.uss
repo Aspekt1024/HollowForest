@@ -4,10 +4,44 @@
     background-color: grey;
 }
 
+.node-page {
+    display: flex;
+    flex-direction: row;
+}
+
 .dialogue-node {
-    background-color: grey;
+    height: 100%;
+    width: 100%;
+    border-radius: 6px;
+}
+
+.first-conversation {
+    border-color: darkgreen;
+    border-width: 2px;
 }
 
 .dialogue-node Label {
     color: black;
+}
+
+.dialogue-node-unselected {
+    background-color: grey;
+}
+
+.dialogue-node-selected {
+    background-color: #acacac;
+}
+
+.dialogue-line {
+    display: flex;
+    flex-direction: row;
+}
+
+.dialogue-line-text {
+    width: 150px;
+    white-space: normal;
+}
+
+.side-panel {
+    width: 250px;
 }

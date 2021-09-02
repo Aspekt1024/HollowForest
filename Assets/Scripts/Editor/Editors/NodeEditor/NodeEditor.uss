@@ -5,9 +5,4 @@
 
 .node {
     position: absolute;
-    background-color: white;
-}
-
-.node-selected {
-    
 }

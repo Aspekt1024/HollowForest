@@ -10,6 +10,7 @@ namespace HollowForest.Data
     {
         public DialogueConfig dialogue;
         public List<GameplayEvent> events;
+        public List<CharacterProfile> characterProfiles;
 
         public void InitAwake(Data data)
         {

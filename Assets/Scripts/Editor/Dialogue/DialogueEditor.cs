@@ -38,8 +38,9 @@ namespace HollowForest.Dialogue
 
         protected override void AddPages(VisualElement root)
         {
+            AddPage(new DialoguePage(this, root));
             AddPage(new EventsPage(this, root));
-            AddPage(new NodePage(this, root));
+            AddPage(new CharacterPage(this, root));
             AddPage(new ConfigPage(this, root));
         }
 
