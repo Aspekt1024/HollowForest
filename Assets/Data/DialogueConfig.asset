@@ -18,7 +18,7 @@ MonoBehaviour:
     interactedCharacter:
       guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
       characterName: Test character
-      description: A test character
+      description: A test character who asks for a lucky coin
     requiredEvents: 
     invalidatingEvents: 
     conversations:
@@ -26,6 +26,7 @@ MonoBehaviour:
       character: 
       requiredEvents: 
       invalidatingEvents: 
+      requiredConversations: []
       dialogueLines:
       - Hi there, hello!
       - I'm a blue square.
@@ -34,5 +35,7 @@ MonoBehaviour:
       character: 
       requiredEvents: 
       invalidatingEvents: 
+      requiredConversations:
+      - 1631afd5-8a46-4099-b1c2-e7ccdf293082
       dialogueLines:
       - Have you seen my lucky coin?

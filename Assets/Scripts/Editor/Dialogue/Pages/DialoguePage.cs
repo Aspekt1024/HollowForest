@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Aspekt.Editors;
 using UnityEditor;
@@ -21,17 +22,24 @@ namespace HollowForest.Dialogue.Pages
         {
         }
 
+        public override void OnGUI()
+        {
+        }
+
         public override void UpdateContents()
         {
             conversationSetPanel.Populate(Editor.Config.dialogue, conversationSet);
-            
-            nodeEditor.Clear();
+
+            nodeEditor.UpdateContents();
             
             if (Editor.Config == null || Editor.Config.dialogue == null) return;
-
             if (conversationSet == null) return;
 
             var conversations = conversationSet.conversations;
+            
+            var dialogueNodes = new List<DialogueNode>();
+            var dialogueDependencies = new Dictionary<Node, List<Node>>();
+            
             for (int i = 0; i < conversations.Count; i++)
             {
                 if (string.IsNullOrEmpty(conversations[i].dialogueGuid))
@@ -39,6 +47,28 @@ namespace HollowForest.Dialogue.Pages
                     conversations[i].dialogueGuid = Guid.NewGuid().ToString();
                 }
                 var node = new DialogueNode(this, conversations[i], i);
+                dialogueNodes.Add(node);
+            }
+
+            foreach (var node in dialogueNodes)
+            {
+                var dependencies = dialogueNodes.Where(node.IsDependentOnDialogue).Select(n => n as Node).ToList();
+                if (dependencies.Any())
+                {
+                    dialogueDependencies.Add(node, dependencies);
+                }
+            }
+
+            foreach (var dependency in dialogueDependencies)
+            {
+                foreach (var dependencyNode in dependency.Value)
+                {
+                    nodeEditor.AddNodeDependency(dependency.Key, dependencyNode, dependencyNode.GetDependencyProfile(DialogueNode.DialogueDependency));
+                }
+            }
+            
+            foreach (var node in dialogueNodes)
+            {
                 nodeEditor.AddNode(node);
             }
         }
@@ -57,6 +87,16 @@ namespace HollowForest.Dialogue.Pages
             nodeEditor.RemoveNode(conversation.dialogueGuid);
         }
 
+        public void BeginDependencyCreation(DialogueNode fromNode, Vector2 mousePos, int dependencyTypeID)
+        {
+            nodeEditor.StartDependencyModification(fromNode, mousePos, dependencyTypeID, NodeEditor.DependencyMode.Create);
+        }
+
+        public void BeginDependencyRemoval(DialogueNode fromNode, Vector2 mousePos, int dependencyTypeID)
+        {
+            nodeEditor.StartDependencyModification(fromNode, mousePos, dependencyTypeID, NodeEditor.DependencyMode.Remove);
+        }
+
         public void RecordDialogueUndo(string undoMessage) => Editor.RecordUndo(Editor.Config.dialogue, undoMessage);
 
         protected override void SetupUI(VisualElement root)
@@ -73,7 +113,7 @@ namespace HollowForest.Dialogue.Pages
 
             nodeEditor = new NodeEditor(600, 500);
             nodeEditor.SetNodeList(Editor.Data.nodes);
-            page.Add(nodeEditor.GetElement());
+            page.Add(nodeEditor.Element);
             
             nodeEditor.AddContextMenuItem("Create Dialogue", CreateNewDialogue);
             

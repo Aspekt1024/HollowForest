@@ -1,21 +1,21 @@
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Aspekt.Editors
 {
     public abstract class TabbedEditor<T, D> : EditorWindow where T : TabbedEditor<T, D> where D : EditorData<D>, new()
     {
         public const string EditorRoot = "Assets/Scripts/Editor/Editors/TabbedEditor";
-        public abstract string WindowName { get; }
         public D Data { get; private set; }
         
         private VisualElement root;
-        
         private Toolbar<T, D> toolbar;
 
         private readonly List<Page<T, D>> pages = new List<Page<T, D>>();
+
+        private Page<T, D> currentPage;
 
         protected virtual void OnPreEnable() { }
         protected virtual void OnPostEnable() { }
@@ -23,10 +23,6 @@ namespace Aspekt.Editors
         
         private void OnEnable()
         {
-            var window = GetWindow<T>();
-            window.titleContent = new GUIContent(WindowName);
-            
-            
             root = rootVisualElement;
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{EditorRoot}/Templates/TabbedEditor.uxml");
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{EditorRoot}/Templates/TabbedEditor.uss");
@@ -39,6 +35,7 @@ namespace Aspekt.Editors
             OnPreEnable();
             
             toolbar = new Toolbar<T, D>(root, Data);
+            toolbar.PageSelected += OnPageSelected;
             
             AddPages(root);
 
@@ -64,7 +61,6 @@ namespace Aspekt.Editors
         {
             pages.ForEach(p => p.UpdateContents());
         }
-        
 
         private void OnDisable()
         {
@@ -76,6 +72,19 @@ namespace Aspekt.Editors
         {
             pages.Add(page);
             toolbar.AddPage(page);
+        }
+
+        private void OnPageSelected(Page<T, D> page)
+        {
+            currentPage = page;
+        }
+
+        private void OnGUI()
+        {
+            if (currentPage != null)
+            {
+                currentPage.OnGUI();
+            }
         }
     }
 }

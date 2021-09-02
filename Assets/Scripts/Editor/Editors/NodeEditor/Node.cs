@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,6 +18,23 @@ namespace Aspekt.Editors
             public string baseStyle;
             public string selectedStyle;
             public string unselectedStyle;
+            public string activatingLink;
+        }
+
+        public struct DependencyProfile
+        {
+            public int dependencyTypeID;
+            public Color lineColor;
+            public float lineThickness;
+            public bool isGlowEnabled;
+
+            public DependencyProfile(int dependencyTypeID, Color lineColor)
+            {
+                this.dependencyTypeID = dependencyTypeID;
+                this.lineColor = lineColor;
+                lineThickness = 1.5f;
+                isGlowEnabled = true;
+            }
         }
 
         private VisualElement element;
@@ -29,15 +47,21 @@ namespace Aspekt.Editors
 
         public event Action<Node> OnSelect = delegate { };
         public event Action<Node> OnMove = delegate { };
+        public event Action<Node> OnEnter = delegate { };
+        public event Action<Node> OnLeave = delegate { };
+        public event Action<Node> OnClick = delegate { };
         
         private readonly ContextMenu contextMenu;
         private readonly StyleProfile styles;
+        private readonly List<DependencyProfile> dependencyProfiles;
         
         public bool HasElement => element != null;
+        public Vector2 GetPosition() => position;
 
-        protected Node(Guid guid, StyleProfile styles)
+        protected Node(Guid guid, StyleProfile styles, List<DependencyProfile> dependencyProfiles)
         {
             this.styles = styles;
+            this.dependencyProfiles = dependencyProfiles;
             
             contextMenu = new ContextMenu();
             serializableGuid = guid.ToString();
@@ -50,6 +74,9 @@ namespace Aspekt.Editors
         }
 
         protected virtual void Populate(VisualElement element) {}
+        
+        public virtual bool CreateDependency(Node dependency) { return false; }
+        public virtual bool RemoveDependency(Node dependency) { return false; }
 
         public VisualElement GetElement()
         {
@@ -79,6 +106,22 @@ namespace Aspekt.Editors
             serializableGuid = data.serializableGuid;
             SetPosition(data.position);
             SetSize(data.size);
+        }
+
+        public DependencyProfile GetDependencyProfile(int id)
+        {
+            var index = dependencyProfiles.FindIndex(p => p.dependencyTypeID == id);
+            if (index < 0)
+            {
+                return new DependencyProfile
+                {
+                    dependencyTypeID = 0,
+                    lineColor = new Color(0.28f, 0.65f, 1f),
+                    lineThickness = 1.5f,
+                };
+            }
+
+            return dependencyProfiles[index];
         }
 
         public virtual Vector2 GetConnectingPosition(Vector2 fromPos)
@@ -140,12 +183,24 @@ namespace Aspekt.Editors
             element?.AddToClassList(styles.selectedStyle);
             element?.RemoveFromClassList(styles.unselectedStyle);
         }
+        
+        public virtual void ActivatingLinkStart()
+        {
+            GetElement().AddToClassList(styles.activatingLink);
+        }
+
+        public virtual void ActivatingLinkEnd()
+        {
+            GetElement().RemoveFromClassList(styles.activatingLink);
+        }
 
         protected override void RegisterCallbacksOnTarget()
         {
             target.RegisterCallback<MouseMoveEvent>(OnMouseMoved);
             target.RegisterCallback<MouseDownEvent>(OnMouseDown);
             target.RegisterCallback<MouseUpEvent>(OnMouseUp);
+            target.RegisterCallback<MouseEnterEvent>(OnMouseEnter);
+            target.RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
         }
 
         protected override void UnregisterCallbacksFromTarget()
@@ -153,6 +208,8 @@ namespace Aspekt.Editors
             target.UnregisterCallback<MouseMoveEvent>(OnMouseMoved);
             target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
             target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+            target.UnregisterCallback<MouseEnterEvent>(OnMouseEnter);
+            target.UnregisterCallback<MouseLeaveEvent>(OnMouseLeave);
         }
 
         private void OnMouseMoved(MouseMoveEvent e)
@@ -176,7 +233,7 @@ namespace Aspekt.Editors
                 e.StopPropagation();
 
                 ShowSelected();
-                OnSelect?.Invoke(this);
+                OnClick?.Invoke(this);
             }
         }
 
@@ -193,6 +250,16 @@ namespace Aspekt.Editors
                 contextMenu.ShowContextMenu(e.mousePosition);
                 e.StopPropagation();
             }
+        }
+
+        private void OnMouseEnter(MouseEnterEvent e)
+        {
+            OnEnter?.Invoke(this);
+        }
+
+        private void OnMouseLeave(MouseLeaveEvent e)
+        {
+            OnLeave?.Invoke(this);
         }
     }
 }

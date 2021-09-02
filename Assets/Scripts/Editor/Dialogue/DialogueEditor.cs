@@ -1,3 +1,4 @@
+using System;
 using Aspekt.Editors;
 using HollowForest.Data;
 using HollowForest.Dialogue.Pages;
@@ -11,7 +12,6 @@ namespace HollowForest.Dialogue
     public class DialogueEditor : TabbedEditor<DialogueEditor, DialogueEditorData>
     {
         public string DirectoryRoot => "Assets/Scripts/Editor/Dialogue";
-        public override string WindowName => "Dialogue";
         
         public Configuration Config { get; set; }
 
@@ -19,8 +19,9 @@ namespace HollowForest.Dialogue
         private static void ShowWindow()
         {
             var window = GetWindow<DialogueEditor>();
-            window.Show();
+            window.titleContent = new GUIContent("Dialogue");
             window.minSize = new Vector2(450f, 300f);
+            window.Show();
         }
 
         protected override void OnPreEnable()
@@ -43,7 +44,5 @@ namespace HollowForest.Dialogue
             AddPage(new CharacterPage(this, root));
             AddPage(new ConfigPage(this, root));
         }
-
-
     }
 }

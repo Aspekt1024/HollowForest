@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -15,6 +16,8 @@ namespace Aspekt.Editors
         private readonly EditorData<D> data;
 
         private readonly ToolbarModifyIndicatorSaveProcessor toolbarModifyIndicatorSaveProcessor;
+
+        public event Action<Page<T, D>> PageSelected = delegate { };
         
         public Toolbar(VisualElement editorRoot, EditorData<D> data)
         {
@@ -103,6 +106,7 @@ namespace Aspekt.Editors
                     ElementUtil.HideElement(page.Root);
                 }
             }
+            PageSelected?.Invoke(selectedPage);
         }
 
         private void HighlightButton(Button button)

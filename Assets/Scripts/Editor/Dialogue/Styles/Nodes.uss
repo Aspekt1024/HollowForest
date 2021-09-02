@@ -32,6 +32,10 @@
     background-color: #acacac;
 }
 
+.dialogue-node-activating-link {
+    background-color: #bf8a8a;
+}
+
 .dialogue-line {
     display: flex;
     flex-direction: row;

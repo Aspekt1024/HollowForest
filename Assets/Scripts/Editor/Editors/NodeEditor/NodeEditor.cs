@@ -8,18 +8,39 @@ namespace Aspekt.Editors
 {
     public class NodeEditor : MouseManipulator
     {
-        private VisualElement element;
-        
+        private readonly VisualElement element;
         private readonly ContextMenu contextMenu;
 
         public Vector2 Size { get; private set; }
 
         private List<Node> nodes;
         
+        public enum DependencyMode
+        {
+            Create,
+            Remove
+        }
+
+        private DependencyMode dependencyMode;
+        private int dependencyTypeID;
+        
+        private readonly List<ConnectionElement> dependencyLinks = new List<ConnectionElement>();
+        private Node selectedNode;
+        private Node dependencyNode;
+        private Node lastNode;
+        private ConnectionElement depLine;
+        
+        public Action<Vector2> OnDrag;
+
+        public VisualElement Element => element;
+        
         public NodeEditor(int width, int height)
         {
             contextMenu = new ContextMenu();
             Size = new Vector2(width, height);
+            
+            element = new VisualElement();
+            element.AddManipulator(this);
         }
 
         public void SetNodeList(List<Node> nodes)
@@ -27,34 +48,16 @@ namespace Aspekt.Editors
             this.nodes = nodes;
         }
         
-        public VisualElement GetElement()
+        public void UpdateContents()
         {
-            if (element == null)
-            {
-                element = new VisualElement();
-                element.AddToClassList("node-editor");
+            element.Clear();
+            element.AddToClassList("node-editor");
 
-                var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Editor/Editors/NodeEditor/NodeEditor.uss");
-                element.styleSheets.Add(styleSheet);
-                
-                element.style.width = Size.x;
-                element.style.height = Size.y;
-                
-                element.AddManipulator(this);
-            }
-
-            return element;
-        }
-
-        public void Clear()
-        {
-            for (int i = nodes.Count - 1; i >= 0; i--)
-            {
-                if (nodes[i].HasElement)
-                {
-                    element.Remove(nodes[i].GetElement());
-                }
-            }
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Editor/Editors/NodeEditor/NodeEditor.uss");
+            element.styleSheets.Add(styleSheet);
+            
+            element.style.width = Size.x;
+            element.style.height = Size.y;
         }
 
         public void AddNode(Node node)
@@ -70,7 +73,9 @@ namespace Aspekt.Editors
             
             nodes.Add(node);
             node.OnMove += OnNodeMoved;
-            node.OnSelect += OnNodeSelected;
+            node.OnEnter += NodeEntered;
+            node.OnLeave += NodeLeft;
+            node.OnClick += NodeClicked;
             
             element.Add(node.GetElement());
         }
@@ -83,6 +88,15 @@ namespace Aspekt.Editors
                 if (nodes[index].HasElement && element.Contains(nodes[index].GetElement()))
                 {
                     element.Remove(nodes[index].GetElement());
+                    for (int i = dependencyLinks.Count - 1; i >= 0; i--)
+                    {
+                        if (dependencyLinks[i].IsConnectedToNode(nodes[index]))
+                        {
+                            element.Remove(dependencyLinks[i]);
+                            dependencyLinks[i].Input.RemoveDependency(dependencyLinks[i].Output);
+                            RemoveNodeDependency(dependencyLinks[i].Input, dependencyLinks[i].Output, nodes[index].GetDependencyProfile(dependencyLinks[i].DependencyTypeID));
+                        }
+                    }
                 }
                 nodes.RemoveAt(index);
             }
@@ -90,6 +104,8 @@ namespace Aspekt.Editors
         
         public void AddContextMenuItem(string label, GenericMenu.MenuFunction2 function) => contextMenu.AddContextMenuItem(label, function);
 
+        private void OnDependencyDrag(Vector2 mousePos) => OnDrag?.Invoke(mousePos);
+        
         private Node GetNode(Guid guid)
         {
             for (int i = nodes.Count - 1; i >= 0; i--)
@@ -113,12 +129,14 @@ namespace Aspekt.Editors
         {
             target.RegisterCallback<MouseDownEvent>(OnMouseDown);
             target.RegisterCallback<MouseUpEvent>(OnMouseUp);
+            target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
         }
 
         protected override void UnregisterCallbacksFromTarget()
         {
             target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
             target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+            target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
         }
         
         private void OnMouseDown(MouseDownEvent e)
@@ -129,23 +147,153 @@ namespace Aspekt.Editors
         {
             if (e.button == 1)
             {
+                if (dependencyNode != null)
+                {
+                    EndDependencyActions();
+                    e.StopPropagation();
+                    return;
+                }
+                
                 contextMenu.ShowContextMenu(e.mousePosition); // TODO account for nodeEditor position, which is not at 0,0
                 e.StopPropagation();
             }
         }
 
-        private void OnNodeSelected(Node node)
+        private void OnMouseMove(MouseMoveEvent e)
         {
-            foreach (var n in nodes)
-            {
-                if (n == node) continue;
-                n.ShowUnselected();
-            }
+            OnDependencyDrag(e.localMousePosition);
         }
 
         private void OnNodeMoved(Node node)
         {
+        }
+
+        /// <summary>
+        /// Adds a visual representation of a dependency between two nodes.
+        /// This assumes the dependency has already been (or will be) established in data.
+        /// </summary>
+        public void AddNodeDependency(Node node, Node dependency, Node.DependencyProfile dependencyProfile)
+        {
+            var line = new ConnectionElement(dependency, node, dependencyProfile);
+            dependencyLinks.Add(line);
+            element.Add(line);
+        }
+
+        /// <summary>
+        /// Removes a visual representation of a dependency between two nodes.
+        /// This assumes the dependency has already been (or will be) removed in data.
+        /// </summary>
+        private void RemoveNodeDependency(Node node, Node dependency, Node.DependencyProfile dependencyProfile)
+        {
+            var index = dependencyLinks.FindIndex(l => 
+                l.DependencyTypeID == dependencyProfile.dependencyTypeID && l.Output == dependency && l.Input == node);
             
+            if (index < 0) return;
+            
+            if (element.Contains(dependencyLinks[index]))
+            {
+                element.Remove(dependencyLinks[index]);
+            }
+            dependencyLinks.RemoveAt(index);
+        }
+
+        public void StartDependencyModification(Node newDependencyNode, Vector2 mousePos, int dependencyTypeID, DependencyMode mode)
+        {
+            EndDependencyActions();
+            
+            dependencyMode = mode;
+            this.dependencyTypeID = dependencyTypeID;
+            
+            dependencyNode = newDependencyNode;
+            newDependencyNode.ActivatingLinkStart();
+            
+            var dependencyProfile = newDependencyNode.GetDependencyProfile(dependencyTypeID);
+            depLine = new ConnectionElement(this, newDependencyNode, mousePos, dependencyProfile);
+            
+            element.Add(depLine);
+        }
+
+        private void EndDependencyModification(Node dependentNode)
+        {
+            if (dependencyNode != null)
+            {
+                if (dependentNode != null)
+                {
+                    var success = false;
+                    if (dependencyMode == DependencyMode.Create)
+                    {
+                        success = dependentNode.CreateDependency(dependencyNode);
+                        if (success)
+                        {
+                            AddNodeDependency(dependentNode, dependencyNode, dependencyNode.GetDependencyProfile(dependencyTypeID));
+                        }
+                    }
+                    else if (dependencyMode == DependencyMode.Remove)
+                    {
+                        success = dependentNode.RemoveDependency(dependencyNode);
+                        if (success)
+                        {
+                            RemoveNodeDependency(dependentNode, dependencyNode, dependencyNode.GetDependencyProfile(dependencyTypeID));
+                        }
+                    }
+                    
+                    dependentNode.ActivatingLinkEnd();
+                }
+            }
+            
+            EndDependencyActions();
+        }
+
+        private void EndDependencyActions()
+        {
+            if (dependencyNode != null)
+            {
+                dependencyNode.ActivatingLinkEnd();
+                dependencyNode = null;
+            }
+
+            lastNode?.ActivatingLinkEnd();
+
+            if (depLine != null)
+            {
+                if (element.Contains(depLine)) element.Remove(depLine);
+                depLine = null;
+            }
+        }
+        
+        private void NodeEntered(Node node)
+        {
+            if (dependencyNode != null)
+            {
+                node.ActivatingLinkStart();
+            }
+            
+            lastNode = node;
+        }
+
+        private void NodeLeft(Node node)
+        {
+            if (dependencyNode != null && dependencyNode != node)
+            {
+                node.ActivatingLinkEnd();
+            }
+
+            if (lastNode == node)
+            {
+                lastNode = null;
+            }
+        }
+
+        private void NodeClicked(Node node)
+        {
+            selectedNode?.ShowUnselected();
+            node.ShowSelected();
+            selectedNode = node;
+
+            if (dependencyNode != null && dependencyNode != node)
+            {
+                EndDependencyModification(node);
+            }
         }
         
     }

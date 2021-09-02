@@ -27,5 +27,7 @@ namespace Aspekt.Editors
 
         public abstract void UpdateContents();
         protected abstract void SetupUI(VisualElement root);
+        
+        public virtual void OnGUI() { }
     }
 }

@@ -26,6 +26,7 @@ namespace HollowForest.Dialogue
             public string character;
             public List<int> requiredEvents = new List<int>();
             public List<int> invalidatingEvents = new List<int>();
+            public List<string> requiredConversations = new List<string>();
             public List<string> dialogueLines = new List<string>();
 
             public Conversation()
