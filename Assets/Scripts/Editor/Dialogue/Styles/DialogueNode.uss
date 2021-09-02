@@ -1,0 +1,45 @@
+.dialogue-node {
+    height: 100%;
+    width: 100%;
+    border-radius: 6px;
+}
+
+.first-conversation {
+    border-color: darkgreen;
+    border-width: 2px;
+}
+
+.dialogue-node Label {
+    color: black;
+}
+
+.dialogue-node-unselected {
+    background-color: grey;
+}
+
+.dialogue-node-selected {
+    background-color: #acacac;
+}
+
+.dialogue-node-activating-link {
+    background-color: #bfbfbf;
+}
+
+.dialogue-line {
+    display: flex;
+    flex-direction: row;
+}
+
+.dialogue-line-text {
+    width: 150px;
+    white-space: normal;
+}
+
+.dialogue-event-item {
+    display: flex;
+    flex-direction: row;
+}
+
+.dialogue-button {
+    
+}

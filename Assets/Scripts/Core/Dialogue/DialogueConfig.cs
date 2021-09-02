@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -56,22 +57,46 @@ namespace HollowForest.Dialogue
             {
                 if (!IsConditionsMet(set, characterInteractedWith)) continue;
                 
-                foreach (var conversation in set.conversations)
+                var conversation = set.conversations[0];
+                
+                const int maxIterations = 40;
+                var iterations = 0;
+                while (iterations < maxIterations)
                 {
-                    if (IsConditionsMet(conversation))
+                    var nextConversation = GetNextConversation(conversation, set);
+                    if (nextConversation != null)
                     {
-                        return Task.FromResult(conversation);
+                        conversation = nextConversation;
                     }
+                    else
+                    {
+                        break;
+                    }
+                    iterations++;
                 }
+                
+                return Task.FromResult(conversation);
             }
 
             return Task.FromResult<Conversation>(null);
         }
 
+        private Conversation GetNextConversation(Conversation currentConversation, ConversationSet set)
+        {
+            foreach (var conversation in set.conversations)
+            {
+                if (!conversation.requiredConversations.Contains(currentConversation.dialogueGuid) || !IsConditionsMet(conversation)) continue;
+                return conversation;
+            }
+
+            return null;
+        }
+
         private bool IsConditionsMet(ConversationSet set, CharacterProfile characterProfile)
         {
+            if (!set.conversations.Any()) return false;
             if (characterProfile.guid != set.interactedCharacter.guid) return false;
-            
+
             foreach (var requiredEvent in set.requiredEvents)
             {
                 if (!data.GameData.achievedEvents.Contains(requiredEvent)) return false;
@@ -95,6 +120,11 @@ namespace HollowForest.Dialogue
             foreach (var invalidatingEvent in conversation.invalidatingEvents)
             {
                 if (data.GameData.achievedEvents.Contains(invalidatingEvent)) return false;
+            }
+
+            foreach (var c in conversation.requiredConversations)
+            {
+                if (!data.GameData.completedDialogue.Contains(c)) return false;
             }
 
             return true;

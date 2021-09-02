@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aspekt.Editors;
 using HollowForest.Dialogue.Pages;
+using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -70,10 +73,20 @@ namespace HollowForest.Dialogue
             {
                 content.AddToClassList("first-conversation");
             }
-            
+
+            CreateEventsDisplay(content);
+            CreateDialogueDisplay(content);
+
+        }
+
+        public bool IsDependentOnDialogue(DialogueNode node) => conversation.requiredConversations.Contains(node.conversation.dialogueGuid);
+
+        private void CreateDialogueDisplay(VisualElement content)
+        {
+            var dialogueDisplay = new VisualElement();
             for (int i = 0; i < conversation.dialogueLines.Count; i++)
             {
-                content.Add(CreateDialogueLineDisplay(content, conversation.dialogueLines[i], i));
+                dialogueDisplay.Add(CreateDialogueLineDisplay(content, conversation.dialogueLines[i], i));
             }
 
             var addLineButton = new Button {text = "Add line"};
@@ -83,11 +96,10 @@ namespace HollowForest.Dialogue
                 conversation.dialogueLines.Add("");
                 Populate(content);
             };
-            content.Add(addLineButton);
+            dialogueDisplay.Add(addLineButton);
+            content.Add(dialogueDisplay);
         }
-
-        public bool IsDependentOnDialogue(DialogueNode node) => conversation.requiredConversations.Contains(node.conversation.dialogueGuid);
-
+        
         private VisualElement CreateDialogueLineDisplay(VisualElement content, string text, int lineIndex)
         {
             var dialogueLine = new VisualElement();
@@ -114,6 +126,72 @@ namespace HollowForest.Dialogue
             dialogueLine.Add(removeLineButton);
             
             return dialogueLine;
+        }
+
+        private void CreateEventsDisplay(VisualElement content)
+        {
+            var eventsDisplay = new VisualElement();
+
+            var events = dialoguePage.Editor.Config.events;
+            var eventIndexes = new List<int>();
+            for (int i = 0; i < events.Count; i++)
+            {
+                eventIndexes.Add(i);
+            }
+
+            for (int i = 0; i < conversation.requiredEvents.Count; i++)
+            {
+                var requriedEventIndex = i;
+                var requiredEvent = conversation.requiredEvents[i];
+                var index = events.FindIndex(e => e.eventID == requiredEvent);
+                if (index < 0)
+                {
+                    index = 0;
+                    requiredEvent = events[index].eventID;
+                    ModifyRequiredEvent(i, requiredEvent);
+                }
+
+                var eventPopup = new PopupField<int>(eventIndexes, index,
+                    eventIndex => events[eventIndex].eventName,
+                    eventIndex => events[eventIndex].eventName
+                );
+                eventPopup.tooltip = events[index].description;
+
+                var removeEventButton = new Button {text = "x"};
+                removeEventButton.clicked += () =>
+                {
+                    dialoguePage.RecordDialogueUndo("Remove required event");
+                    conversation.requiredEvents.RemoveAt(requriedEventIndex);
+                    Populate(content);
+                };
+                removeEventButton.AddToClassList("dialogue-button");
+                
+                var eventItem = new VisualElement();
+                eventItem.AddToClassList("dialogue-event-item");
+                
+                eventItem.Add(eventPopup);
+                eventItem.Add(removeEventButton);
+                
+                eventsDisplay.Add(eventItem);
+            }
+
+            var addEventButton = new Button {text = "Add Required Event"};
+            addEventButton.clicked += () =>
+            {
+                dialoguePage.RecordDialogueUndo("Add required event");
+                conversation.requiredEvents.Add(events[0].eventID);
+                Populate(content);
+            };
+            
+            eventsDisplay.Add(addEventButton);
+                
+            content.Add(eventsDisplay);
+        }
+
+        private void ModifyRequiredEvent(int index, int id)
+        {
+            dialoguePage.RecordDialogueUndo("Modify required event");
+            conversation.requiredEvents[index] = id;
         }
     }
 }

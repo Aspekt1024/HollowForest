@@ -101,8 +101,10 @@ namespace HollowForest.Dialogue.Pages
 
         protected override void SetupUI(VisualElement root)
         {
-            var stylesheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/Nodes.uss");
-            root.styleSheets.Add(stylesheet);
+            var nodesStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/Nodes.uss");
+            var dialogueStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/DialogueNode.uss");
+            root.styleSheets.Add(nodesStyleSheet);
+            root.styleSheets.Add(dialogueStyleSheet);
 
             var page = new VisualElement();
             page.AddToClassList("node-page");

@@ -8,7 +8,7 @@ namespace Aspekt.Editors
         public abstract string Title { get; }
         public VisualElement Root { get; private set; }
 
-        protected readonly T Editor;
+        public readonly T Editor;
         
         protected Page(T editor, VisualElement root)
         {
