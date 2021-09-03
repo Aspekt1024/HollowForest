@@ -128,14 +128,17 @@ namespace Aspekt.Editors
         public void FindNodeZero()
         {
             var elementSize = element.layout.size;
-            var nodeSize = nodes[0].GetSize();
-            offset = elementSize * 0.5f - (nodes[0].GetPosition() + nodeSize * 0.5f) * Zoom;
+            var firstNodeIndex = nodes.FindIndex(n => n.HasElement);
+            if (firstNodeIndex < 0) return;
+            
+            var nodeSize = nodes[firstNodeIndex].GetSize();
+            offset = elementSize * 0.5f - (nodes[firstNodeIndex].GetPosition() + nodeSize * 0.5f) * Zoom;
             graph.transform.position = offset;
         }
         
         private void OnDependencyDrag(Vector2 mousePos)
         {
-            var pos = (mousePos + new Vector2(offset.x, offset.y)) / Zoom;
+            var pos = (mousePos - new Vector2(offset.x, offset.y)) / Zoom;
             OnDrag?.Invoke(pos);
         }
 
