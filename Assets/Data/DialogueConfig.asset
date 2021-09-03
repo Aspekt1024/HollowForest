@@ -26,7 +26,8 @@ MonoBehaviour:
       character: 
       requiredEvents: 
       invalidatingEvents: 
-      requiredConversations: []
+      linkedConversations:
+      - 09784d42-8ccf-4cdf-9c91-44d241fc117b
       dialogueLines:
       - Hi there, hello!
       - I'm a blue square.
@@ -35,16 +36,17 @@ MonoBehaviour:
       character: 
       requiredEvents: 
       invalidatingEvents: 
-      requiredConversations:
-      - 1631afd5-8a46-4099-b1c2-e7ccdf293082
+      linkedConversations:
+      - 86399682-5b16-487b-b38e-cbd2d41ffeaa
+      - 03da5e91-7b0c-4128-834e-2d27c9616bf1
       dialogueLines:
       - Have you seen my lucky coin?
     - dialogueGuid: 86399682-5b16-487b-b38e-cbd2d41ffeaa
       character: 
       requiredEvents: 10270000
       invalidatingEvents: 
-      requiredConversations:
-      - 09784d42-8ccf-4cdf-9c91-44d241fc117b
+      linkedConversations:
+      - 02d5e321-6c35-4056-a014-2ffd553570e4
       dialogueLines:
       - You found my coin!
       - You're the best!
@@ -52,7 +54,13 @@ MonoBehaviour:
       character: 
       requiredEvents: 
       invalidatingEvents: 
-      requiredConversations:
-      - 86399682-5b16-487b-b38e-cbd2d41ffeaa
+      linkedConversations: []
       dialogueLines:
       - Thank you, green one!
+    - dialogueGuid: 03da5e91-7b0c-4128-834e-2d27c9616bf1
+      character: 
+      requiredEvents: 11270000
+      invalidatingEvents: 
+      linkedConversations: []
+      dialogueLines:
+      - This isn't possible!

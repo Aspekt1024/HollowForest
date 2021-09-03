@@ -27,6 +27,3 @@ MonoBehaviour:
   - guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
     characterName: Test character
     description: A test character who asks for a lucky coin
-  - guid: d42e4b3d-8237-4003-afe9-66b3ee78ba77
-    characterName: New Character
-    description: 

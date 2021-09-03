@@ -26,10 +26,10 @@ namespace HollowForest.Dialogue
             activatingLink = "dialogue-node-activating-link",
         };
 
-        public static int DialogueDependency = 1000;
+        public static int LinkDialogueDependency = 1000;
         public static readonly List<DependencyProfile> DependencyProfiles = new List<DependencyProfile>
         {
-            new DependencyProfile(DialogueDependency, Color.cyan) { lineThickness = 1.5f }
+            new DependencyProfile(LinkDialogueDependency, Color.cyan) { lineThickness = 1.5f }
         };
         
         public DialogueNode(DialoguePage dialoguePage, DialogueConfig.Conversation conversation, int index) : base(new Guid(conversation.dialogueGuid), Styles, DependencyProfiles)
@@ -38,27 +38,27 @@ namespace HollowForest.Dialogue
             this.conversation = conversation;
             conversationIndex = index;
             
-            AddContextMenuItem("Create Dependency", pos => dialoguePage.BeginDependencyCreation(this, DialogueDependency));
-            AddContextMenuItem("Remove Dependency", pos => dialoguePage.BeginDependencyRemoval(this, DialogueDependency));
+            AddContextMenuItem("Create Link", pos => dialoguePage.BeginLinkCreation(this, LinkDialogueDependency));
+            AddContextMenuItem("Remove Link", pos => dialoguePage.BeginLinkRemoval(this, LinkDialogueDependency));
             AddContextMenuItem("Delete", pos => dialoguePage.RemoveConversation(conversation));
         }
         
-        public override bool CreateDependency(Node nodeDependency)
+        public override bool CreateDependency(Node linkingNode)
         {
-            if (!(nodeDependency is DialogueNode dependency)) return false;
-            if (nodeDependency == this) return false;
+            if (!(linkingNode is DialogueNode linkingDialogue)) return false;
+            if (linkingDialogue == this) return false;
             
-            if (conversation.requiredConversations.Contains(dependency.conversation.dialogueGuid)) return false;
-            conversation.requiredConversations.Add(dependency.conversation.dialogueGuid);
+            if (linkingDialogue.conversation.linkedConversations.Contains(conversation.dialogueGuid)) return false;
+            linkingDialogue.conversation.linkedConversations.Add(conversation.dialogueGuid);
             return true;
         }
 
-        public override bool RemoveDependency(Node nodeDependency)
+        public override bool RemoveDependency(Node linkingNode)
         {
-            if (!(nodeDependency is DialogueNode dependency)) return false;
+            if (!(linkingNode is DialogueNode linkingDialogue)) return false;
             
-            if (!conversation.requiredConversations.Contains(dependency.conversation.dialogueGuid)) return false;
-            conversation.requiredConversations.Remove(dependency.conversation.dialogueGuid);
+            if (!linkingDialogue.conversation.linkedConversations.Contains(conversation.dialogueGuid)) return false;
+            linkingDialogue.conversation.linkedConversations.Remove(conversation.dialogueGuid);
             return true;
         }
 
@@ -79,7 +79,7 @@ namespace HollowForest.Dialogue
 
         }
 
-        public bool IsDependentOnDialogue(DialogueNode node) => conversation.requiredConversations.Contains(node.conversation.dialogueGuid);
+        public bool IsLinkedFrom(DialogueNode node) => node.conversation.linkedConversations.Contains(conversation.dialogueGuid);
 
         private void CreateDialogueDisplay(VisualElement content)
         {
@@ -156,6 +156,7 @@ namespace HollowForest.Dialogue
                     eventIndex => events[eventIndex].eventName
                 );
                 eventPopup.tooltip = events[index].description;
+                eventPopup.RegisterValueChangedCallback(e => ModifyRequiredEvent(requriedEventIndex, events[e.newValue].eventID));
 
                 var removeEventButton = new Button {text = "x"};
                 removeEventButton.clicked += () =>

@@ -27,7 +27,7 @@ namespace HollowForest.Dialogue
             public string character;
             public List<int> requiredEvents = new List<int>();
             public List<int> invalidatingEvents = new List<int>();
-            public List<string> requiredConversations = new List<string>();
+            public List<string> linkedConversations = new List<string>();
             public List<string> dialogueLines = new List<string>();
 
             public Conversation()
@@ -45,51 +45,51 @@ namespace HollowForest.Dialogue
             this.data = data;
         }
         
-        public async void GetConversationAsync(Character interactingCharacter, CharacterProfile characterInteractedWith, Action<Conversation> callback)
+        public async void GetConversationAsync(Character interactingCharacter, CharacterProfile characterInteractedWith, Action<ConversationSet, Conversation> callback)
         {
-            var dialogue = await GetConversation(interactingCharacter, characterInteractedWith);
-            callback?.Invoke(dialogue);
+            var info = await GetConversation(interactingCharacter, characterInteractedWith);
+            callback?.Invoke(info.set, info.conversation);
         }
 
-        private Task<Conversation> GetConversation(Character interactingCharacter, CharacterProfile characterInteractedWith)
+        private struct ConversationInfo
+        {
+            public ConversationSet set;
+            public Conversation conversation;
+        }
+
+        private Task<ConversationInfo> GetConversation(Character interactingCharacter, CharacterProfile characterInteractedWith)
         {
             foreach (var set in ConversationSets)
             {
                 if (!IsConditionsMet(set, characterInteractedWith)) continue;
-                
-                var conversation = set.conversations[0];
-                
-                const int maxIterations = 40;
-                var iterations = 0;
-                while (iterations < maxIterations)
-                {
-                    var nextConversation = GetNextConversation(conversation, set);
-                    if (nextConversation != null)
-                    {
-                        conversation = nextConversation;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                    iterations++;
-                }
-                
-                return Task.FromResult(conversation);
+
+                var conversation = DetermineConversation(set);                
+                return Task.FromResult(new ConversationInfo {set = set, conversation = conversation});
             }
 
-            return Task.FromResult<Conversation>(null);
+            return Task.FromResult(new ConversationInfo());
         }
 
-        private Conversation GetNextConversation(Conversation currentConversation, ConversationSet set)
+        private Conversation DetermineConversation(ConversationSet set)
         {
-            foreach (var conversation in set.conversations)
+            var conversation = data.GameData.dialogue.GetCurrentConversation(set);
+            if (!data.GameData.dialogue.completedDialogue.Contains(conversation.dialogueGuid))
             {
-                if (!conversation.requiredConversations.Contains(currentConversation.dialogueGuid) || !IsConditionsMet(conversation)) continue;
                 return conversation;
             }
+                
+            foreach (var guid in conversation.linkedConversations)
+            {
+                var index = set.conversations.FindIndex(c => c.dialogueGuid == guid);
+                if (index < 0) continue;
 
-            return null;
+                if (IsConditionsMet(set.conversations[index]))
+                {
+                    return set.conversations[index];
+                }
+            }
+
+            return conversation;
         }
 
         private bool IsConditionsMet(ConversationSet set, CharacterProfile characterProfile)
@@ -120,11 +120,6 @@ namespace HollowForest.Dialogue
             foreach (var invalidatingEvent in conversation.invalidatingEvents)
             {
                 if (data.GameData.achievedEvents.Contains(invalidatingEvent)) return false;
-            }
-
-            foreach (var c in conversation.requiredConversations)
-            {
-                if (!data.GameData.completedDialogue.Contains(c)) return false;
             }
 
             return true;

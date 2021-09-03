@@ -52,7 +52,7 @@ namespace HollowForest.Dialogue.Pages
 
             foreach (var node in dialogueNodes)
             {
-                var dependencies = dialogueNodes.Where(node.IsDependentOnDialogue).Select(n => n as Node).ToList();
+                var dependencies = dialogueNodes.Where(node.IsLinkedFrom).Select(n => n as Node).ToList();
                 if (dependencies.Any())
                 {
                     dialogueDependencies.Add(node, dependencies);
@@ -63,7 +63,7 @@ namespace HollowForest.Dialogue.Pages
             {
                 foreach (var dependencyNode in dependency.Value)
                 {
-                    nodeEditor.AddNodeDependency(dependency.Key, dependencyNode, dependencyNode.GetDependencyProfile(DialogueNode.DialogueDependency));
+                    nodeEditor.AddNodeDependency(dependency.Key, dependencyNode, dependencyNode.GetDependencyProfile(DialogueNode.LinkDialogueDependency));
                 }
             }
             
@@ -87,12 +87,12 @@ namespace HollowForest.Dialogue.Pages
             nodeEditor.RemoveNode(conversation.dialogueGuid);
         }
 
-        public void BeginDependencyCreation(DialogueNode fromNode, int dependencyTypeID)
+        public void BeginLinkCreation(DialogueNode fromNode, int dependencyTypeID)
         {
             nodeEditor.StartDependencyModification(fromNode, dependencyTypeID, NodeEditor.DependencyMode.Create);
         }
 
-        public void BeginDependencyRemoval(DialogueNode fromNode, int dependencyTypeID)
+        public void BeginLinkRemoval(DialogueNode fromNode, int dependencyTypeID)
         {
             nodeEditor.StartDependencyModification(fromNode, dependencyTypeID, NodeEditor.DependencyMode.Remove);
         }

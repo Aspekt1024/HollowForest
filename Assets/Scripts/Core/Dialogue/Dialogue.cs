@@ -8,27 +8,28 @@ namespace HollowForest.Dialogue
     public class Dialogue : DialogueUI.IObserver
     {
         private UserInterface ui;
-        private GameplayEvents events;
         private DialogueConfig config;
+        private DialogueData data;
 
         private bool isShowingDialogue;
+        private DialogueConfig.ConversationSet currentConversationSet;
         private DialogueConfig.Conversation currentConversation;
         private int currentConversationLineIndex;
 
         private Action onDialogueCompleteCallback;
 
-        public void InitAwake(GameplayEvents events, UserInterface ui, DialogueConfig config)
+        public void InitAwake(DialogueConfig config, DialogueData data, UserInterface ui)
         {
             this.ui = ui;
-            this.events = events;
             this.config = config;
+            this.data = data;
             ui.GetUI<DialogueUI>().RegisterObserver(this);
         }
 
         public void InitiateDialogue(Character interactingCharacter, CharacterProfile characterInteractedWith, Action onDialogueCompleteCallback)
         {
             this.onDialogueCompleteCallback = onDialogueCompleteCallback;
-            config.GetConversationAsync(interactingCharacter, characterInteractedWith, conversation =>
+            config.GetConversationAsync(interactingCharacter, characterInteractedWith, (conversationSet, conversation) =>
             {
                 if (conversation == null)
                 {
@@ -37,15 +38,16 @@ namespace HollowForest.Dialogue
                     onDialogueCompleteCallback?.Invoke();
                     return;
                 }
-                BeginDialogue(conversation);
+                BeginDialogue(conversationSet, conversation);
             });
             
         }
 
-        private void BeginDialogue(DialogueConfig.Conversation conversation)
+        private void BeginDialogue(DialogueConfig.ConversationSet set, DialogueConfig.Conversation conversation)
         {
             isShowingDialogue = true;
-            
+
+            currentConversationSet = set;
             currentConversation = conversation;
             currentConversationLineIndex = 0;
             
@@ -71,8 +73,8 @@ namespace HollowForest.Dialogue
             {
                 isShowingDialogue = false;
                 ui.Hide<DialogueUI>();
-                
-                events.DialogueComplete(currentConversation.dialogueGuid);
+
+                data.SetDialogueComplete(currentConversationSet, currentConversation);
                 onDialogueCompleteCallback?.Invoke();
                 return;
             }

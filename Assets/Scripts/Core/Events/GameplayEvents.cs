@@ -23,11 +23,5 @@ namespace HollowForest.Events
             if (data.GameData.achievedEvents.Contains(eventID)) return;
             data.GameData.achievedEvents.Add(eventID);
         }
-
-        public void DialogueComplete(string dialogueGuid)
-        {
-            if (data.GameData.completedDialogue.Contains(dialogueGuid)) return;
-            data.GameData.completedDialogue.Add(dialogueGuid);
-        }
     }
 }
