@@ -216,7 +216,7 @@ namespace Aspekt.Editors
                     return;
                 }
                 
-                contextMenu.ShowContextMenu(e.mousePosition); // TODO account for nodeEditor position, which is not at 0,0
+                contextMenu.ShowContextMenu((e.localMousePosition - new Vector2(offset.x, offset.y)) / Zoom);
                 e.StopPropagation();
             }
         }
