@@ -3,9 +3,13 @@ Label {
 }
 
 .root-container {
+    display: flex;
+    flex-direction: column;
     color: black;
-}
 
+    position: absolute;
+    flex-grow: 1;
+}
 
 .active-button {
     color: white;
@@ -25,7 +29,12 @@ Label {
     -unity-text-align: middle-left;
 }
 
+.page-container {
+    flex-grow: 1;
+}
+
 .page {
+    flex-grow: 1;
 }
 
 .page-toolbar {

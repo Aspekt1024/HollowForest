@@ -12,6 +12,7 @@ namespace Aspekt.Editors
         
         private VisualElement root;
         private Toolbar<T, D> toolbar;
+        private VisualElement pageContainer;
 
         private readonly List<Page<T, D>> pages = new List<Page<T, D>>();
 
@@ -19,7 +20,7 @@ namespace Aspekt.Editors
 
         protected virtual void OnPreEnable() { }
         protected virtual void OnPostEnable() { }
-        protected abstract void AddPages(VisualElement root);
+        protected abstract void AddPages();
         
         private void OnEnable()
         {
@@ -36,8 +37,12 @@ namespace Aspekt.Editors
             
             toolbar = new Toolbar<T, D>(root, Data);
             toolbar.PageSelected += OnPageSelected;
+
+            pageContainer = new VisualElement();
+            pageContainer.AddToClassList("page-container");
+            root.Add(pageContainer);
             
-            AddPages(root);
+            AddPages();
 
             toolbar.Init();
             
@@ -77,6 +82,8 @@ namespace Aspekt.Editors
         private void OnPageSelected(Page<T, D> page)
         {
             currentPage = page;
+            pageContainer.Clear();
+            page.DrawPage(pageContainer);
         }
 
         private void OnGUI()

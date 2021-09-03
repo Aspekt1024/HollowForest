@@ -1,11 +1,9 @@
-using System;
 using Aspekt.Editors;
 using HollowForest.Data;
 using HollowForest.Dialogue.Pages;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace HollowForest.Dialogue
 {
@@ -37,12 +35,12 @@ namespace HollowForest.Dialogue
             this.SetAntiAliasing(4);
         }
 
-        protected override void AddPages(VisualElement root)
+        protected override void AddPages()
         {
-            AddPage(new DialoguePage(this, root));
-            AddPage(new EventsPage(this, root));
-            AddPage(new CharacterPage(this, root));
-            AddPage(new ConfigPage(this, root));
+            AddPage(new DialoguePage(this));
+            AddPage(new EventsPage(this));
+            AddPage(new CharacterPage(this));
+            AddPage(new ConfigPage(this));
         }
     }
 }

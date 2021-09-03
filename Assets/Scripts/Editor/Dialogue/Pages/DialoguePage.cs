@@ -18,7 +18,7 @@ namespace HollowForest.Dialogue.Pages
         private DialogueConfig.ConversationSet conversationSet;
         private DialogueNode selectedNode;
         
-        public DialoguePage(DialogueEditor editor, VisualElement root) : base(editor, root)
+        public DialoguePage(DialogueEditor editor) : base(editor)
         {
         }
 
@@ -87,14 +87,14 @@ namespace HollowForest.Dialogue.Pages
             nodeEditor.RemoveNode(conversation.dialogueGuid);
         }
 
-        public void BeginDependencyCreation(DialogueNode fromNode, Vector2 mousePos, int dependencyTypeID)
+        public void BeginDependencyCreation(DialogueNode fromNode, int dependencyTypeID)
         {
-            nodeEditor.StartDependencyModification(fromNode, mousePos, dependencyTypeID, NodeEditor.DependencyMode.Create);
+            nodeEditor.StartDependencyModification(fromNode, dependencyTypeID, NodeEditor.DependencyMode.Create);
         }
 
-        public void BeginDependencyRemoval(DialogueNode fromNode, Vector2 mousePos, int dependencyTypeID)
+        public void BeginDependencyRemoval(DialogueNode fromNode, int dependencyTypeID)
         {
-            nodeEditor.StartDependencyModification(fromNode, mousePos, dependencyTypeID, NodeEditor.DependencyMode.Remove);
+            nodeEditor.StartDependencyModification(fromNode, dependencyTypeID, NodeEditor.DependencyMode.Remove);
         }
 
         public void RecordDialogueUndo(string undoMessage) => Editor.RecordUndo(Editor.Config.dialogue, undoMessage);
@@ -113,11 +113,13 @@ namespace HollowForest.Dialogue.Pages
             conversationSetPanel = new ConversationSetPanel(this, page);
             conversationSet = Editor.Config.dialogue.ConversationSets.Any() ? Editor.Config.dialogue.ConversationSets[0] : null;
 
-            nodeEditor = new NodeEditor(600, 500);
+            nodeEditor = new NodeEditor();
             nodeEditor.SetNodeList(Editor.Data.nodes);
             page.Add(nodeEditor.Element);
             
             nodeEditor.AddContextMenuItem("Create Dialogue", CreateNewDialogue);
+            nodeEditor.AddContextMenuItem("Reset Zoom", (pos) => nodeEditor.ResetZoom());
+            nodeEditor.AddContextMenuItem("Find Starting Node", pos => nodeEditor.FindNodeZero());
             
             UpdateContents();
         }

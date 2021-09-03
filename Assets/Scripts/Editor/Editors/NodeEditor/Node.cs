@@ -40,12 +40,9 @@ namespace Aspekt.Editors
         private VisualElement element;
         protected NodeEditor Parent;
         
-        private bool isSelected;
         private bool isMouseDown;
-        private Vector2 initialMousePos;
-        private Vector2 initialNodePos;
+        private Vector2 rawPosition;
 
-        public event Action<Node> OnSelect = delegate { };
         public event Action<Node> OnMove = delegate { };
         public event Action<Node> OnEnter = delegate { };
         public event Action<Node> OnLeave = delegate { };
@@ -57,6 +54,7 @@ namespace Aspekt.Editors
         
         public bool HasElement => element != null;
         public Vector2 GetPosition() => position;
+        public Vector2 GetSize() => size;
 
         protected Node(Guid guid, StyleProfile styles, List<DependencyProfile> dependencyProfiles)
         {
@@ -154,9 +152,10 @@ namespace Aspekt.Editors
 
         public void SetPosition(Vector2 newPos)
         {
-            position = newPos;
-            position.x = Mathf.Clamp(position.x, 0, Parent.Size.x - size.x);
-            position.y = Mathf.Clamp(position.y, 0, Parent.Size.y - size.y);
+            rawPosition = newPos;
+
+            position.x = Mathf.Round(rawPosition.x / NodeEditor.GridStepSize) * NodeEditor.GridStepSize;
+            position.y = Mathf.Round(rawPosition.y / NodeEditor.GridStepSize) * NodeEditor.GridStepSize;
             
             element.style.left = position.x;
             element.style.top = position.y;
@@ -172,14 +171,12 @@ namespace Aspekt.Editors
 
         public void ShowUnselected()
         {
-            isSelected = false;
             element?.RemoveFromClassList(styles.selectedStyle);
             element?.AddToClassList(styles.unselectedStyle);
         }
 
         public void ShowSelected()
         {
-            isSelected = true;
             element?.AddToClassList(styles.selectedStyle);
             element?.RemoveFromClassList(styles.unselectedStyle);
         }
@@ -216,8 +213,8 @@ namespace Aspekt.Editors
         {
             if (isMouseDown && e.button == 0)
             {
-                var delta = e.mousePosition - initialMousePos;
-                SetPosition(initialNodePos + delta);
+                var delta = e.mouseDelta / Parent.Zoom;
+                SetPosition(rawPosition + delta);
                 OnMove?.Invoke(this);
             }
         }
@@ -227,8 +224,6 @@ namespace Aspekt.Editors
             if (e.button == 0)
             {
                 isMouseDown = true;
-                initialMousePos = e.mousePosition;
-                initialNodePos = position;
                 target.CaptureMouse();
                 e.StopPropagation();
 

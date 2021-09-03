@@ -12,7 +12,7 @@ namespace HollowForest.Dialogue.Pages
 
         private VisualElement charactersContainer;
         
-        public CharacterPage(DialogueEditor editor, VisualElement root) : base(editor, root)
+        public CharacterPage(DialogueEditor editor) : base(editor)
         {
         }
         

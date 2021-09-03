@@ -1,7 +1,7 @@
 .toolbar {
     display: flex;
     flex-direction: row;
-
+    
     border-color: black;
     border-bottom-width: 2px;
 

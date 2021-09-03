@@ -12,7 +12,7 @@ namespace HollowForest.Dialogue.Pages
 
         private VisualElement eventsContainer;
         
-        public EventsPage(DialogueEditor editor, VisualElement root) : base(editor, root)
+        public EventsPage(DialogueEditor editor) : base(editor)
         {
         }
         

@@ -1,6 +1,12 @@
 .node-editor {
     position: relative;
     background-color: black;
+    
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.graph {
 }
 
 .node {

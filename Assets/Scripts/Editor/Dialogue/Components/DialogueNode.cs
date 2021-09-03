@@ -38,9 +38,9 @@ namespace HollowForest.Dialogue
             this.conversation = conversation;
             conversationIndex = index;
             
-            AddContextMenuItem("Create Dependency", mousePos => dialoguePage.BeginDependencyCreation(this, (Vector2) mousePos, DialogueDependency));
-            AddContextMenuItem("Remove Dependency", mousePos => dialoguePage.BeginDependencyRemoval(this, (Vector2) mousePos, DialogueDependency));
-            AddContextMenuItem("Delete", mousePos => dialoguePage.RemoveConversation(conversation));
+            AddContextMenuItem("Create Dependency", pos => dialoguePage.BeginDependencyCreation(this, DialogueDependency));
+            AddContextMenuItem("Remove Dependency", pos => dialoguePage.BeginDependencyRemoval(this, DialogueDependency));
+            AddContextMenuItem("Delete", pos => dialoguePage.RemoveConversation(conversation));
         }
         
         public override bool CreateDependency(Node nodeDependency)

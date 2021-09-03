@@ -7,6 +7,8 @@
 .node-page {
     display: flex;
     flex-direction: row;
+    
+    flex-grow: 1;
 }
 
 .side-panel {

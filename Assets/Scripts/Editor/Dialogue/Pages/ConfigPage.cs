@@ -10,7 +10,7 @@ namespace HollowForest.Dialogue.Pages
     {
         public override string Title => "Config";
 
-        public ConfigPage(DialogueEditor editor, VisualElement root) : base(editor, root)
+        public ConfigPage(DialogueEditor editor) : base(editor)
         {
         }
 

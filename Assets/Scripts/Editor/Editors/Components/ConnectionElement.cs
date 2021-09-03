@@ -39,20 +39,20 @@ namespace Aspekt.Editors
         /// Creates a connection element from one node to the mouse position.
         /// This is a temporary connection element used while a dependency is being setup.
         /// </summary>
-        public ConnectionElement(NodeEditor nodeEditor, Node outputNode, Vector2 mousePos, Node.DependencyProfile dependencyProfile)
+        public ConnectionElement(NodeEditor nodeEditor, Node outputNode, Node.DependencyProfile dependencyProfile)
         {
             this.nodeEditor = nodeEditor;
             
             DependencyTypeID = dependencyProfile.dependencyTypeID;
 
-            this.mousePos = outputNode.GetConnectingPosition(mousePos);
+            mousePos = outputNode.GetConnectingPosition(outputNode.GetPosition());
             
             generateVisualContent = ctx =>
             {
                 DrawLine(
                     ctx,
-                    outputNode.GetConnectingPosition(this.mousePos),
-                    this.mousePos,
+                    outputNode.GetConnectingPosition(mousePos),
+                    mousePos,
                     dependencyProfile.lineColor,
                     dependencyProfile.lineThickness,
                     dependencyProfile.isGlowEnabled

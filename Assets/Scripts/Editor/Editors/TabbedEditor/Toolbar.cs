@@ -86,7 +86,6 @@ namespace Aspekt.Editors
             {
                 HighlightButton(btn);
                 OnPageSelected(page);
-                
             };
             items.Add(btn);
             buttons.Add(btn);
@@ -95,17 +94,6 @@ namespace Aspekt.Editors
         private void OnPageSelected(Page<T, D> selectedPage)
         {
             data.currentPage = selectedPage.Title;
-            foreach (var page in pages)
-            {
-                if (page.Root == selectedPage.Root)
-                {
-                    ElementUtil.ShowElement(page.Root);
-                }
-                else
-                {
-                    ElementUtil.HideElement(page.Root);
-                }
-            }
             PageSelected?.Invoke(selectedPage);
         }
 

@@ -10,17 +10,16 @@ namespace Aspekt.Editors
 
         public readonly T Editor;
         
-        protected Page(T editor, VisualElement root)
+        protected Page(T editor)
         {
             Editor = editor;
-            AddToRoot(root);
         }
         
-        private void AddToRoot(VisualElement editorRoot)
+        public void DrawPage(VisualElement container)
         {
             Root = new VisualElement();
             Root.AddToClassList("page");
-            editorRoot.Add(Root);
+            container.Add(Root);
             
             SetupUI(Root);
         }
