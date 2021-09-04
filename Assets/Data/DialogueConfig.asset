@@ -24,6 +24,7 @@ MonoBehaviour:
     conversations:
     - dialogueGuid: 1631afd5-8a46-4099-b1c2-e7ccdf293082
       character: 
+      isOneTime: 0
       requiredEvents: 
       invalidatingEvents: 
       linkedConversations:
@@ -34,6 +35,7 @@ MonoBehaviour:
       - I lost my lucky coin :(
     - dialogueGuid: 09784d42-8ccf-4cdf-9c91-44d241fc117b
       character: 
+      isOneTime: 0
       requiredEvents: 
       invalidatingEvents: 
       linkedConversations:
@@ -43,24 +45,39 @@ MonoBehaviour:
       - Have you seen my lucky coin?
     - dialogueGuid: 86399682-5b16-487b-b38e-cbd2d41ffeaa
       character: 
+      isOneTime: 0
       requiredEvents: 10270000
       invalidatingEvents: 
       linkedConversations:
+      - ade5cd6b-bdc8-4bae-885c-da20a1ef4228
       - 02d5e321-6c35-4056-a014-2ffd553570e4
+      - 03da5e91-7b0c-4128-834e-2d27c9616bf1
       dialogueLines:
-      - You found my coin!
-      - You're the best!
+      - You found my lucky coin!
+      - Thank you, green one!
     - dialogueGuid: 02d5e321-6c35-4056-a014-2ffd553570e4
       character: 
-      requiredEvents: 
+      isOneTime: 0
+      requiredEvents: 1027000011270000
       invalidatingEvents: 
       linkedConversations: []
       dialogueLines:
-      - Thank you, green one!
+      - You're the best!
     - dialogueGuid: 03da5e91-7b0c-4128-834e-2d27c9616bf1
       character: 
+      isOneTime: 1
       requiredEvents: 11270000
       invalidatingEvents: 
       linkedConversations: []
       dialogueLines:
-      - This isn't possible!
+      - Oh, you found my valuable coin!
+    - dialogueGuid: ade5cd6b-bdc8-4bae-885c-da20a1ef4228
+      character: 
+      isOneTime: 0
+      requiredEvents: 
+      invalidatingEvents: 11270000
+      linkedConversations:
+      - 03da5e91-7b0c-4128-834e-2d27c9616bf1
+      - 02d5e321-6c35-4056-a014-2ffd553570e4
+      dialogueLines:
+      - Thanks for finding my lucky coin!

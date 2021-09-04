@@ -18,6 +18,8 @@ namespace HollowForest.Dialogue
         private readonly DialoguePage dialoguePage;
         private readonly int conversationIndex;
 
+        private VisualElement content;
+
         private static readonly StyleProfile Styles = new StyleProfile
         {
             baseStyle = "dialogue-node",
@@ -42,6 +44,9 @@ namespace HollowForest.Dialogue
             AddContextMenuItem("Remove Link", pos => dialoguePage.BeginLinkRemoval(this, LinkDialogueDependency));
             AddContextMenuItem("Delete", pos => dialoguePage.RemoveConversation(conversation));
         }
+
+        public void RecordUndo(string message) => dialoguePage.RecordDialogueUndo(message);
+        public void Refresh() => Populate(content);
         
         public override bool CreateDependency(Node linkingNode)
         {
@@ -64,17 +69,24 @@ namespace HollowForest.Dialogue
 
         protected override void Populate(VisualElement content)
         {
+            this.content = content;
             content.Clear();
             
             SetSize(new Vector2(200, 120));
             content.AddToClassList("dialogue-node");
 
+
+            var topSection = new VisualElement();
+            topSection.AddToClassList("top-section");
             if (conversationIndex == 0)
             {
-                content.AddToClassList("first-conversation");
+                topSection.AddToClassList("top-section-start-node");
+                var label = new Label("Start");
+                label.AddToClassList("top-section-start-node-label");
+                topSection.Add(label);
             }
+            content.Add(topSection);
 
-            CreateEventsDisplay(content);
             CreateDialogueDisplay(content);
 
         }

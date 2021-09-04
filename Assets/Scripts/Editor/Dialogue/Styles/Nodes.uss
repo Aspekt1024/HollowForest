@@ -10,7 +10,3 @@
     
     flex-grow: 1;
 }
-
-.side-panel {
-    width: 250px;
-}

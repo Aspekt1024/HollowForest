@@ -13,10 +13,10 @@ namespace HollowForest.Dialogue.Pages
         public override string Title => "Dialogue";
 
         private NodeEditor nodeEditor;
-        private ConversationSetPanel conversationSetPanel;
+        private DialogueSidePanel dialogueSidePanel;
 
         private DialogueConfig.ConversationSet conversationSet;
-        private DialogueNode selectedNode;
+        private Node selectedNode;
         
         public DialoguePage(DialogueEditor editor) : base(editor)
         {
@@ -28,7 +28,7 @@ namespace HollowForest.Dialogue.Pages
 
         public override void UpdateContents()
         {
-            conversationSetPanel.Populate(Editor.Config.dialogue, conversationSet);
+            dialogueSidePanel.Populate(Editor.Config.dialogue, conversationSet);
 
             nodeEditor.UpdateContents();
             
@@ -102,18 +102,22 @@ namespace HollowForest.Dialogue.Pages
         protected override void SetupUI(VisualElement root)
         {
             var nodesStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/Nodes.uss");
+            var sidePanelStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/SidePanel.uss");
             var dialogueStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/DialogueNode.uss");
             root.styleSheets.Add(nodesStyleSheet);
+            root.styleSheets.Add(sidePanelStyleSheet);
             root.styleSheets.Add(dialogueStyleSheet);
 
             var page = new VisualElement();
             page.AddToClassList("node-page");
             root.Add(page);
 
-            conversationSetPanel = new ConversationSetPanel(this, page);
+            dialogueSidePanel = new DialogueSidePanel(this, page);
             conversationSet = Editor.Config.dialogue.ConversationSets.Any() ? Editor.Config.dialogue.ConversationSets[0] : null;
 
             nodeEditor = new NodeEditor();
+            nodeEditor.NodeSelected += OnNodeSelected;
+            nodeEditor.OnNodeUnselected += OnNodeUnselected;
             nodeEditor.SetNodeList(Editor.Data.nodes);
             page.Add(nodeEditor.Element);
             
@@ -134,6 +138,21 @@ namespace HollowForest.Dialogue.Pages
             var node = new DialogueNode(this, newConversation, conversationSet.conversations.Count - 1);
             nodeEditor.AddNode(node);
             node.SetPosition((Vector2)mousePos);
+        }
+
+        private void OnNodeSelected(Node node)
+        {
+            selectedNode = node;
+            dialogueSidePanel.OnNodeSelected(node);
+        }
+
+        private void OnNodeUnselected(Node node)
+        {
+            if (selectedNode == node)
+            {
+                selectedNode = null;
+                dialogueSidePanel.OnNodeUnselected(node);
+            }
         }
     }
 }

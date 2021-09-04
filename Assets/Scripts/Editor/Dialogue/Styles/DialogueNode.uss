@@ -4,13 +4,28 @@
     border-radius: 6px;
 }
 
-.first-conversation {
-    border-color: darkgreen;
-    border-width: 2px;
+.top-section {
+    height: 17px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    margin-bottom: 4px;
+    border-bottom-width: 1px;
+    background-color: #4e4e4e;
+    border-color: #626262;
 }
 
-.dialogue-node Label {
-    color: black;
+.top-section-start-node {
+    height: 20px;
+    background-color: #13671f;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.top-section-start-node-label {
+    color: #ffffff;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    font-size: 12px;
 }
 
 .dialogue-node-unselected {

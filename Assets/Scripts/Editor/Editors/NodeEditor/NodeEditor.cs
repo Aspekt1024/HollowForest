@@ -12,6 +12,9 @@ namespace Aspekt.Editors
         
         private const float MinZoom = 0.2f;
         private const float MaxZoom = 2f;
+
+        public event Action<Node> NodeSelected = delegate { };
+        public event Action<Node> OnNodeUnselected = delegate { };
         
         public float Zoom
         {
@@ -359,8 +362,14 @@ namespace Aspekt.Editors
 
         private void NodeClicked(Node node)
         {
-            selectedNode?.ShowUnselected();
+            if (selectedNode != null)
+            {
+                selectedNode.ShowUnselected();
+                OnNodeUnselected?.Invoke(selectedNode);
+            }
+            
             node.ShowSelected();
+            NodeSelected?.Invoke(node);
             selectedNode = node;
 
             if (dependencyNode != null && dependencyNode != node)

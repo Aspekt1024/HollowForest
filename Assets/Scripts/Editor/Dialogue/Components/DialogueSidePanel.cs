@@ -1,42 +1,69 @@
 using System;
-using System.Collections.Generic;
+using Aspekt.Editors;
 using HollowForest.Dialogue.Pages;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace HollowForest.Dialogue
 {
-    public class ConversationSetPanel
+    public class DialogueSidePanel
     {
         private readonly DialoguePage page;
         private readonly VisualElement panel;
+        private readonly VisualElement setInfo;
+        private readonly VisualElement inspector;
+
+        private Node selectedNode;
+        private DialogueConfig.ConversationSet currentSet;
 
         public event Action<DialogueConfig.ConversationSet> NewConversationSetSelected = delegate {  };
         
-        public ConversationSetPanel(DialoguePage page, VisualElement rootElement)
+        public DialogueSidePanel(DialoguePage page, VisualElement rootElement)
         {
             this.page = page;
             
             panel = new VisualElement();
+            setInfo = new VisualElement();
+            inspector = new VisualElement();
+            
+            panel.AddToClassList("side-panel");
+            
+            panel.Add(setInfo);
+            panel.Add(inspector);
+            
             rootElement.Add(panel);
         }
         
         public void Populate(DialogueConfig config, DialogueConfig.ConversationSet currentSet)
         {
-            var serializedObject = new SerializedObject(config);
+            this.currentSet = currentSet;
+            PopulateSetInfo(config, currentSet);
+        }
+
+        public void OnNodeSelected(Node node)
+        {
+            selectedNode = node;
+            PopulateNodeInfo(node);
+        }
+
+        public void OnNodeUnselected(Node node)
+        {
+            if (selectedNode != node) return;
             
-            panel.Clear();
-            panel.AddToClassList("side-panel");
+            selectedNode = null;
+            inspector.Clear();
+        }
 
-            var setDropdown = CreateSetDropdown(config, currentSet);
-            panel.Add(setDropdown);
-
-            var setDetails = CreateSetDetails(config, currentSet);
-            panel.Add(setDetails);
+        private void PopulateSetInfo(DialogueConfig config, DialogueConfig.ConversationSet set)
+        {
+            setInfo.Clear();
             
+            var setDropdown = CreateSetDropdown(config, set);
+            setInfo.Add(setDropdown);
 
+            var setDetails = CreateSetDetails(config, set);
+            setInfo.Add(setDetails);
         }
 
         private VisualElement CreateSetDropdown(DialogueConfig config, DialogueConfig.ConversationSet currentSet)
@@ -83,6 +110,16 @@ namespace HollowForest.Dialogue
             details.Add(characterField);
             
             return details;
+        }
+
+        private void PopulateNodeInfo(Node node)
+        {
+            inspector.Clear();
+            
+            if (node is DialogueNode dialogueNode)
+            {
+                inspector.Add(ConversationInspector.GetInspector(dialogueNode, currentSet, page.Editor.Config));
+            }
         }
     }
 }

@@ -291,8 +291,8 @@
         {
             "serializableGuid": "1631afd5-8a46-4099-b1c2-e7ccdf293082",
             "position": {
-                "x": 330.0,
-                "y": 20.0
+                "x": 300.0,
+                "y": 40.0
             },
             "size": {
                 "x": 200.0,
@@ -302,8 +302,8 @@
         {
             "serializableGuid": "09784d42-8ccf-4cdf-9c91-44d241fc117b",
             "position": {
-                "x": 330.0,
-                "y": 160.0
+                "x": 300.0,
+                "y": 190.0
             },
             "size": {
                 "x": 200.0,
@@ -313,8 +313,8 @@
         {
             "serializableGuid": "86399682-5b16-487b-b38e-cbd2d41ffeaa",
             "position": {
-                "x": 230.0,
-                "y": 350.0
+                "x": 300.0,
+                "y": 340.0
             },
             "size": {
                 "x": 200.0,
@@ -324,8 +324,8 @@
         {
             "serializableGuid": "02d5e321-6c35-4056-a014-2ffd553570e4",
             "position": {
-                "x": 230.0,
-                "y": 500.0
+                "x": 140.0,
+                "y": 530.0
             },
             "size": {
                 "x": 200.0,
@@ -335,8 +335,19 @@
         {
             "serializableGuid": "03da5e91-7b0c-4128-834e-2d27c9616bf1",
             "position": {
-                "x": 440.0,
-                "y": 350.0
+                "x": 600.0,
+                "y": 340.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        },
+        {
+            "serializableGuid": "ade5cd6b-bdc8-4bae-885c-da20a1ef4228",
+            "position": {
+                "x": 370.0,
+                "y": 530.0
             },
             "size": {
                 "x": 200.0,

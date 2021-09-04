@@ -25,6 +25,7 @@ namespace HollowForest.Dialogue
         {
             public string dialogueGuid;
             public string character;
+            public bool isOneTime;
             public List<int> requiredEvents = new List<int>();
             public List<int> invalidatingEvents = new List<int>();
             public List<string> linkedConversations = new List<string>();
@@ -77,15 +78,38 @@ namespace HollowForest.Dialogue
             {
                 return conversation;
             }
-                
+
+            // Determine non-repeating conversations and prioritise them over standard conversations
+            var nonRepeatingConversations = new List<Conversation>();
+            var linkedConversations = new List<Conversation>();
             foreach (var guid in conversation.linkedConversations)
             {
                 var index = set.conversations.FindIndex(c => c.dialogueGuid == guid);
                 if (index < 0) continue;
 
-                if (IsConditionsMet(set.conversations[index]))
+                if (set.conversations[index].isOneTime)
                 {
-                    return set.conversations[index];
+                    nonRepeatingConversations.Add(set.conversations[index]);
+                }
+                else
+                {
+                    linkedConversations.Add(set.conversations[index]);
+                }
+            }
+
+            foreach (var nonRepeatingConversation in nonRepeatingConversations)
+            {
+                if (IsConditionsMet(nonRepeatingConversation))
+                {
+                    return nonRepeatingConversation;
+                }
+            }
+
+            foreach (var linkedConversation in linkedConversations)
+            {
+                if (IsConditionsMet(linkedConversation))
+                {
+                    return linkedConversation;
                 }
             }
 
@@ -112,6 +136,11 @@ namespace HollowForest.Dialogue
 
         private bool IsConditionsMet(Conversation conversation)
         {
+            if (data.GameData.dialogue.completedDialogue.Contains(conversation.dialogueGuid))
+            {
+                if (conversation.isOneTime) return false;
+            }
+            
             foreach (var requiredEvent in conversation.requiredEvents)
             {
                 if (!data.GameData.achievedEvents.Contains(requiredEvent)) return false;

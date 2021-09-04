@@ -80,7 +80,11 @@ namespace HollowForest.Dialogue
             {
                 completedDialogue.Add(conversation.dialogueGuid);
             }
-            SetCurrentConversation(set, conversation);
+
+            if (!conversation.isOneTime)
+            {
+                SetCurrentConversation(set, conversation);
+            }
         }
     }
 }

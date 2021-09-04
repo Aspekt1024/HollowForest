@@ -18,8 +18,8 @@ MonoBehaviour:
     eventName: Get Lucky Coin
     description: Find and collect the lucky coin
   - eventID: 10001
-    eventName: Another event
-    description: Another test event
+    eventName: Get Valuable Coin
+    description: Find and collect the valuable coin
   - eventID: 10002
     eventName: Test event
     description: A test event
