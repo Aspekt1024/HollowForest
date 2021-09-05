@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Aspekt.Editors;
 using HollowForest.Dialogue.Pages;
-using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -19,34 +16,22 @@ namespace HollowForest.Dialogue
         private readonly int conversationIndex;
 
         private VisualElement content;
-
-        private static readonly StyleProfile Styles = new StyleProfile
-        {
-            baseStyle = "dialogue-node",
-            selectedStyle = "dialogue-node-selected",
-            unselectedStyle = "dialogue-node-unselected",
-            activatingLink = "dialogue-node-activating-link",
-        };
-
-        public static int LinkDialogueDependency = 1000;
-        public static readonly List<DependencyProfile> DependencyProfiles = new List<DependencyProfile>
-        {
-            new DependencyProfile(LinkDialogueDependency, Color.cyan) { lineThickness = 1.5f }
-        };
         
-        public DialogueNode(DialoguePage dialoguePage, DialogueConfig.Conversation conversation, int index) : base(new Guid(conversation.dialogueGuid), Styles, DependencyProfiles)
+        public DialogueNode(DialoguePage dialoguePage, DialogueConfig.Conversation conversation, int index) : base(new Guid(conversation.dialogueGuid), DialogueNodeProfiles.DependencyProfiles)
         {   
             this.dialoguePage = dialoguePage;
             this.conversation = conversation;
             conversationIndex = index;
             
-            AddContextMenuItem("Create Link", pos => dialoguePage.BeginLinkCreation(this, LinkDialogueDependency));
-            AddContextMenuItem("Remove Link", pos => dialoguePage.BeginLinkRemoval(this, LinkDialogueDependency));
+            AddContextMenuItem("Create Link", pos => dialoguePage.BeginLinkCreation(this, DialogueNodeProfiles.LinkDialogueDependency));
+            AddContextMenuItem("Remove Link", pos => dialoguePage.BeginLinkRemoval(this, DialogueNodeProfiles.LinkDialogueDependency));
             AddContextMenuItem("Delete", pos => dialoguePage.RemoveConversation(conversation));
         }
 
         public void RecordUndo(string message) => dialoguePage.RecordDialogueUndo(message);
         public void Refresh() => Populate(content);
+        
+        public bool IsLinkedTo(DialogueNode node) => node.conversation.linkedConversations.Contains(conversation.dialogueGuid);
         
         public override bool CreateDependency(Node linkingNode)
         {
@@ -71,13 +56,26 @@ namespace HollowForest.Dialogue
         {
             this.content = content;
             content.Clear();
-            
-            SetSize(new Vector2(200, 120));
             content.AddToClassList("dialogue-node");
 
+            SetStyle(conversation.isOneTime ? DialogueNodeProfiles.OnetimeStyle : DialogueNodeProfiles.StandardStyle);
+            SetSelectedState();
 
+            SetSize(new Vector2(200, 120));
+
+            SetupTopSection();
+
+            CreateDialogueDisplay(content);
+        }
+
+        private void SetupTopSection()
+        {
             var topSection = new VisualElement();
             topSection.AddToClassList("top-section");
+            if (conversation.isOneTime)
+            {
+                topSection.AddToClassList("top-section-onetime");
+            }
             if (conversationIndex == 0)
             {
                 topSection.AddToClassList("top-section-start-node");
@@ -86,12 +84,7 @@ namespace HollowForest.Dialogue
                 topSection.Add(label);
             }
             content.Add(topSection);
-
-            CreateDialogueDisplay(content);
-
         }
-
-        public bool IsLinkedFrom(DialogueNode node) => node.conversation.linkedConversations.Contains(conversation.dialogueGuid);
 
         private void CreateDialogueDisplay(VisualElement content)
         {
@@ -138,73 +131,6 @@ namespace HollowForest.Dialogue
             dialogueLine.Add(removeLineButton);
             
             return dialogueLine;
-        }
-
-        private void CreateEventsDisplay(VisualElement content)
-        {
-            var eventsDisplay = new VisualElement();
-
-            var events = dialoguePage.Editor.Config.events;
-            var eventIndexes = new List<int>();
-            for (int i = 0; i < events.Count; i++)
-            {
-                eventIndexes.Add(i);
-            }
-
-            for (int i = 0; i < conversation.requiredEvents.Count; i++)
-            {
-                var requriedEventIndex = i;
-                var requiredEvent = conversation.requiredEvents[i];
-                var index = events.FindIndex(e => e.eventID == requiredEvent);
-                if (index < 0)
-                {
-                    index = 0;
-                    requiredEvent = events[index].eventID;
-                    ModifyRequiredEvent(i, requiredEvent);
-                }
-
-                var eventPopup = new PopupField<int>(eventIndexes, index,
-                    eventIndex => events[eventIndex].eventName,
-                    eventIndex => events[eventIndex].eventName
-                );
-                eventPopup.tooltip = events[index].description;
-                eventPopup.RegisterValueChangedCallback(e => ModifyRequiredEvent(requriedEventIndex, events[e.newValue].eventID));
-
-                var removeEventButton = new Button {text = "x"};
-                removeEventButton.clicked += () =>
-                {
-                    dialoguePage.RecordDialogueUndo("Remove required event");
-                    conversation.requiredEvents.RemoveAt(requriedEventIndex);
-                    Populate(content);
-                };
-                removeEventButton.AddToClassList("dialogue-button");
-                
-                var eventItem = new VisualElement();
-                eventItem.AddToClassList("dialogue-event-item");
-                
-                eventItem.Add(eventPopup);
-                eventItem.Add(removeEventButton);
-                
-                eventsDisplay.Add(eventItem);
-            }
-
-            var addEventButton = new Button {text = "Add Required Event"};
-            addEventButton.clicked += () =>
-            {
-                dialoguePage.RecordDialogueUndo("Add required event");
-                conversation.requiredEvents.Add(events[0].eventID);
-                Populate(content);
-            };
-            
-            eventsDisplay.Add(addEventButton);
-                
-            content.Add(eventsDisplay);
-        }
-
-        private void ModifyRequiredEvent(int index, int id)
-        {
-            dialoguePage.RecordDialogueUndo("Modify required event");
-            conversation.requiredEvents[index] = id;
         }
     }
 }

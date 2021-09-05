@@ -47,6 +47,7 @@ namespace Aspekt.Editors
         private Vector3 offset;
         private bool isDragging;
         public Action<Vector2> OnDrag;
+        private Vector2 dragStartPos;
         
         private readonly VisualElement element;
         private readonly VisualElement graph;
@@ -200,6 +201,7 @@ namespace Aspekt.Editors
             if (e.button == 0)
             {
                 isDragging = true;
+                dragStartPos = e.mousePosition;
                 element.CaptureMouse();
                 e.StopPropagation();
             }
@@ -209,7 +211,19 @@ namespace Aspekt.Editors
         {
             if (e.button == 0)
             {
-                isDragging = false;
+                if (isDragging)
+                {
+                    isDragging = false;
+                    if (Vector2.Distance(e.mousePosition, dragStartPos) < 2f)
+                    {
+                        if (selectedNode != null)
+                        {
+                            selectedNode.ShowUnselected();
+                            OnNodeUnselected?.Invoke(selectedNode);
+                            selectedNode = null;
+                        }
+                    }
+                }
                 element.ReleaseMouse();
                 e.StopPropagation();
             }

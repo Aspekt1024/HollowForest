@@ -1,30 +1,58 @@
 using System.Collections.Generic;
 using HollowForest.Data;
 using HollowForest.Events;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace HollowForest.Dialogue
 {
-    public static class ConversationInspector
+    public class ConversationInspector
     {
-        public static VisualElement GetInspector(DialogueNode dialogueNode, DialogueConfig.ConversationSet set, Configuration config)
+        private struct EventSettings
         {
-            var inspector = new VisualElement();
-            inspector.AddToClassList("inspector");
-            
-            var index = set.conversations.FindIndex(c => c.dialogueGuid == dialogueNode.serializableGuid);
-            if (index < 0) return inspector;
-
-            var conversation = set.conversations[index];
-            
-            CreateToggle(inspector, dialogueNode, conversation);
-            CreateEvents(inspector, dialogueNode, conversation, config);
-
-            return inspector;
+            public string type;
+            public string styleClass;
+            public List<int> nodeEvents;
         }
 
-        private static void CreateToggle(VisualElement inspector, DialogueNode dialogueNode, DialogueConfig.Conversation conversation)
+        private DialogueNode dialogueNode;
+        private DialogueConfig.ConversationSet set;
+        private DialogueConfig.Conversation conversation;
+        
+        private readonly Configuration config;
+        private readonly VisualElement inspector;
+
+        public ConversationInspector(VisualElement inspector, Configuration config)
+        {
+            this.inspector = inspector;
+            this.config = config;
+            inspector.AddToClassList("inspector");
+        }
+        
+        public void PopulateConversationInfo(DialogueNode dialogueNode, DialogueConfig.ConversationSet set)
+        {
+            inspector.Clear();
+            
+            this.dialogueNode = dialogueNode;
+            this.set = set;
+            
+            var index = set.conversations.FindIndex(c => c.dialogueGuid == dialogueNode.serializableGuid);
+            if (index < 0) return;
+
+            conversation = set.conversations[index];
+
+            CreateCharacterDropdown(inspector);
+            CreateToggle(inspector);
+            CreateEvents(inspector);
+        }
+
+        public void Clear()
+        {
+            inspector.Clear();
+        }
+
+        private void CreateToggle(VisualElement inspector)
         {
             var toggleElement = new VisualElement();
             toggleElement.AddToClassList("inspector-field");
@@ -40,17 +68,8 @@ namespace HollowForest.Dialogue
             toggleElement.Add(oneTimeToggle);
             inspector.Add(toggleElement);
         }
-
-        private struct EventSettings
-        {
-            public string type;
-            public string styleClass;
-            public List<int> nodeEvents;
-            public DialogueNode node;
-            public List<GameplayEvent> allEvents;
-        }
         
-        private static void CreateEvents(VisualElement inspector, DialogueNode dialogueNode, DialogueConfig.Conversation conversation, Configuration config)
+        private void CreateEvents(VisualElement inspector)
         {
             var requiredEventsElement = new VisualElement();
             var requiredEventSettings = new EventSettings
@@ -58,8 +77,6 @@ namespace HollowForest.Dialogue
                 type = "Required Event",
                 styleClass = "eventlist-required",
                 nodeEvents = conversation.requiredEvents,
-                node = dialogueNode,
-                allEvents = config.events,
             };
             CreateEventsDisplay(requiredEventsElement, requiredEventSettings);
             
@@ -69,8 +86,6 @@ namespace HollowForest.Dialogue
                 type = "Invalidating Event",
                 styleClass = "eventlist-invalidating",
                 nodeEvents = conversation.invalidatingEvents,
-                node = dialogueNode,
-                allEvents = config.events,
             };
             CreateEventsDisplay(invalidatingEventsElement, invalidatingEventSettings);
             
@@ -78,7 +93,7 @@ namespace HollowForest.Dialogue
             inspector.Add(invalidatingEventsElement);
         }
         
-        private static void CreateEventsDisplay(VisualElement eventsDisplay, EventSettings settings)
+        private void CreateEventsDisplay(VisualElement eventsDisplay, EventSettings settings)
         {
             eventsDisplay.Clear();
             eventsDisplay.AddToClassList(settings.styleClass);
@@ -86,7 +101,7 @@ namespace HollowForest.Dialogue
             eventsDisplay.Add(new Label($"{settings.type}s:"));
 
             var eventIndexes = new List<int>();
-            for (int i = 0; i < settings.allEvents.Count; i++)
+            for (int i = 0; i < config.events.Count; i++)
             {
                 eventIndexes.Add(i);
             }
@@ -95,32 +110,32 @@ namespace HollowForest.Dialogue
             {
                 var requriedEventIndex = i;
                 var requiredEvent = settings.nodeEvents[i];
-                var index = settings.allEvents.FindIndex(e => e.eventID == requiredEvent);
+                var index = config.events.FindIndex(e => e.eventID == requiredEvent);
                 if (index < 0)
                 {
                     index = 0;
-                    requiredEvent = settings.allEvents[index].eventID;
-                    settings.node.RecordUndo($"Modify {settings.type}");
+                    requiredEvent = config.events[index].eventID;
+                    dialogueNode.RecordUndo($"Modify {settings.type}");
                     settings.nodeEvents[index] = requiredEvent;
                 }
 
                 var eventPopup = new PopupField<int>(eventIndexes, index,
-                    eventIndex => settings.allEvents[eventIndex].eventName,
-                    eventIndex => settings.allEvents[eventIndex].eventName
+                    eventIndex => config.events[eventIndex].eventName,
+                    eventIndex => config.events[eventIndex].eventName
                 );
-                eventPopup.tooltip = settings.allEvents[index].description;
+                eventPopup.tooltip = config.events[index].description;
                 eventPopup.RegisterValueChangedCallback(e =>
                 {
-                    settings.node.RecordUndo($"Modify {settings.type}");
-                    settings.nodeEvents[requriedEventIndex] = settings.allEvents[e.newValue].eventID;
+                    dialogueNode.RecordUndo($"Modify {settings.type}");
+                    settings.nodeEvents[requriedEventIndex] = config.events[e.newValue].eventID;
                 });
 
                 var removeEventButton = new Button {text = "x"};
                 removeEventButton.clicked += () =>
                 {
-                    settings.node.RecordUndo($"Remove {settings.type}");
+                    dialogueNode.RecordUndo($"Remove {settings.type}");
                     settings.nodeEvents.RemoveAt(requriedEventIndex);
-                    settings.node.Refresh();
+                    dialogueNode.Refresh();
                     CreateEventsDisplay(eventsDisplay, settings);
                 };
                 removeEventButton.AddToClassList("dialogue-button");
@@ -137,13 +152,51 @@ namespace HollowForest.Dialogue
             var addEventButton = new Button {text = $"Add {settings.type}"};
             addEventButton.clicked += () =>
             {
-                settings.node.RecordUndo($"Add {settings.type}");
-                settings.nodeEvents.Add(settings.allEvents[0].eventID);
-                settings.node.Refresh();
+                dialogueNode.RecordUndo($"Add {settings.type}");
+                settings.nodeEvents.Add(config.events[0].eventID);
+                dialogueNode.Refresh();
                 CreateEventsDisplay(eventsDisplay, settings);
             };
             
             eventsDisplay.Add(addEventButton);
+        }
+
+        private void CreateCharacterDropdown(VisualElement inspector)
+        {
+            var conversationProp = GetSerializedConversationProperty();
+            if (conversationProp == null)
+            {
+                inspector.Add(new Label("Error: failed to get conversation property"));
+                return;
+            }
+            
+            var characterField = new PropertyField(conversationProp.FindPropertyRelative(nameof(conversation.character)));
+            characterField.Bind(conversationProp.serializedObject);
+            
+            inspector.Add(characterField);
+        }
+
+        private SerializedProperty GetSerializedConversationProperty()
+        {
+            var setIndex = config.dialogue.ConversationSets.FindIndex(s => s == set);
+            if (setIndex < 0)
+            {
+                return null;
+            }
+            
+            var conversationindex = config.dialogue.ConversationSets[setIndex].conversations.FindIndex(c => c.dialogueGuid == dialogueNode.serializableGuid);
+            if (conversationindex < 0)
+            {
+                return null;
+            }
+            
+            var serializedObject = new SerializedObject(config.dialogue);
+            var setsProp = serializedObject.FindProperty(nameof(config.dialogue.ConversationSets));
+            var setProp = setsProp.GetArrayElementAtIndex(setIndex);
+            var conversationsProp = setProp.FindPropertyRelative(nameof(set.conversations));
+            var conversationProp = conversationsProp.GetArrayElementAtIndex(conversationindex);
+
+            return conversationProp;
         }
     }
 }

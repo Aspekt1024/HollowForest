@@ -22,10 +22,6 @@ namespace HollowForest.Dialogue.Pages
         {
         }
 
-        public override void OnGUI()
-        {
-        }
-
         public override void UpdateContents()
         {
             dialogueSidePanel.Populate(Editor.Config.dialogue, conversationSet);
@@ -52,7 +48,7 @@ namespace HollowForest.Dialogue.Pages
 
             foreach (var node in dialogueNodes)
             {
-                var dependencies = dialogueNodes.Where(node.IsLinkedFrom).Select(n => n as Node).ToList();
+                var dependencies = dialogueNodes.Where(node.IsLinkedTo).Select(n => n as Node).ToList();
                 if (dependencies.Any())
                 {
                     dialogueDependencies.Add(node, dependencies);
@@ -63,7 +59,7 @@ namespace HollowForest.Dialogue.Pages
             {
                 foreach (var dependencyNode in dependency.Value)
                 {
-                    nodeEditor.AddNodeDependency(dependency.Key, dependencyNode, dependencyNode.GetDependencyProfile(DialogueNode.LinkDialogueDependency));
+                    nodeEditor.AddNodeDependency(dependency.Key, dependencyNode, dependencyNode.GetDependencyProfile(DialogueNodeProfiles.LinkDialogueDependency));
                 }
             }
             
@@ -71,6 +67,14 @@ namespace HollowForest.Dialogue.Pages
             {
                 nodeEditor.AddNode(node);
             }
+        }
+
+        public void SelectConversationSet(DialogueConfig.ConversationSet set)
+        {
+            if (set == conversationSet) return;
+            conversationSet = set;
+            Editor.Data.conversationSetGuid = set.setGuid;
+            UpdateContents();
         }
 
         public void RemoveConversation(DialogueConfig.Conversation conversation)
@@ -113,7 +117,7 @@ namespace HollowForest.Dialogue.Pages
             root.Add(page);
 
             dialogueSidePanel = new DialogueSidePanel(this, page);
-            conversationSet = Editor.Config.dialogue.ConversationSets.Any() ? Editor.Config.dialogue.ConversationSets[0] : null;
+            conversationSet = DetermineInitialConversationSet();
 
             nodeEditor = new NodeEditor();
             nodeEditor.NodeSelected += OnNodeSelected;
@@ -126,6 +130,26 @@ namespace HollowForest.Dialogue.Pages
             nodeEditor.AddContextMenuItem("Find Starting Node", pos => nodeEditor.FindNodeZero());
             
             UpdateContents();
+        }
+
+        private DialogueConfig.ConversationSet DetermineInitialConversationSet()
+        {
+            var set = Editor.Config.dialogue.ConversationSets.Any() ? Editor.Config.dialogue.ConversationSets[0] : null;
+            if (!string.IsNullOrEmpty(Editor.Data.conversationSetGuid))
+            {
+                var index = Editor.Config.dialogue.ConversationSets.FindIndex(s => s.setGuid == Editor.Data.conversationSetGuid);
+                if (index >= 0)
+                {
+                    set = Editor.Config.dialogue.ConversationSets[index];
+                }
+            }
+
+            if (set != null)
+            {
+                Editor.Data.conversationSetGuid = set.setGuid;
+            }
+            
+            return set;
         }
 
         private void CreateNewDialogue(object mousePos)

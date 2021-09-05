@@ -1,13 +1,13 @@
 .dialogue-node {
-    height: 100%;
-    width: 100%;
+    border-color: black;
+    border-width: 1px;
     border-radius: 6px;
 }
 
 .top-section {
     height: 17px;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     margin-bottom: 4px;
     border-bottom-width: 1px;
     background-color: #4e4e4e;
@@ -38,6 +38,25 @@
 
 .dialogue-node-activating-link {
     background-color: #bfbfbf;
+}
+
+.top-section-onetime {
+    border-color: #2a2839;
+    background-color: #1a1a1f;
+}
+
+.dialogue-node-onetime-unselected {
+    border-color: #2a2839;
+    background-color: #49385f;
+}
+
+.dialogue-node-onetime-selected {
+    border-color: #2a2839;
+    background-color: #695d83;
+}
+
+.dialogue-node-onetime-activating-link {
+    background-color: #b7b7b7;
 }
 
 .dialogue-line {

@@ -15,7 +15,6 @@ namespace Aspekt.Editors
 
         public struct StyleProfile
         {
-            public string baseStyle;
             public string selectedStyle;
             public string unselectedStyle;
             public string activatingLink;
@@ -39,7 +38,8 @@ namespace Aspekt.Editors
 
         private VisualElement element;
         protected NodeEditor Parent;
-        
+
+        private bool isSelected;
         private bool isMouseDown;
         private Vector2 rawPosition;
 
@@ -49,16 +49,16 @@ namespace Aspekt.Editors
         public event Action<Node> OnClick = delegate { };
         
         private readonly ContextMenu contextMenu;
-        private readonly StyleProfile styles;
         private readonly List<DependencyProfile> dependencyProfiles;
+        
+        private StyleProfile styles;
         
         public bool HasElement => element != null;
         public Vector2 GetPosition() => position;
         public Vector2 GetSize() => size;
 
-        protected Node(Guid guid, StyleProfile styles, List<DependencyProfile> dependencyProfiles)
+        protected Node(Guid guid, List<DependencyProfile> dependencyProfiles)
         {
-            this.styles = styles;
             this.dependencyProfiles = dependencyProfiles;
             
             contextMenu = new ContextMenu();
@@ -82,14 +82,10 @@ namespace Aspekt.Editors
             {
                 element = new VisualElement();
                 element.AddToClassList("node");
-                element.AddToClassList(styles.baseStyle);
-                element.AddToClassList(styles.unselectedStyle);
 
                 SetBaseData(this);
 
-                var nodeContent = new VisualElement();
-                Populate(nodeContent);
-                element.Add(nodeContent);
+                Populate(element);
                 
                 element.AddManipulator(this);
             }
@@ -160,6 +156,19 @@ namespace Aspekt.Editors
             element.style.left = position.x;
             element.style.top = position.y;
         }
+
+        protected void SetStyle(StyleProfile styleProfile)
+        {
+            if (!string.IsNullOrEmpty(styles.activatingLink))
+            {
+                element.RemoveFromClassList(styles.unselectedStyle);
+                element.RemoveFromClassList(styles.selectedStyle);
+                element.RemoveFromClassList(styles.activatingLink);
+            }
+
+            styles = styleProfile;
+            SetSelectedState();
+        }
         
         protected void SetSize(Vector2 newSize)
         {
@@ -169,14 +178,28 @@ namespace Aspekt.Editors
             element.style.height = size.y;
         }
 
+        public void SetSelectedState()
+        {
+            if (isSelected)
+            {
+                ShowSelected();
+            }
+            else
+            {
+                ShowUnselected();
+            }
+        }
+
         public void ShowUnselected()
         {
+            isSelected = false;
             element?.RemoveFromClassList(styles.selectedStyle);
             element?.AddToClassList(styles.unselectedStyle);
         }
 
         public void ShowSelected()
         {
+            isSelected = true;
             element?.AddToClassList(styles.selectedStyle);
             element?.RemoveFromClassList(styles.unselectedStyle);
         }

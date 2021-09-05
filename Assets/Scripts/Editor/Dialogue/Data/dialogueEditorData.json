@@ -335,7 +335,7 @@
         {
             "serializableGuid": "03da5e91-7b0c-4128-834e-2d27c9616bf1",
             "position": {
-                "x": 600.0,
+                "x": 640.0,
                 "y": 340.0
             },
             "size": {
@@ -353,6 +353,40 @@
                 "x": 200.0,
                 "y": 120.0
             }
+        },
+        {
+            "serializableGuid": "c667fb2b-e698-4a0d-9eb2-a60f8d596d57",
+            "position": {
+                "x": 190.0,
+                "y": 60.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        },
+        {
+            "serializableGuid": "791f3412-0841-4326-b6e6-0281a01111a3",
+            "position": {
+                "x": 190.0,
+                "y": 210.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        },
+        {
+            "serializableGuid": "28eb7ef3-5f53-4534-9efc-31fe00a1c5c7",
+            "position": {
+                "x": 190.0,
+                "y": 360.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
         }
-    ]
+    ],
+    "conversationSetGuid": "5a5bc776-12ce-4447-a16d-cd176c6c5024"
 }

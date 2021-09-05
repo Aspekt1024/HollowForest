@@ -11,6 +11,7 @@ namespace HollowForest.Dialogue
 
         public string configPath;
         public List<Node> nodes = new List<Node>();
+        public string conversationSetGuid;
 
     }
 }

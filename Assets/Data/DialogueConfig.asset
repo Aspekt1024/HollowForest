@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: DialogueConfig
   m_EditorClassIdentifier: 
   ConversationSets:
-  - setGuid: 
+  - setGuid: c3fef251-46fa-499b-abc5-3219cfe66c12
     setName: Test Conversation
-    interactedCharacter:
-      guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
-      characterName: Test character
-      description: A test character who asks for a lucky coin
+    priority: 0
     requiredEvents: 
     invalidatingEvents: 
     conversations:
     - dialogueGuid: 1631afd5-8a46-4099-b1c2-e7ccdf293082
-      character: 
+      character:
+        guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
+        characterName: Test character
+        description: A test character who asks for a lucky coin
       isOneTime: 0
       requiredEvents: 
       invalidatingEvents: 
@@ -34,7 +34,10 @@ MonoBehaviour:
       - I'm a blue square.
       - I lost my lucky coin :(
     - dialogueGuid: 09784d42-8ccf-4cdf-9c91-44d241fc117b
-      character: 
+      character:
+        guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
+        characterName: Test character
+        description: A test character who asks for a lucky coin
       isOneTime: 0
       requiredEvents: 
       invalidatingEvents: 
@@ -44,7 +47,10 @@ MonoBehaviour:
       dialogueLines:
       - Have you seen my lucky coin?
     - dialogueGuid: 86399682-5b16-487b-b38e-cbd2d41ffeaa
-      character: 
+      character:
+        guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
+        characterName: Test character
+        description: A test character who asks for a lucky coin
       isOneTime: 0
       requiredEvents: 10270000
       invalidatingEvents: 
@@ -56,7 +62,10 @@ MonoBehaviour:
       - You found my lucky coin!
       - Thank you, green one!
     - dialogueGuid: 02d5e321-6c35-4056-a014-2ffd553570e4
-      character: 
+      character:
+        guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
+        characterName: Test character
+        description: A test character who asks for a lucky coin
       isOneTime: 0
       requiredEvents: 1027000011270000
       invalidatingEvents: 
@@ -64,7 +73,10 @@ MonoBehaviour:
       dialogueLines:
       - You're the best!
     - dialogueGuid: 03da5e91-7b0c-4128-834e-2d27c9616bf1
-      character: 
+      character:
+        guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
+        characterName: Test character
+        description: A test character who asks for a lucky coin
       isOneTime: 1
       requiredEvents: 11270000
       invalidatingEvents: 
@@ -72,7 +84,10 @@ MonoBehaviour:
       dialogueLines:
       - Oh, you found my valuable coin!
     - dialogueGuid: ade5cd6b-bdc8-4bae-885c-da20a1ef4228
-      character: 
+      character:
+        guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
+        characterName: Test character
+        description: A test character who asks for a lucky coin
       isOneTime: 0
       requiredEvents: 
       invalidatingEvents: 11270000
@@ -81,3 +96,50 @@ MonoBehaviour:
       - 02d5e321-6c35-4056-a014-2ffd553570e4
       dialogueLines:
       - Thanks for finding my lucky coin!
+  - setGuid: 5a5bc776-12ce-4447-a16d-cd176c6c5024
+    setName: Second Set
+    priority: 10
+    requiredEvents: 
+    invalidatingEvents: 
+    conversations:
+    - dialogueGuid: c667fb2b-e698-4a0d-9eb2-a60f8d596d57
+      character:
+        guid: ebbf3a3d-71ee-4ffd-b4b4-01e59d4bea45
+        characterName: Second character
+        description: Another test character on a separate questline
+      isOneTime: 0
+      requiredEvents: 
+      invalidatingEvents: 
+      linkedConversations:
+      - 791f3412-0841-4326-b6e6-0281a01111a3
+      dialogueLines:
+      - Tell blue I said hi
+    - dialogueGuid: 791f3412-0841-4326-b6e6-0281a01111a3
+      character:
+        guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
+        characterName: Test character
+        description: A test character who asks for a lucky coin
+      isOneTime: 0
+      requiredEvents: 
+      invalidatingEvents: 
+      linkedConversations:
+      - 28eb7ef3-5f53-4534-9efc-31fe00a1c5c7
+      dialogueLines:
+      - Yellow says hi? Say hi back!
+    - dialogueGuid: 28eb7ef3-5f53-4534-9efc-31fe00a1c5c7
+      character:
+        guid: ebbf3a3d-71ee-4ffd-b4b4-01e59d4bea45
+        characterName: Second character
+        description: Another test character on a separate questline
+      isOneTime: 0
+      requiredEvents: 
+      invalidatingEvents: 
+      linkedConversations: []
+      dialogueLines:
+      - Thankyou!
+  - setGuid: 9549e4ce-d60b-4bd0-adaf-f1f69757f9c9
+    setName: gfd
+    priority: 0
+    requiredEvents: 
+    invalidatingEvents: 
+    conversations: []

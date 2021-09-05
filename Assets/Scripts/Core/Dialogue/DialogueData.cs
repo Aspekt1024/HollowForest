@@ -26,7 +26,7 @@ namespace HollowForest.Dialogue
         /// <summary>
         /// 
         /// </summary>
-        private readonly Dictionary<string, DialogueConfig.Conversation> conversationCache = new Dictionary<string, DialogueConfig.Conversation>(); 
+        private readonly Dictionary<string, DialogueConfig.Conversation> conversationCache = new Dictionary<string, DialogueConfig.Conversation>();
 
         public DialogueConfig.Conversation GetCurrentConversation(DialogueConfig.ConversationSet set)
         {
@@ -46,8 +46,7 @@ namespace HollowForest.Dialogue
                 }
             }
 
-            conversationCache.Add(set.setGuid, set.conversations[0]);
-            return set.conversations[0];
+            return null;
         }
 
         public void SetCurrentConversation(DialogueConfig.ConversationSet set, DialogueConfig.Conversation conversation)
@@ -76,7 +75,7 @@ namespace HollowForest.Dialogue
 
         public void SetDialogueComplete(DialogueConfig.ConversationSet set, DialogueConfig.Conversation conversation)
         {
-            if (!completedDialogue.Contains(conversation.dialogueGuid))
+            if (conversation.isOneTime && !completedDialogue.Contains(conversation.dialogueGuid))
             {
                 completedDialogue.Add(conversation.dialogueGuid);
             }

@@ -10,10 +10,11 @@ namespace HollowForest.Dialogue.Pages
     {
         public override string Title => "Events";
 
-        private VisualElement eventsContainer;
+        private readonly VisualElement eventsContainer;
         
         public EventsPage(DialogueEditor editor) : base(editor)
         {
+            eventsContainer = new VisualElement();
         }
         
         public override void UpdateContents()
@@ -39,7 +40,6 @@ namespace HollowForest.Dialogue.Pages
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/Events.uss");
             root.styleSheets.Add(styleSheet);
             
-            eventsContainer = new VisualElement();
             root.Add(eventsContainer);
              
             UpdateContents();

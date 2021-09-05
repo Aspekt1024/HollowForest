@@ -14,17 +14,22 @@ namespace HollowForest.Dialogue
         {
             public string setGuid;
             public string setName;
-            public CharacterProfile interactedCharacter;
-            public List<int> requiredEvents;
-            public List<int> invalidatingEvents;
-            public List<Conversation> conversations;
+            public int priority;
+            public List<int> requiredEvents = new List<int>();
+            public List<int> invalidatingEvents = new List<int>();
+            public List<Conversation> conversations = new List<Conversation>();
+
+            public ConversationSet()
+            {
+                setGuid = Guid.NewGuid().ToString();
+            }
         }
         
         [Serializable]
         public class Conversation
         {
             public string dialogueGuid;
-            public string character;
+            public CharacterProfile character;
             public bool isOneTime;
             public List<int> requiredEvents = new List<int>();
             public List<int> invalidatingEvents = new List<int>();
@@ -44,6 +49,7 @@ namespace HollowForest.Dialogue
         public void InitAwake(Data.Data data)
         {
             this.data = data;
+            data.Config.dialogue.ConversationSets.Sort((s1, s2) => s2.priority.CompareTo(s1.priority));
         }
         
         public async void GetConversationAsync(Character interactingCharacter, CharacterProfile characterInteractedWith, Action<ConversationSet, Conversation> callback)
@@ -60,23 +66,30 @@ namespace HollowForest.Dialogue
 
         private Task<ConversationInfo> GetConversation(Character interactingCharacter, CharacterProfile characterInteractedWith)
         {
+            // Conversations are already sorted by priority at this point, so we can return
+            // on the first set that meets the current game conditions
             foreach (var set in ConversationSets)
             {
-                if (!IsConditionsMet(set, characterInteractedWith)) continue;
+                if (!IsConditionsMet(set)) continue;
 
-                var conversation = DetermineConversation(set);                
+                var conversation = DetermineConversation(set, characterInteractedWith);
+                if (conversation == null) continue;
+                
                 return Task.FromResult(new ConversationInfo {set = set, conversation = conversation});
             }
 
             return Task.FromResult(new ConversationInfo());
         }
 
-        private Conversation DetermineConversation(ConversationSet set)
+        private Conversation DetermineConversation(ConversationSet set, CharacterProfile characterInteractedWith)
         {
             var conversation = data.GameData.dialogue.GetCurrentConversation(set);
-            if (!data.GameData.dialogue.completedDialogue.Contains(conversation.dialogueGuid))
+            if (conversation == null)
             {
-                return conversation;
+                // This conversation set hasn't been accessed yet, so get the first node and see if we can run it
+                if (!set.conversations.Any()) return null;
+                conversation = set.conversations[0];
+                return IsConditionsMet(conversation, characterInteractedWith) ? conversation : null;
             }
 
             // Determine non-repeating conversations and prioritise them over standard conversations
@@ -99,7 +112,7 @@ namespace HollowForest.Dialogue
 
             foreach (var nonRepeatingConversation in nonRepeatingConversations)
             {
-                if (IsConditionsMet(nonRepeatingConversation))
+                if (IsConditionsMet(nonRepeatingConversation, characterInteractedWith))
                 {
                     return nonRepeatingConversation;
                 }
@@ -107,19 +120,18 @@ namespace HollowForest.Dialogue
 
             foreach (var linkedConversation in linkedConversations)
             {
-                if (IsConditionsMet(linkedConversation))
+                if (IsConditionsMet(linkedConversation, characterInteractedWith))
                 {
                     return linkedConversation;
                 }
             }
 
-            return conversation;
+            return IsConditionsMet(conversation, characterInteractedWith) ? conversation : null;
         }
 
-        private bool IsConditionsMet(ConversationSet set, CharacterProfile characterProfile)
+        private bool IsConditionsMet(ConversationSet set)
         {
             if (!set.conversations.Any()) return false;
-            if (characterProfile.guid != set.interactedCharacter.guid) return false;
 
             foreach (var requiredEvent in set.requiredEvents)
             {
@@ -134,8 +146,10 @@ namespace HollowForest.Dialogue
             return true;
         }
 
-        private bool IsConditionsMet(Conversation conversation)
+        private bool IsConditionsMet(Conversation conversation, CharacterProfile characterInteractedWith)
         {
+            if (conversation.character.guid != characterInteractedWith.guid) return false;
+            
             if (data.GameData.dialogue.completedDialogue.Contains(conversation.dialogueGuid))
             {
                 if (conversation.isOneTime) return false;
