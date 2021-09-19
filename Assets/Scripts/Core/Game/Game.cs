@@ -20,6 +20,8 @@ namespace HollowForest
         public Data.Data data;
         public GameplayEvents events;
 
+        private static Game instance;
+
         private void Awake()
         {
             characters = new Characters(this);
@@ -51,6 +53,15 @@ namespace HollowForest
         private void FixedUpdate()
         {
             characters.Tick_Fixed();
+        }
+
+        public static Game GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<Game>();
+            }
+            return instance;
         }
     }
 }

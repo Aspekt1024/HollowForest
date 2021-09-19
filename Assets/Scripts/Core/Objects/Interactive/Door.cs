@@ -20,6 +20,7 @@ namespace HollowForest.Objects
         protected override void OnSwitchedOn()
         {
             anim.SetBool(OpenAnimBool, true);
+            Game.GetInstance().cameraManager.FollowTemporary(transform, 1.5f);
         }
 
         protected override void OnSwitchedOff()

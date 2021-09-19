@@ -41,10 +41,12 @@ namespace HollowForest.Effects
                 if (fallHeight > 6f)
                 {
                     settings.animator.Play(BigSquishAnim, 0, 0f);
+                    Game.GetInstance().cameraManager.Shake(1f, 0.2f);
                 }
                 else
                 {
                     settings.animator.Play(SmallSquishAnim, 0, 0f);
+                    Game.GetInstance().cameraManager.Squish(1f);
                 }
             }
         }
