@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using HollowForest.Dialogue;
+using HollowForest.Events;
 using UnityEngine;
 
 namespace HollowForest
 {
-    public class Characters
+    public class Characters : GameplayEvents.IObserver
     {
         private readonly struct TrackedCharacter
         {
@@ -76,6 +76,11 @@ namespace HollowForest
         private void OnInteractedWith(Character interactingCharacter, CharacterProfile characterIDInteractedWith)
         {
             game.dialogue.InitiateDialogue(interactingCharacter, characterIDInteractedWith, null);
+        }
+
+        public void OnEventAchieved(GameplayEvent gameplayEvent)
+        {
+            trackedCharacters.ForEach(c => c.Character.Abilities.EnableAbility(gameplayEvent.abilityUnlock));
         }
     }
 }

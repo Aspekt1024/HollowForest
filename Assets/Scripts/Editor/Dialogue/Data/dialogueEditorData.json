@@ -1,5 +1,5 @@
 {
-    "currentPage": "Dialogue",
+    "currentPage": "Events",
     "configPath": "Assets/Data/Configuration.asset",
     "nodes": [
         {
@@ -289,6 +289,39 @@
             }
         },
         {
+            "serializableGuid": "c667fb2b-e698-4a0d-9eb2-a60f8d596d57",
+            "position": {
+                "x": 190.0,
+                "y": 60.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        },
+        {
+            "serializableGuid": "791f3412-0841-4326-b6e6-0281a01111a3",
+            "position": {
+                "x": 190.0,
+                "y": 210.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        },
+        {
+            "serializableGuid": "28eb7ef3-5f53-4534-9efc-31fe00a1c5c7",
+            "position": {
+                "x": 190.0,
+                "y": 360.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        },
+        {
             "serializableGuid": "1631afd5-8a46-4099-b1c2-e7ccdf293082",
             "position": {
                 "x": 300.0,
@@ -353,40 +386,7 @@
                 "x": 200.0,
                 "y": 120.0
             }
-        },
-        {
-            "serializableGuid": "c667fb2b-e698-4a0d-9eb2-a60f8d596d57",
-            "position": {
-                "x": 190.0,
-                "y": 60.0
-            },
-            "size": {
-                "x": 200.0,
-                "y": 120.0
-            }
-        },
-        {
-            "serializableGuid": "791f3412-0841-4326-b6e6-0281a01111a3",
-            "position": {
-                "x": 190.0,
-                "y": 210.0
-            },
-            "size": {
-                "x": 200.0,
-                "y": 120.0
-            }
-        },
-        {
-            "serializableGuid": "28eb7ef3-5f53-4534-9efc-31fe00a1c5c7",
-            "position": {
-                "x": 190.0,
-                "y": 360.0
-            },
-            "size": {
-                "x": 200.0,
-                "y": 120.0
-            }
         }
     ],
-    "conversationSetGuid": "5a5bc776-12ce-4447-a16d-cd176c6c5024"
+    "conversationSetGuid": "c3fef251-46fa-499b-abc5-3219cfe66c12"
 }

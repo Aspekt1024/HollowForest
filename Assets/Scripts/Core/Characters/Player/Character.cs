@@ -10,6 +10,7 @@ namespace HollowForest
         public CharacterEffects.Settings effectsSettings;
         
         public CharacterState State { get; private set; }
+        public CharacterAbilities Abilities { get; private set; }
         public CharacterDirector Director { get; private set; }
         public CharacterPhysics Physics { get; private set; }
         public CharacterAfflictions Afflictions { get; private set; }
@@ -27,11 +28,14 @@ namespace HollowForest
             Rigidbody = GetComponent<Rigidbody2D>();
             
             State = new CharacterState();
+            Abilities = new CharacterAbilities();
             Physics = new CharacterPhysics(this, settings.physicsSettings);
             Director = new CharacterDirector(this, Physics);
             Afflictions = new CharacterAfflictions(this, settings.afflictionSettings);
             Effects = new CharacterEffects(this, effectsSettings);
             Interaction = new Interaction(this);
+            
+            SetBaseAbilities();
         }
 
         private void Update()
@@ -53,6 +57,11 @@ namespace HollowForest
             {
                 Interaction.UnsetInteractive(other.GetComponent<IInteractive>());
             }
+        }
+
+        private void SetBaseAbilities()
+        {
+            Abilities.EnableAbility(CharacterAbility.Jump);
         }
     }
 }

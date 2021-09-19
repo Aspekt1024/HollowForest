@@ -5355,6 +5355,7 @@ MonoBehaviour:
     eventID: 10000
     eventName: Get Lucky Coin
     description: Find and collect the lucky coin
+    abilityUnlock: 0
 --- !u!4 &362110986
 Transform:
   m_ObjectHideFlags: 0
@@ -5953,6 +5954,7 @@ MonoBehaviour:
     eventID: 10000
     eventName: Get Lucky Coin
     description: Find and collect the lucky coin
+    abilityUnlock: 0
 --- !u!95 &739987438
 Animator:
   serializedVersion: 3
@@ -6240,6 +6242,7 @@ MonoBehaviour:
     eventID: 10001
     eventName: Another event
     description: Another test event
+    abilityUnlock: 0
 --- !u!4 &1053865846
 Transform:
   m_ObjectHideFlags: 0
@@ -7753,11 +7756,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3228071855276256699, guid: fe7d2c58bc2b05b42ada51afe5d32bcd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.95
       objectReference: {fileID: 0}
     - target: {fileID: 3228071855276256699, guid: fe7d2c58bc2b05b42ada51afe5d32bcd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -2.4
       objectReference: {fileID: 0}
     - target: {fileID: 3228071855276256699, guid: fe7d2c58bc2b05b42ada51afe5d32bcd, type: 3}
       propertyPath: m_LocalPosition.z

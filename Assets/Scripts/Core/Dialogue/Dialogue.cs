@@ -1,5 +1,4 @@
 using System;
-using HollowForest.Events;
 using HollowForest.UI;
 using UnityEngine;
 
@@ -11,7 +10,6 @@ namespace HollowForest.Dialogue
         private DialogueConfig config;
         private DialogueData data;
 
-        private bool isShowingDialogue;
         private DialogueConfig.ConversationSet currentConversationSet;
         private DialogueConfig.Conversation currentConversation;
         private int currentConversationLineIndex;
@@ -45,8 +43,6 @@ namespace HollowForest.Dialogue
 
         private void BeginDialogue(DialogueConfig.ConversationSet set, DialogueConfig.Conversation conversation)
         {
-            isShowingDialogue = true;
-
             currentConversationSet = set;
             currentConversation = conversation;
             currentConversationLineIndex = 0;
@@ -62,7 +58,6 @@ namespace HollowForest.Dialogue
 
         public void SkipDialogue()
         {
-            isShowingDialogue = false;
             ui.Hide<DialogueUI>();
             onDialogueCompleteCallback?.Invoke();
         }
@@ -71,7 +66,6 @@ namespace HollowForest.Dialogue
         {
             if (currentConversationLineIndex >= currentConversation.dialogueLines.Count)
             {
-                isShowingDialogue = false;
                 ui.Hide<DialogueUI>();
 
                 data.SetDialogueComplete(currentConversationSet, currentConversation);

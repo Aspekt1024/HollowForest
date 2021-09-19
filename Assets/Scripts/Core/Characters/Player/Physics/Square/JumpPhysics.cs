@@ -43,6 +43,7 @@ namespace HollowForest.Physics
 
             canJump = true;
             timeStartedJumping = -1000;
+            timeJumpRequested = -1000;
             
             character.State.RegisterStateObserver(CharacterStates.IsGrounded, OnGroundStateChanged);
             character.State.RegisterStateObserver(CharacterStates.IsRecovering, OnRecoveryStateChanged);
@@ -65,7 +66,7 @@ namespace HollowForest.Physics
 
         private bool IsJumpAllowed()
         {
-            if (!canJump) return false;
+            if (!canJump || !character.Abilities.HasAbility(CharacterAbility.Jump)) return false;
             
             if (character.State.GetState(CharacterStates.IsAttachedToWall)) return true;
             

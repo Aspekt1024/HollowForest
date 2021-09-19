@@ -33,9 +33,11 @@ namespace HollowForest.Objects
 
         private void SetGameplayEvent(SerializedProperty property, GameplayEvent gameplayEvent)
         {
+            property.managedReferenceValue = gameplayEvent;
             property.FindPropertyRelative(nameof(GameplayEvent.eventID)).intValue = gameplayEvent.eventID;
             property.FindPropertyRelative(nameof(GameplayEvent.eventName)).stringValue = gameplayEvent.eventName;
             property.FindPropertyRelative(nameof(GameplayEvent.description)).stringValue = gameplayEvent.description;
+            property.FindPropertyRelative(nameof(GameplayEvent.abilityUnlock)).intValue = (int)gameplayEvent.abilityUnlock;
             
             property.serializedObject.ApplyModifiedProperties();
         }

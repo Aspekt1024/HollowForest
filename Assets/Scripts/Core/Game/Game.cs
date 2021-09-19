@@ -14,11 +14,11 @@ namespace HollowForest
         public Character player;
         public Configuration configuration;
 
-        [HideInInspector] public Dialogue.Dialogue dialogue;
-        [HideInInspector] public Characters characters;
-        [HideInInspector] public Objects.Objects objects;
-        [HideInInspector] public Data.Data data;
-        [HideInInspector] public GameplayEvents events;
+        public Dialogue.Dialogue dialogue;
+        public Characters characters;
+        public Objects.Objects objects;
+        public Data.Data data;
+        public GameplayEvents events;
 
         private void Awake()
         {
@@ -37,6 +37,8 @@ namespace HollowForest
             ui.InitAwake();
             inputManager.InitAwake(ui);
             dialogue.InitAwake(data.Config.dialogue, data.GameData.dialogue, ui);
+
+            events.RegisterObserver(characters);
         }
 
         private void Start()
