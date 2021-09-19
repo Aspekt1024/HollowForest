@@ -64,10 +64,16 @@ namespace HollowForest
             character.State.RegisterStateObserver(CharacterStates.IsGrounded, OnGroundedStateChanged);
             character.State.RegisterStateObserver(CharacterStates.IsRecovering, OnRecoverStateChanged);
 
+            Collision.OnCeilingHit += CancelMovementOverride;
+            Collision.OnWallHit += CancelMovementOverride;
+
             // Set initial conditions
             SetOnGround();
             canMove = true;
         }
+
+        private void CancelMovementOverride() => timeHorizontalVelocityOverrideEnds = Time.time - 0.1f;
+        private void CancelMovementOverride(Vector3 wallPos) => CancelMovementOverride();
 
         private void SetOnGround()
         {

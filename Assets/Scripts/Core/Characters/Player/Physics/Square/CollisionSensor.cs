@@ -36,10 +36,18 @@ namespace HollowForest.Physics
         {
             var currentPos = character.Transform.position;
             var diff = pos - currentPos;
+
+            pos = ProcessHorizontalBounds(currentPos, pos, diff.x);
+            pos = ProcessVerticalBounds(pos, diff);
             
-            if (diff.x > 0)
+            return pos;
+        }
+
+        private Vector3 ProcessHorizontalBounds(Vector3 currentPos, Vector3 pos, float xDiff)
+        {
+            if (xDiff > 0)
             {
-                var hitRight = Physics2D.Raycast(currentPos, Vector2.right, colliderExtents.x + diff.x, worldLayer);
+                var hitRight = Physics2D.Raycast(currentPos, Vector2.right, colliderExtents.x + xDiff, worldLayer);
                 if (hitRight.collider != null)
                 {
                     pos.x = hitRight.point.x - colliderExtents.x;
@@ -48,7 +56,7 @@ namespace HollowForest.Physics
             }
             else
             {
-                var hitLeft = Physics2D.Raycast(currentPos, Vector2.left, colliderExtents.x - diff.x, worldLayer);
+                var hitLeft = Physics2D.Raycast(currentPos, Vector2.left, colliderExtents.x - xDiff, worldLayer);
                 if (hitLeft.collider != null)
                 {
                     pos.x = hitLeft.point.x + colliderExtents.x;
@@ -56,6 +64,11 @@ namespace HollowForest.Physics
                 }
             }
 
+            return pos;
+        }
+
+        private Vector3 ProcessVerticalBounds(Vector3 pos, Vector3 diff)
+        {
             var groundHit = CalculateGroundHit(pos, diff);
             CurrentGradient = groundHit.gradient;
             if (groundHit.isGrounded)
@@ -74,25 +87,16 @@ namespace HollowForest.Physics
                     OnCeilingHit?.Invoke();
                 }
             }
-            
+
             return pos;
         }
 
         private GroundHit CalculateGroundHit(Vector3 currentPos, Vector3 diff)
         {
             var pos = currentPos;
-            var raycastDist = colliderExtents.y;
             pos.x += diff.x;
             
-            if (diff.y > 0)
-            {
-                pos.y += diff.y;
-                raycastDist += 0.5f;
-            }
-            else
-            {
-                raycastDist -= diff.y;
-            }
+            var raycastDist = colliderExtents.y + Mathf.Abs(diff.y);
             
             var hitCentre = Physics2D.Raycast(pos, Vector2.down, raycastDist, worldLayer);
             
@@ -129,11 +133,6 @@ namespace HollowForest.Physics
             }
             
             var gradient = groundDetectedCentre ? 0f : 1f;
-            if (groundDetectedLeft && groundDetectedRight)
-            {
-                var lrDiff = hitRight.point - hitLeft.point;
-                //gradient = lrDiff.y / lrDiff.x;
-            }
 
             var groundPoint = pos;
             groundPoint.y = height;

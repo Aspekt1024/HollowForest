@@ -24,15 +24,6 @@ namespace Core.Characters.Physics.Square
         public bool IsAttachedToWall { get; private set; }
         public Vector3 WallPosition { get; private set; }
 
-        public float Direction
-        {
-            get
-            {
-                var xDir = WallPosition.x - character.transform.position.x;
-                return xDir > 0 ? 1 : -1;
-            }
-        }
-
         public WallPhysics(Character character, Settings settings, CollisionSensor collision)
         {
             this.character = character;
