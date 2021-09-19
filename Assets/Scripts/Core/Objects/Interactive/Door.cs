@@ -16,6 +16,7 @@ namespace HollowForest.Objects
             
             anim = GetComponent<Animator>();
             anim.Play(IsSwitchedOn ? OpenAnim : CloseAnim, 0, 1f);
+            anim.SetBool(OpenAnimBool, IsSwitchedOn);
         }
         protected override void OnSwitchedOn()
         {
