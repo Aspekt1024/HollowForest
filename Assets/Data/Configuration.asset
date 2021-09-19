@@ -23,6 +23,9 @@ MonoBehaviour:
   - eventID: 10002
     eventName: Test event
     description: A test event
+  - eventID: 10003
+    eventName: My Event
+    description: This is my event for testing
   characterProfiles:
   - guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
     characterName: Test character

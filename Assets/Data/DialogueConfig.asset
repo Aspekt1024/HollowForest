@@ -13,6 +13,47 @@ MonoBehaviour:
   m_Name: DialogueConfig
   m_EditorClassIdentifier: 
   ConversationSets:
+  - setGuid: 5a5bc776-12ce-4447-a16d-cd176c6c5024
+    setName: Second Set
+    priority: 10
+    requiredEvents: 
+    invalidatingEvents: 
+    conversations:
+    - dialogueGuid: c667fb2b-e698-4a0d-9eb2-a60f8d596d57
+      character:
+        guid: ebbf3a3d-71ee-4ffd-b4b4-01e59d4bea45
+        characterName: Second character
+        description: Another test character on a separate questline
+      isOneTime: 0
+      requiredEvents: 
+      invalidatingEvents: 
+      linkedConversations:
+      - 791f3412-0841-4326-b6e6-0281a01111a3
+      dialogueLines:
+      - Tell blue I said hi
+    - dialogueGuid: 791f3412-0841-4326-b6e6-0281a01111a3
+      character:
+        guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
+        characterName: Test character
+        description: A test character who asks for a lucky coin
+      isOneTime: 0
+      requiredEvents: 
+      invalidatingEvents: 
+      linkedConversations:
+      - 28eb7ef3-5f53-4534-9efc-31fe00a1c5c7
+      dialogueLines:
+      - Yellow says hi? Say hi back!
+    - dialogueGuid: 28eb7ef3-5f53-4534-9efc-31fe00a1c5c7
+      character:
+        guid: ebbf3a3d-71ee-4ffd-b4b4-01e59d4bea45
+        characterName: Second character
+        description: Another test character on a separate questline
+      isOneTime: 0
+      requiredEvents: 
+      invalidatingEvents: 
+      linkedConversations: []
+      dialogueLines:
+      - Thankyou!
   - setGuid: c3fef251-46fa-499b-abc5-3219cfe66c12
     setName: Test Conversation
     priority: 0
@@ -96,47 +137,6 @@ MonoBehaviour:
       - 02d5e321-6c35-4056-a014-2ffd553570e4
       dialogueLines:
       - Thanks for finding my lucky coin!
-  - setGuid: 5a5bc776-12ce-4447-a16d-cd176c6c5024
-    setName: Second Set
-    priority: 10
-    requiredEvents: 
-    invalidatingEvents: 
-    conversations:
-    - dialogueGuid: c667fb2b-e698-4a0d-9eb2-a60f8d596d57
-      character:
-        guid: ebbf3a3d-71ee-4ffd-b4b4-01e59d4bea45
-        characterName: Second character
-        description: Another test character on a separate questline
-      isOneTime: 0
-      requiredEvents: 
-      invalidatingEvents: 
-      linkedConversations:
-      - 791f3412-0841-4326-b6e6-0281a01111a3
-      dialogueLines:
-      - Tell blue I said hi
-    - dialogueGuid: 791f3412-0841-4326-b6e6-0281a01111a3
-      character:
-        guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
-        characterName: Test character
-        description: A test character who asks for a lucky coin
-      isOneTime: 0
-      requiredEvents: 
-      invalidatingEvents: 
-      linkedConversations:
-      - 28eb7ef3-5f53-4534-9efc-31fe00a1c5c7
-      dialogueLines:
-      - Yellow says hi? Say hi back!
-    - dialogueGuid: 28eb7ef3-5f53-4534-9efc-31fe00a1c5c7
-      character:
-        guid: ebbf3a3d-71ee-4ffd-b4b4-01e59d4bea45
-        characterName: Second character
-        description: Another test character on a separate questline
-      isOneTime: 0
-      requiredEvents: 
-      invalidatingEvents: 
-      linkedConversations: []
-      dialogueLines:
-      - Thankyou!
   - setGuid: 9549e4ce-d60b-4bd0-adaf-f1f69757f9c9
     setName: gfd
     priority: 0

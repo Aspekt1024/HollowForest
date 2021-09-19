@@ -1,0 +1,30 @@
+using UnityEngine;
+
+namespace HollowForest.Objects
+{
+    public class Door : Switchable
+    {
+        private Animator anim;
+
+        private static readonly int OpenAnim = Animator.StringToHash("Open");
+        private static readonly int CloseAnim = Animator.StringToHash("Close");
+        private static readonly int OpenAnimBool = Animator.StringToHash("isOpen");
+
+        protected override void Awake()
+        {
+            base.Awake();
+            
+            anim = GetComponent<Animator>();
+            anim.Play(IsSwitchedOn ? OpenAnim : CloseAnim, 0, 1f);
+        }
+        protected override void OnSwitchedOn()
+        {
+            anim.SetBool(OpenAnimBool, true);
+        }
+
+        protected override void OnSwitchedOff()
+        {
+            anim.SetBool(OpenAnimBool, false);
+        }
+    }
+}

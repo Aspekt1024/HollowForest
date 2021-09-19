@@ -12,15 +12,14 @@ namespace HollowForest.Objects
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var config = Configuration.LoadConfigurationInEditor();
-            var eventRef = new GameplayEvent(); // Used for nameof() references to properties so we don't have to use strings
 
-            var idProperty = property.FindPropertyRelative(nameof(eventRef.eventID));
+            var idProperty = property.FindPropertyRelative(nameof(GameplayEvent.eventID));
             var id = idProperty.intValue;
             var selectedEventIndex = config.events.FindIndex(e => e.eventID == id);
             if (selectedEventIndex < 0)
             {
                 selectedEventIndex = 0;
-                SetGameplayEvent(idProperty, config.events[selectedEventIndex]);
+                SetGameplayEvent(property, config.events[selectedEventIndex]);
             }
             
             var eventNames = config.events.Select(e => new GUIContent(e.eventName, e.description)).ToArray();
@@ -34,11 +33,9 @@ namespace HollowForest.Objects
 
         private void SetGameplayEvent(SerializedProperty property, GameplayEvent gameplayEvent)
         {
-            var eventRef = new GameplayEvent();
-            
-            property.FindPropertyRelative(nameof(eventRef.eventID)).intValue = gameplayEvent.eventID;
-            property.FindPropertyRelative(nameof(eventRef.eventName)).stringValue = gameplayEvent.eventName;
-            property.FindPropertyRelative(nameof(eventRef.description)).stringValue = gameplayEvent.description;
+            property.FindPropertyRelative(nameof(GameplayEvent.eventID)).intValue = gameplayEvent.eventID;
+            property.FindPropertyRelative(nameof(GameplayEvent.eventName)).stringValue = gameplayEvent.eventName;
+            property.FindPropertyRelative(nameof(GameplayEvent.description)).stringValue = gameplayEvent.description;
             
             property.serializedObject.ApplyModifiedProperties();
         }
