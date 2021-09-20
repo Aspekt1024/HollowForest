@@ -17,20 +17,11 @@ namespace HollowForest.Events
         private bool isEnabled;
 
         private BoxCollider2D coll;
-        
-        private GameplayEvents events;
-        private CameraManager cam;
 
         private void Awake()
         {
             coll = GetComponent<BoxCollider2D>();
             triggerPoint.Init(this);
-        }
-
-        private void Start()
-        {
-            cam = Game.GetInstance().cameraManager;
-            events = Game.GetInstance().events;
         }
 
         public void OnCharacterTriggered(Character character)
@@ -45,9 +36,9 @@ namespace HollowForest.Events
         
         private void BeginEvent()
         {
-            events.EventAchieved(startGameplayEvent.eventID);
-            
+            Game.Events.EventAchieved(startGameplayEvent.eventID);
             switchedObjects.ForEach(s => s.SwitchOff());
+            Game.Characters.BlockInput(2f);
         }
         
         private void OnTriggerEnter2D(Collider2D other)
@@ -57,7 +48,7 @@ namespace HollowForest.Events
             var otherChar = other.GetComponent<Character>();
             if (otherChar != null)
             {
-                cam.ApplyBounds(transform.position, coll.size);
+                Game.Camera.ApplyBounds(transform.position, coll.size);
             }
         }
 
@@ -68,7 +59,7 @@ namespace HollowForest.Events
             var otherChar = other.GetComponent<Character>();
             if (otherChar != null)
             {
-                cam.ReleaseBounds();
+                Game.Camera.ReleaseBounds();
             }
         }
     }

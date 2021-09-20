@@ -67,6 +67,11 @@ namespace HollowForest
             }
         }
 
+        public void BlockInput(float duration)
+        {
+            trackedCharacters.ForEach(c => c.Character.Director.BlockInputs(duration));
+        }
+
         private void OnGoundHit(Character character, Vector3 hitPos, float fallHeight)
         {
             // TODO setup ground landing particle effect in some manager

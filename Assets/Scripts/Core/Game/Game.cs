@@ -20,7 +20,26 @@ namespace HollowForest
         public Data.Data data;
         public GameplayEvents events;
 
+        public static CameraManager Camera => Instance.cameraManager;
+        public static Dialogue.Dialogue Dialogue => Instance.dialogue;
+        public static Characters Characters => Instance.characters;
+        public static Objects.Objects Objects => Instance.objects;
+        public static Data.Data Data => Instance.data;
+        public static GameplayEvents Events => Instance.events;
+
         private static Game instance;
+
+        public static Game Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = FindObjectOfType<Game>();
+                }
+                return instance;
+            }
+        }
 
         private void Awake()
         {
@@ -53,15 +72,6 @@ namespace HollowForest
         private void FixedUpdate()
         {
             characters.Tick_Fixed();
-        }
-
-        public static Game GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<Game>();
-            }
-            return instance;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace HollowForest
         private Vector3 boundsCentre;
         private Vector2 boundsSize;
         private float boundStartTime;
-        private const float BoundPositionLerpDuration = 5f;
+        private const float BoundPositionLerpDuration = 1.3f;
 
         private void Awake()
         {
@@ -85,8 +85,9 @@ namespace HollowForest
             {
                 pos = HandleBoundPosition(pos);
             }
-            
-            pos = Vector3.Lerp(mainCamTf.position, pos, Time.deltaTime * followSpeed);
+
+            var diff = Vector3.Distance(mainCamTf.position, pos);
+            pos = Vector3.Lerp(mainCamTf.position, pos, Time.deltaTime * followSpeed * Mathf.Max(1f, diff));
             
             if (Time.time < squishEndTime)
             {

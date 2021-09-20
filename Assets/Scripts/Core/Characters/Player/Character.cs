@@ -40,6 +40,7 @@ namespace HollowForest
 
         private void Update()
         {
+            Director.Tick();
             Afflictions.Tick();
         }
 

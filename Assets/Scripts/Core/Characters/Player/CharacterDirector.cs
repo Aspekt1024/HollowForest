@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace HollowForest
 {
     /// <summary>
@@ -5,9 +7,12 @@ namespace HollowForest
     /// </summary>
     public class CharacterDirector
     {
-
         private readonly Character character;
         private readonly CharacterPhysics physics;
+
+        private bool isBlocked;
+        private bool isBlockTemporary;
+        private float timeUnblocked;
 
         public CharacterDirector(Character character, CharacterPhysics physics)
         {
@@ -15,26 +20,77 @@ namespace HollowForest
             this.physics = physics;
         }
 
-        public void MoveLeft() => physics.MoveLeft();
-        public void MoveRight() => physics.MoveRight();
-        public void StopMoving() => physics.StopMoving();
+        public void Tick()
+        {
+            if (isBlocked && isBlockTemporary && Time.time >= timeUnblocked)
+            {
+                UnblockInputs();
+            }
+        }
 
-        public void JumpPressed() => physics.JumpPressed();
-        public void JumpReleased() => physics.JumpReleased();
+        public void MoveLeft()
+        {
+            if (isBlocked) return;
+            physics.MoveLeft();
+        }
+
+        public void MoveRight()
+        {
+            if (isBlocked) return;
+            physics.MoveRight();
+        }
+
+        public void StopMoving()
+        {
+            if (isBlocked) return;
+            physics.StopMoving();
+        }
+
+        public void JumpPressed()
+        {
+            if (isBlocked) return;
+            physics.JumpPressed();
+        }
+
+        public void JumpReleased()
+        {
+            if (isBlocked) return;
+            physics.JumpReleased();
+        }
 
         public void GrapplePressed()
         {
+            if (isBlocked) return;
             character.State.SetState(CharacterStates.IsGrappling, true);
         }
 
         public void GrappleReleased()
         {
+            if (isBlocked) return;
             character.State.SetState(CharacterStates.IsGrappling, false);
         }
 
         public void Interact()
         {
+            if (isBlocked) return;
             character.Interaction.Interact();
+        }
+
+        public void BlockInputs(float duration = -1f)
+        {
+            physics.BlockInput();
+            physics.JumpReleased();
+            GrappleReleased();
+
+            isBlocked = true;
+            isBlockTemporary = duration > 0f;
+            timeUnblocked = Time.time + duration;
+        }
+
+        public void UnblockInputs()
+        {
+            isBlocked = false;
+            physics.ResumeInput();
         }
     }
 }

@@ -171,6 +171,16 @@ namespace HollowForest
             return newVelocity;
         }
 
+        public void BlockInput()
+        {
+            canMove = false;
+        }
+
+        public void ResumeInput()
+        {
+            canMove = true;
+        }
+
         public void MoveLeft()
         {
             horizontal = HorizontalInput.Left;
