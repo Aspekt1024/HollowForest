@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using HollowForest.Objects;
 using UnityEngine;
@@ -39,6 +40,15 @@ namespace HollowForest.Events
             Game.Events.EventAchieved(startGameplayEvent.eventID);
             switchedObjects.ForEach(s => s.SwitchOff());
             Game.Characters.BlockInput(2f);
+
+            Game.Events.RegisterEventObserver(endGameplayEvent, OnEndGameplayEventAchieved);
+        }
+
+        private void OnEndGameplayEventAchieved(GameplayEvent gameplayEvent)
+        {
+            Game.Events.UnregisterEventObserver(endGameplayEvent, OnEndGameplayEventAchieved);
+            isEnabled = false;
+            switchedObjects.ForEach(s => s.SwitchOn());
         }
         
         private void OnTriggerEnter2D(Collider2D other)

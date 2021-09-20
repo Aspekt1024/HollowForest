@@ -1,6 +1,7 @@
 using System;
 using Core.Characters.Physics.Square;
 using HollowForest.Physics;
+using HollowForest.World;
 using UnityEngine;
 
 namespace HollowForest
@@ -73,7 +74,7 @@ namespace HollowForest
         }
 
         private void CancelMovementOverride() => timeHorizontalVelocityOverrideEnds = Time.time - 0.1f;
-        private void CancelMovementOverride(Vector3 wallPos) => CancelMovementOverride();
+        private void CancelMovementOverride(Vector3 wallPos, Surface surface) => CancelMovementOverride();
 
         private void SetOnGround()
         {

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace HollowForest.Events
@@ -13,9 +15,7 @@ namespace HollowForest.Events
         }
 
         private readonly List<IObserver> observers = new List<IObserver>();
-
-        public void RegisterObserver(IObserver observer) => observers.Add(observer);
-        public void UnregisterObserver(IObserver observer) => observers.Remove(observer);
+        private readonly Dictionary<int, List<Action<GameplayEvent>>> eventObservers = new Dictionary<int, List<Action<GameplayEvent>>>();
 
         public GameplayEvents(Data.Data data)
         {
@@ -35,6 +35,34 @@ namespace HollowForest.Events
             data.GameData.achievedEvents.Add(eventID);
             
             observers.ForEach(o => o.OnEventAchieved(data.Config.events[index]));
+
+            if (eventObservers.ContainsKey(eventID))
+            {
+                eventObservers[eventID].ToList().ForEach(o => o.Invoke(data.Config.events[index]));
+            }
+        }
+        
+        public void RegisterObserver(IObserver observer) => observers.Add(observer);
+        public void UnregisterObserver(IObserver observer) => observers.Remove(observer);
+
+        public void RegisterEventObserver(GameplayEvent gameplayEvent, Action<GameplayEvent> callback)
+        {
+            if (!eventObservers.ContainsKey(gameplayEvent.eventID))
+            {
+                eventObservers.Add(gameplayEvent.eventID, new List<Action<GameplayEvent>>());
+            }
+            eventObservers[gameplayEvent.eventID].Add(callback);
+        }
+
+        public void UnregisterEventObserver(GameplayEvent gameplayEvent, Action<GameplayEvent> callback)
+        {
+            if (!eventObservers.ContainsKey(gameplayEvent.eventID)) return;
+            eventObservers[gameplayEvent.eventID].Remove(callback);
+
+            if (!eventObservers[gameplayEvent.eventID].Any())
+            {
+                eventObservers.Remove(gameplayEvent.eventID);
+            }
         }
     }
 }

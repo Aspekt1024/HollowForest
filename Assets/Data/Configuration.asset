@@ -21,7 +21,7 @@ MonoBehaviour:
   - eventID: 10001
     eventName: Get Valuable Coin
     description: Find and collect the valuable coin
-    abilityUnlock: 2000
+    abilityUnlock: 0
   - eventID: 10002
     eventName: Test event
     description: A test event
@@ -33,6 +33,10 @@ MonoBehaviour:
   - eventID: 10004
     eventName: EnterStickyRoom
     description: Enter the sticky room for the first time
+    abilityUnlock: 0
+  - eventID: 10005
+    eventName: CompleteStickyRoom
+    description: Obtain the item at the end of the sticky room
     abilityUnlock: 2000
   characterProfiles:
   - guid: 49b703f1-6115-4efc-91dc-871f03bcdd31

@@ -1,4 +1,5 @@
 using System;
+using HollowForest.World;
 using UnityEngine;
 
 namespace HollowForest.Physics
@@ -10,7 +11,7 @@ namespace HollowForest.Physics
         private readonly Character character;
 
         public event Action OnCeilingHit = delegate { };
-        public event Action<Vector3> OnWallHit = delegate { };
+        public event Action<Vector3, Surface> OnWallHit = delegate { };
 
         public bool IsGrounded { get; private set; }
         public float TimeUngrounded { get; private set; }
@@ -51,7 +52,7 @@ namespace HollowForest.Physics
                 if (hitRight.collider != null)
                 {
                     pos.x = hitRight.point.x - colliderExtents.x;
-                    OnWallHit?.Invoke(hitRight.point);
+                    OnWallHit?.Invoke(hitRight.point, hitRight.collider.GetComponent<Surface>());
                 }
             }
             else
@@ -60,7 +61,7 @@ namespace HollowForest.Physics
                 if (hitLeft.collider != null)
                 {
                     pos.x = hitLeft.point.x + colliderExtents.x;
-                    OnWallHit?.Invoke(hitLeft.point);
+                    OnWallHit?.Invoke(hitLeft.point, hitLeft.collider.GetComponent<Surface>());
                 }
             }
 

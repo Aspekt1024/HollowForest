@@ -1,6 +1,7 @@
 using System;
 using HollowForest;
 using HollowForest.Physics;
+using HollowForest.World;
 using UnityEngine;
 
 namespace Core.Characters.Physics.Square
@@ -21,6 +22,8 @@ namespace Core.Characters.Physics.Square
 
         private float timeUnattached;
 
+        private bool isAttachedToStickySurface;
+
         public bool IsAttachedToWall { get; private set; }
         public Vector3 WallPosition { get; private set; }
 
@@ -36,9 +39,9 @@ namespace Core.Characters.Physics.Square
             character.State.RegisterStateObserver(CharacterStates.IsGrappling, OnGrapplingStateChanged);
         }
 
-        private void OnWallHit(Vector3 position)
+        private void OnWallHit(Vector3 position, Surface surface)
         {
-            if (CanAttachToWall())
+            if (CanAttachToWall(surface))
             {
                 WallPosition = position;
                 character.State.SetState(CharacterStates.IsAttachedToWall, true);
@@ -55,6 +58,7 @@ namespace Core.Characters.Physics.Square
                 var xDir = WallPosition.x - character.transform.position.x;
                 var xVelocity = settings.wallJumpHorizontalVelocity * Mathf.Sign(-xDir);
                 character.Physics.SetHorizontalVelocity(xVelocity, settings.wallJumpDuration);
+                isAttachedToStickySurface = false;
             }
             
             IsAttachedToWall = isAttachedToWall;
@@ -62,7 +66,7 @@ namespace Core.Characters.Physics.Square
 
         private void OnGrapplingStateChanged(bool isGrappling)
         {
-            if (IsAttachedToWall && !isGrappling)
+            if (IsAttachedToWall && !isGrappling && !isAttachedToStickySurface)
             {
                 IsAttachedToWall = false;
                 timeUnattached = Time.time;
@@ -70,11 +74,17 @@ namespace Core.Characters.Physics.Square
             }
         }
 
-        private bool CanAttachToWall()
+        private bool CanAttachToWall(Surface surface)
         {
-            if (!character.Abilities.HasAbility(CharacterAbility.AttachToWall)) return false;
-            
             if (IsAttachedToWall) return false;
+            
+            if (surface != null && surface.isSticky)
+            {
+                isAttachedToStickySurface = true;
+                return Time.time >= timeUnattached + settings.wallAttachmentCooldown;
+            }
+            
+            if (!character.Abilities.HasAbility(CharacterAbility.AttachToWall)) return false;
 
             if (!character.State.GetState(CharacterStates.IsGrappling)) return false;
             if (character.State.GetState(CharacterStates.IsGrounded)) return false;

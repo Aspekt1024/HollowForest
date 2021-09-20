@@ -42,10 +42,15 @@ namespace HollowForest
             followTarget = target;
         }
 
-        public void FollowTemporary(Transform target, float duration)
+        public void FollowTemporary(Transform target, float duration, bool blockInput)
         {
             tempTarget = target;
             tempTargetFollowEndTime = Time.time + duration;
+
+            if (blockInput)
+            {
+                Game.Characters.BlockInput(duration);
+            }
         }
 
         public void Squish(float intensity, float duration = 0.2f)
@@ -87,7 +92,8 @@ namespace HollowForest
             }
 
             var diff = Vector3.Distance(mainCamTf.position, pos);
-            pos = Vector3.Lerp(mainCamTf.position, pos, Time.deltaTime * followSpeed * Mathf.Max(1f, diff));
+            var speedModifier = Time.time < tempTargetFollowEndTime ? 1f : Mathf.Max(1f, diff);
+            pos = Vector3.Lerp(mainCamTf.position, pos, Time.deltaTime * followSpeed * speedModifier);
             
             if (Time.time < squishEndTime)
             {
