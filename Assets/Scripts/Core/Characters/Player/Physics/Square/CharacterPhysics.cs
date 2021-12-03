@@ -20,6 +20,7 @@ namespace HollowForest
             public float maxFallSpeed = -50f;
 
             public JumpPhysics.Settings jumpSettings;
+            public DashPhysics.Settings dashSettings;
             public WallPhysics.Settings wallSettings;
         }
 
@@ -42,6 +43,7 @@ namespace HollowForest
         private readonly Settings settings;
 
         private readonly JumpPhysics jump;
+        private readonly DashPhysics dash;
         private readonly WallPhysics wall;
         private readonly RollingPhysics rolling;
 
@@ -57,6 +59,7 @@ namespace HollowForest
 
             Collision = new CollisionSensor(character);
             jump = new JumpPhysics(character, settings.jumpSettings, Collision);
+            dash = new DashPhysics(character, settings.dashSettings, Collision);
             wall = new WallPhysics(character, settings.wallSettings, Collision);
             
             rolling = new RollingPhysics(character);
@@ -106,6 +109,11 @@ namespace HollowForest
         private Vector3 CalculateVelocity()
         {
             velocity = CalculateHorizontalInfluencedVelocity(character.Rigidbody.velocity);
+            
+            if (dash.IsDashing)
+            {
+                velocity = dash.CalculateVelocity(velocity);
+            }
 
             var startPos = character.Rigidbody.position;
             var pos = startPos;
@@ -120,7 +128,11 @@ namespace HollowForest
 
         private float CalculateHeight(Vector3 velocity, Vector3 pos)
         {
-            if (jump.IsJumping)
+            if (dash.IsDashing)
+            {
+                pos.y = dash.CalculateHeight(velocity, pos);
+            }
+            else if (jump.IsJumping)
             {
                 pos.y = jump.CalculateHeight();
             }
@@ -199,6 +211,8 @@ namespace HollowForest
 
         public void JumpPressed() => jump.JumpRequested();
         public void JumpReleased() => jump.JumpReleased();
+
+        public void DashPressed() => dash.DashRequested();
 
         private void OnRecoverStateChanged(bool isRecovering)
         {

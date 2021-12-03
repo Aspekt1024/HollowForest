@@ -69,6 +69,14 @@ namespace HollowForest
             }
         }
 
+        private void OnDash(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                controllerCharacter.Director.DashPressed();
+            }
+        }
+
         private void OnGrapple(InputValue value)
         {
             if (value.isPressed)

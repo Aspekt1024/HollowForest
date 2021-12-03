@@ -58,6 +58,12 @@ namespace HollowForest
             physics.JumpReleased();
         }
 
+        public void DashPressed()
+        {
+            if (isBlocked) return;
+            physics.DashPressed();
+        }
+
         public void GrapplePressed()
         {
             if (isBlocked) return;

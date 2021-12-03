@@ -11,6 +11,7 @@ namespace HollowForest
         IsRecovering,
         IsAttachedToWall,
         IsGrappling,
+        IsDashing,
     }
     
     public class CharacterState
