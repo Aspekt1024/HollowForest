@@ -47,6 +47,7 @@ namespace HollowForest.Physics
             
             character.State.RegisterStateObserver(CharacterStates.IsGrounded, OnGroundStateChanged);
             character.State.RegisterStateObserver(CharacterStates.IsRecovering, OnRecoveryStateChanged);
+            character.State.RegisterStateObserver(CharacterStates.IsDashing, OnDashStateChanged);
             character.State.RegisterStateObserver(CharacterStates.IsAttachedToWall, OnAttachedToWallStateChanged);
             collision.OnCeilingHit += OnCeilingHit;
         }
@@ -128,6 +129,14 @@ namespace HollowForest.Physics
         {
             canJump = !isRecovering;
             CheckEarlyJumpLeway();
+        }
+
+        private void OnDashStateChanged(bool isDashing)
+        {
+            if (isDashing)
+            {
+                CancelJump();
+            }
         }
 
         private void CheckEarlyJumpLeway()
