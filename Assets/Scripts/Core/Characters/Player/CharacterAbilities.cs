@@ -10,6 +10,8 @@ namespace HollowForest
         DoubleJump = 1010,
         
         AttachToWall = 2000,
+        
+        Dash = 3000,
     }
     
     public class CharacterAbilities

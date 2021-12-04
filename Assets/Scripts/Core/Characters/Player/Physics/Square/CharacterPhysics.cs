@@ -65,6 +65,7 @@ namespace HollowForest
             rolling = new RollingPhysics(character);
 
             character.State.RegisterStateObserver(CharacterStates.IsJumping, OnJumpStateChanged);
+            character.State.RegisterStateObserver(CharacterStates.IsDashing, OnDashStateChanged);
             character.State.RegisterStateObserver(CharacterStates.IsGrounded, OnGroundedStateChanged);
             character.State.RegisterStateObserver(CharacterStates.IsRecovering, OnRecoverStateChanged);
 
@@ -187,6 +188,7 @@ namespace HollowForest
         public void BlockInput()
         {
             canMove = false;
+            dash.CancelDash();
         }
 
         public void ResumeInput()
@@ -197,11 +199,13 @@ namespace HollowForest
         public void MoveLeft()
         {
             horizontal = HorizontalInput.Left;
+            character.State.SetState(CharacterStates.IsFacingRight, false);
         }
 
         public void MoveRight()
         {
             horizontal = HorizontalInput.Right;
+            character.State.SetState(CharacterStates.IsFacingRight, true);
         }
 
         public void StopMoving()
@@ -222,6 +226,11 @@ namespace HollowForest
         private void OnJumpStateChanged(bool isJumping)
         {
             UpdateFallingState(isJumping, character.State.GetState(CharacterStates.IsGrounded));
+        }
+
+        private void OnDashStateChanged(bool isDashing)
+        {
+            UpdateFallingState(character.State.GetState(CharacterStates.IsJumping), character.State.GetState(CharacterStates.IsGrounded));
         }
         
         private void OnGroundedStateChanged(bool isGrounded)
