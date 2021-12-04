@@ -47,6 +47,10 @@ MonoBehaviour:
       maxAirTime: 0.4
       earlyJumpLeway: 0.1
       lateJumpLeway: 0.1
+    dashSettings:
+      distance: 4
+      speed: 30
+      cooldown: 0.5
     wallSettings:
       wallAttachmentCooldown: 0.2
       wallJumpHorizontalVelocity: 10

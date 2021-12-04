@@ -230,7 +230,8 @@ namespace HollowForest
 
         private void OnDashStateChanged(bool isDashing)
         {
-            UpdateFallingState(character.State.GetState(CharacterStates.IsJumping), character.State.GetState(CharacterStates.IsGrounded));
+            var isJumping = !isDashing && character.State.GetState(CharacterStates.IsJumping);
+            UpdateFallingState(isJumping, character.State.GetState(CharacterStates.IsGrounded));
         }
         
         private void OnGroundedStateChanged(bool isGrounded)
