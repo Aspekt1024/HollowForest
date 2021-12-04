@@ -189,6 +189,7 @@ namespace HollowForest
         {
             canMove = false;
             dash.CancelDash();
+            jump.JumpReleased();
         }
 
         public void ResumeInput()
@@ -200,17 +201,20 @@ namespace HollowForest
         {
             horizontal = HorizontalInput.Left;
             character.State.SetState(CharacterStates.IsFacingRight, false);
+            character.Animator.MoveLeft();
         }
 
         public void MoveRight()
         {
             horizontal = HorizontalInput.Right;
             character.State.SetState(CharacterStates.IsFacingRight, true);
+            character.Animator.MoveRight();
         }
 
         public void StopMoving()
         {
             horizontal = HorizontalInput.None;
+            character.Animator.StopMoving();
         }
 
         public void JumpPressed() => jump.JumpRequested();

@@ -8,20 +8,18 @@ namespace HollowForest.Effects
         [Serializable]
         public class Settings
         {
-            public Animator animator;
             public Transform model;
             public ParticleSystem landedEffect;
             public ParticleSystem wallAttachEffect;
         }
 
+        private readonly Character character;
         private readonly Settings settings;
         private readonly Rigidbody2D body;
 
-        private static readonly int SmallSquishAnim = Animator.StringToHash("SmallSquish");
-        private static readonly int BigSquishAnim = Animator.StringToHash("BigSquish");
-
         public CharacterEffects(Character character, Settings settings)
         {
+            this.character = character;
             this.settings = settings;
             body = character.Rigidbody;
         }
@@ -40,12 +38,12 @@ namespace HollowForest.Effects
             {
                 if (fallHeight > 6f)
                 {
-                    settings.animator.Play(BigSquishAnim, 0, 0f);
+                    character.Animator.GroundHitHeavy();
                     Game.Camera.Shake(1f, 0.2f);
                 }
                 else
                 {
-                    settings.animator.Play(SmallSquishAnim, 0, 0f);
+                    character.Animator.GroundHitLight();
                     Game.Camera.Squish(1f);
                 }
             }

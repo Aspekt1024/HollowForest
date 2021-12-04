@@ -7,6 +7,7 @@ namespace HollowForest
     public class Character : MonoBehaviour
     {
         public CharacterSettings settings;
+        public CharacterAnimator.Settings animatorSettings;
         public CharacterEffects.Settings effectsSettings;
         
         public CharacterState State { get; private set; }
@@ -15,6 +16,8 @@ namespace HollowForest
         public CharacterPhysics Physics { get; private set; }
         public CharacterAfflictions Afflictions { get; private set; }
         public CharacterEffects Effects { get; private set; }
+        public CharacterAnimator Animator { get; private set; }
+        public CharacterCombat Combat { get; private set; }
         public Interaction Interaction { get; private set; }
         
         public Transform Transform { get; private set; }
@@ -28,9 +31,11 @@ namespace HollowForest
             Rigidbody = GetComponent<Rigidbody2D>();
             
             State = new CharacterState();
+            Animator = new CharacterAnimator(animatorSettings, effectsSettings.model);
             Abilities = new CharacterAbilities();
             Physics = new CharacterPhysics(this, settings.physicsSettings);
-            Director = new CharacterDirector(this, Physics);
+            Combat = new CharacterCombat(this, settings.combatSettings);
+            Director = new CharacterDirector(this, Physics, Combat);
             Afflictions = new CharacterAfflictions(this, settings.afflictionSettings);
             Effects = new CharacterEffects(this, effectsSettings);
             Interaction = new Interaction(this);

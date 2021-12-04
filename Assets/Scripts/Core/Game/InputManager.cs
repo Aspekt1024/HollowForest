@@ -93,6 +93,30 @@ namespace HollowForest
         {
             controllerCharacter.Director.Interact();
         }
+
+        private void OnAttackLight(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                controllerCharacter.Director.AttackLightPressed();
+            }
+            else
+            {
+                controllerCharacter.Director.AttackLightReleased();
+            }
+        }
+
+        private void OnAttackHeavy(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                controllerCharacter.Director.AttackHeavyPressed();
+            }
+            else
+            {
+                controllerCharacter.Director.AttackHeavyReleased();
+            }
+        }
         
         #endregion
 

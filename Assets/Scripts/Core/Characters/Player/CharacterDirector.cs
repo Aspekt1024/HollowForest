@@ -9,15 +9,17 @@ namespace HollowForest
     {
         private readonly Character character;
         private readonly CharacterPhysics physics;
+        private readonly CharacterCombat combat;
 
         private bool isBlocked;
         private bool isBlockTemporary;
         private float timeUnblocked;
 
-        public CharacterDirector(Character character, CharacterPhysics physics)
+        public CharacterDirector(Character character, CharacterPhysics physics, CharacterCombat combat)
         {
             this.character = character;
             this.physics = physics;
+            this.combat = combat;
         }
 
         public void Tick()
@@ -82,10 +84,34 @@ namespace HollowForest
             character.Interaction.Interact();
         }
 
+        public void AttackLightPressed()
+        {
+            if (isBlocked) return;
+            combat.AttackLightRequested();
+        }
+
+        public void AttackLightReleased()
+        {
+            if (isBlocked) return;
+            combat.AttackLightReleased();
+        }
+
+        public void AttackHeavyPressed()
+        {
+            if (isBlocked) return;
+            combat.AttackHeavyRequested();
+        }
+
+        public void AttackHeavyReleased()
+        {
+            if (isBlocked) return;
+            combat.AttackHeavyReleased();
+        }
+
         public void BlockInputs(float duration = -1f)
         {
             physics.BlockInput();
-            physics.JumpReleased();
+            combat.BlockInput();
             GrappleReleased();
 
             isBlocked = true;

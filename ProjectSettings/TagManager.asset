@@ -41,21 +41,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background
-    uniqueID: 1126636757
-    locked: 0
-  - name: World
-    uniqueID: 790228297
-    locked: 0
-  - name: Interactive
-    uniqueID: 2726970211
-    locked: 0
-  - name: NPCs
-    uniqueID: 685878359
-    locked: 0
-  - name: Player
-    uniqueID: 3020945889
-    locked: 0
   - name: UI
     uniqueID: 1921526233
     locked: 0

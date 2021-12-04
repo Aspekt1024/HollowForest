@@ -8,5 +8,6 @@ namespace HollowForest
     {
         public CharacterPhysics.Settings physicsSettings;
         public CharacterAfflictions.Settings afflictionSettings;
+        public CharacterCombat.Settings combatSettings;
     }
 }

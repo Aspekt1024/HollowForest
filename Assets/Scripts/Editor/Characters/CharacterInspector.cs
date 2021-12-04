@@ -18,8 +18,10 @@ namespace HollowForest.Characters
             var inspector = new VisualElement();
             
             var settings = new PropertyField(serializedObject.FindProperty(nameof(character.settings)));
+            var animatorSettings = new PropertyField(serializedObject.FindProperty(nameof(character.animatorSettings)));
             var effectsSettings = new PropertyField(serializedObject.FindProperty(nameof(character.effectsSettings)));
             inspector.Add(settings);
+            inspector.Add(animatorSettings);
             inspector.Add(effectsSettings);
 
             stateDisplay = new VisualElement();
