@@ -24,6 +24,7 @@ namespace HollowForest.UI
 
         public void InitAwake()
         {
+            // TODO this means all UIs must be attached, and therefore all UI elements are loaded on startup. Most UI elements won't be needed immediately
             allUIs = GetComponentsInChildren<UIBase>().ToList();
         }
 

@@ -58,6 +58,7 @@ namespace HollowForest
             ui.InitAwake();
             inputManager.InitAwake(ui);
             dialogue.InitAwake(data.Config.dialogue, data.GameData.dialogue, ui);
+            cameraManager.InitAwake(ui);
 
             events.RegisterObserver(characters);
         }

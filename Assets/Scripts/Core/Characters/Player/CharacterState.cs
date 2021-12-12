@@ -13,6 +13,7 @@ namespace HollowForest
         IsGrappling,
         IsDashing,
         IsFacingRight,
+        IsLockedForAttack,
     }
     
     public class CharacterState

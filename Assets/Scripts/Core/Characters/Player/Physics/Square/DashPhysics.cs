@@ -20,7 +20,7 @@ namespace HollowForest.Physics
 
         private bool isDashActive;
         private float timeStartedDash;
-        private float startPosX;
+        private float timeDashEnds;
         private bool isDirectionRight;
         
         private bool isGroundedSinceLastDash;
@@ -49,10 +49,10 @@ namespace HollowForest.Physics
             if (!isDashActive) return velocity;
             velocity.x = settings.speed * (isDirectionRight ? 1f : -1f);
             
-            var overshoot = character.transform.position.x + velocity.x * Time.fixedDeltaTime - startPosX;
-            overshoot = (isDirectionRight ? overshoot : -overshoot) - settings.distance;
-            if (overshoot > 0f)
+            var remainingTime = timeDashEnds - Time.time;
+            if (remainingTime < 0f)
             {
+                var overshoot = remainingTime * (isDirectionRight ? settings.speed : -settings.speed);
                 velocity.x -= overshoot / Time.fixedDeltaTime;
                 isDashActive = false;
                 character.State.SetState(CharacterStates.IsDashing, false);
@@ -79,7 +79,7 @@ namespace HollowForest.Physics
             {
                 isGroundedSinceLastDash = false;
             }
-            startPosX = character.transform.position.x;
+            timeDashEnds = timeStartedDash + settings.distance / settings.speed;
             isDirectionRight = character.State.GetState(CharacterStates.IsFacingRight);
             character.State.SetState(CharacterStates.IsDashing, true);
         }

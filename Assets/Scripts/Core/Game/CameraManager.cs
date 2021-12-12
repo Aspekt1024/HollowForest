@@ -1,4 +1,5 @@
 using System;
+using HollowForest.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,6 +11,8 @@ namespace HollowForest
         public float followSpeed;
         public AnimationCurve squishCurve;
         public float baseShakeIntensity = 0.1f;
+
+        private UserInterface ui;
 
         private Transform mainCamTf;
         private Transform followTarget;
@@ -37,6 +40,11 @@ namespace HollowForest
             originalOrthSize = mainCamera.orthographicSize;
         }
 
+        public void InitAwake(UserInterface ui)
+        {
+            this.ui = ui;
+        }
+
         public void Follow(Transform target)
         {
             followTarget = target;
@@ -49,8 +57,14 @@ namespace HollowForest
 
             if (blockInput)
             {
-                Game.Characters.BlockInput(duration);
+                SetCinematic(duration);
             }
+        }
+
+        public void SetCinematic(float duration)
+        {
+            ui.GetUI<CinematicUI>().Activate(duration);
+            Game.Characters.BlockInput(duration);
         }
 
         public void Squish(float intensity, float duration = 0.2f)

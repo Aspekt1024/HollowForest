@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Core.Characters.Physics.Square;
 using HollowForest.Physics;
 using HollowForest.World;
@@ -32,7 +34,12 @@ namespace HollowForest
         }
 
         private HorizontalInput horizontal;
-        private bool canMove;
+
+        private enum MovementBlocks
+        {
+            Recovering, Attacking, Master,
+        }
+        private readonly HashSet<MovementBlocks> movementBlockList = new HashSet<MovementBlocks>();
 
         private Vector2 velocity;
         private float fallStartHeight;
@@ -67,14 +74,14 @@ namespace HollowForest
             character.State.RegisterStateObserver(CharacterStates.IsJumping, OnJumpStateChanged);
             character.State.RegisterStateObserver(CharacterStates.IsDashing, OnDashStateChanged);
             character.State.RegisterStateObserver(CharacterStates.IsGrounded, OnGroundedStateChanged);
-            character.State.RegisterStateObserver(CharacterStates.IsRecovering, OnRecoverStateChanged);
+            character.State.RegisterStateObserver(CharacterStates.IsRecovering, isRecovering => OnMovementLockStateChanged(MovementBlocks.Recovering, isRecovering));
+            character.State.RegisterStateObserver(CharacterStates.IsLockedForAttack, isLocked => OnMovementLockStateChanged(MovementBlocks.Attacking, isLocked));
 
             Collision.OnCeilingHit += CancelMovementOverride;
             Collision.OnWallHit += CancelMovementOverride;
 
             // Set initial conditions
             SetOnGround();
-            canMove = true;
         }
 
         private void CancelMovementOverride() => timeHorizontalVelocityOverrideEnds = Time.time - 0.1f;
@@ -150,7 +157,7 @@ namespace HollowForest
 
         private Vector3 CalculateHorizontalInfluencedVelocity(Vector3 velocity)
         {
-            if (!canMove || wall.IsAttachedToWall)
+            if (movementBlockList.Any() || wall.IsAttachedToWall)
             {
                 velocity.x = 0;
                 return velocity;
@@ -187,14 +194,14 @@ namespace HollowForest
 
         public void BlockInput()
         {
-            canMove = false;
+            movementBlockList.Add(MovementBlocks.Master);
             dash.CancelDash();
             jump.JumpReleased();
         }
 
         public void ResumeInput()
         {
-            canMove = true;
+            movementBlockList.Remove(MovementBlocks.Master);
         }
 
         public void MoveLeft()
@@ -221,11 +228,6 @@ namespace HollowForest
         public void JumpReleased() => jump.JumpReleased();
 
         public void DashPressed() => dash.DashRequested();
-
-        private void OnRecoverStateChanged(bool isRecovering)
-        {
-            canMove = !isRecovering;
-        }
         
         private void OnJumpStateChanged(bool isJumping)
         {
@@ -251,6 +253,18 @@ namespace HollowForest
             }
             
             UpdateFallingState(character.State.GetState(CharacterStates.IsJumping), isGrounded);
+        }
+
+        private void OnMovementLockStateChanged(MovementBlocks block, bool isBlocked)
+        {
+            if (isBlocked)
+            {
+                movementBlockList.Add(block);
+            }
+            else
+            {
+                movementBlockList.Remove(block);
+            }
         }
 
         private void UpdateFallingState(bool isJumping, bool isGrounded)

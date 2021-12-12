@@ -39,7 +39,7 @@ namespace HollowForest.Events
         {
             Game.Events.EventAchieved(startGameplayEvent.eventID);
             switchedObjects.ForEach(s => s.SwitchOff());
-            Game.Characters.BlockInput(2f);
+            Game.Camera.SetCinematic(2f);
 
             Game.Events.RegisterEventObserver(endGameplayEvent, OnEndGameplayEventAchieved);
         }

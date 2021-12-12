@@ -47,6 +47,7 @@ namespace HollowForest
         {
             Director.Tick();
             Afflictions.Tick();
+            Combat.Tick();
         }
 
         private void OnTriggerEnter2D(Collider2D other)

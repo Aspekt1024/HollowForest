@@ -44,7 +44,6 @@ namespace HollowForest
 
         public void StopMoving()
         {
-            if (isBlocked) return;
             physics.StopMoving();
         }
 
