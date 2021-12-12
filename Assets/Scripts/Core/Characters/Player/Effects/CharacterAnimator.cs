@@ -13,12 +13,14 @@ namespace HollowForest.Effects
             [Header("Animations")]
             public string groundHitLight;
             public string groundHitHeavy;
-            public string lightAttack;
-            public string heavyAttack;
 
             [Header("Animation Booleans")]
             public string walking;
             public string running;
+
+            [Header("Animation Triggers")]
+            public string lightAttack;
+            public string heavyAttack;
         }
 
         private readonly Animator animator;
@@ -26,8 +28,8 @@ namespace HollowForest.Effects
 
         private readonly int groundHitLightAnim;
         private readonly int groundHitHeavyAnim;
-        private readonly int lightAttackAnim;
-        private readonly int heavyAttackAnim;
+        private readonly int lightAttackTrigger;
+        private readonly int heavyAttackTrigger;
         
         private readonly int walkBool;
         private readonly int runBool;
@@ -39,11 +41,12 @@ namespace HollowForest.Effects
 
             groundHitLightAnim = GetAnimationHash(settings.groundHitLight);
             groundHitHeavyAnim = GetAnimationHash(settings.groundHitHeavy);
-            lightAttackAnim = GetAnimationHash(settings.lightAttack);
-            heavyAttackAnim = GetAnimationHash(settings.heavyAttack);
 
             walkBool = GetAnimationHash(settings.walking);
             runBool = GetAnimationHash(settings.running);
+            
+            lightAttackTrigger = GetAnimationHash(settings.lightAttack);
+            heavyAttackTrigger = GetAnimationHash(settings.heavyAttack);
         }
 
         public void GroundHitLight()
@@ -58,13 +61,17 @@ namespace HollowForest.Effects
 
         public void MoveLeft()
         {
-            model.localEulerAngles = new Vector3(0f, 180f, 0f);
+            var scale = model.localScale;
+            scale.x = -Mathf.Abs(scale.x);
+            model.localScale = scale;
             SetBool(runBool, true);
         }
 
         public void MoveRight()
         {
-            model.localEulerAngles = Vector3.zero;
+            var scale = model.localScale;
+            scale.x = Mathf.Abs(scale.x);
+            model.localScale = scale;
             SetBool(runBool, true);
         }
 
@@ -76,12 +83,12 @@ namespace HollowForest.Effects
 
         public void LightAttack()
         {
-            PlayAnimation(lightAttackAnim);
+            SetTrigger(lightAttackTrigger);
         }
 
         public void HeavyAttack()
         {
-            PlayAnimation(heavyAttackAnim);
+            SetTrigger(heavyAttackTrigger);
         }
         
         private static int GetAnimationHash(string name)
@@ -90,16 +97,22 @@ namespace HollowForest.Effects
             return Animator.StringToHash(name);
         }
 
-        private void PlayAnimation(int hash)
+        private void PlayAnimation(int hash, int layer = 0)
         {
             if (hash == 0) return;
-            animator.Play(hash, 0, 0f);
+            animator.Play(hash, layer, 0f);
         }
 
         private void SetBool(int hash, bool value)
         {
             if (hash == 0) return;
             animator.SetBool(hash, value);
+        }
+
+        private void SetTrigger(int hash)
+        {
+            if (hash == 0) return;
+            animator.SetTrigger(hash);
         }
     }
 }
