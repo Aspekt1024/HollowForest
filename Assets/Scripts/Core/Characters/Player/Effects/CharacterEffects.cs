@@ -11,6 +11,8 @@ namespace HollowForest.Effects
             public Transform model;
             public ParticleSystem landedEffect;
             public ParticleSystem wallAttachEffect;
+            public TrailRenderer dashEffect;
+            public SpriteRenderer slashEffect;
         }
 
         private readonly Character character;
@@ -22,6 +24,8 @@ namespace HollowForest.Effects
             this.character = character;
             this.settings = settings;
             body = character.Rigidbody;
+
+            settings.dashEffect.emitting = false;
         }
 
         public void OnGroundHit(Vector3 hitPosition, float fallHeight)
@@ -56,6 +60,17 @@ namespace HollowForest.Effects
             
             settings.wallAttachEffect.transform.position = hitPosition;
             settings.wallAttachEffect.Play();
+        }
+
+        public void BeginDash()
+        {
+            settings.dashEffect.emitting = true;
+            character.Animator.Dash();
+        }
+
+        public void EndDash()
+        {
+            settings.dashEffect.emitting = false;
         }
     }
 }

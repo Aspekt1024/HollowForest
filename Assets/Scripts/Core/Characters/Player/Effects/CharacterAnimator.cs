@@ -17,10 +17,13 @@ namespace HollowForest.Effects
             [Header("Animation Booleans")]
             public string walking;
             public string running;
-
+            public string falling;
+            
             [Header("Animation Triggers")]
             public string lightAttack;
             public string heavyAttack;
+            public string dashing;
+            public string jumping;
         }
 
         private readonly Animator animator;
@@ -31,10 +34,14 @@ namespace HollowForest.Effects
         private readonly int lightAttackTrigger;
         private readonly int heavyAttackTrigger;
         
+        private readonly int dashTrigger;
+        private readonly int jumpTrigger;
+        
         private readonly int walkBool;
         private readonly int runBool;
+        private readonly int fallBool;
 
-        public CharacterAnimator(Settings settings, Transform model)
+        public CharacterAnimator(Character character, Settings settings, Transform model)
         {
             animator = settings.animator;
             this.model = model;
@@ -44,9 +51,15 @@ namespace HollowForest.Effects
 
             walkBool = GetAnimationHash(settings.walking);
             runBool = GetAnimationHash(settings.running);
+            fallBool = GetAnimationHash(settings.falling);
             
             lightAttackTrigger = GetAnimationHash(settings.lightAttack);
             heavyAttackTrigger = GetAnimationHash(settings.heavyAttack);
+            jumpTrigger = GetAnimationHash(settings.jumping);
+            dashTrigger = GetAnimationHash(settings.dashing);
+            
+            character.State.RegisterStateObserver(CharacterStates.IsFalling, OnFallStateChanged);
+            character.State.RegisterStateObserver(CharacterStates.IsJumping, OnJumpStateChanged);
         }
 
         public void GroundHitLight()
@@ -73,6 +86,22 @@ namespace HollowForest.Effects
             scale.x = Mathf.Abs(scale.x);
             model.localScale = scale;
             SetBool(runBool, true);
+        }
+
+        private void OnJumpStateChanged(bool isJumping)
+        {
+            if (!isJumping) return;
+            SetTrigger(jumpTrigger);
+        }
+
+        private void OnFallStateChanged(bool isFalling)
+        {
+            SetBool(fallBool, isFalling);
+        }
+
+        public void Dash()
+        {
+            SetTrigger(dashTrigger);
         }
 
         public void StopMoving()

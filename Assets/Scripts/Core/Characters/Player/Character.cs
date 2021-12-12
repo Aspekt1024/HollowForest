@@ -31,7 +31,7 @@ namespace HollowForest
             Rigidbody = GetComponent<Rigidbody2D>();
             
             State = new CharacterState();
-            Animator = new CharacterAnimator(animatorSettings, effectsSettings.model);
+            Animator = new CharacterAnimator(this, animatorSettings, effectsSettings.model);
             Abilities = new CharacterAbilities();
             Physics = new CharacterPhysics(this, settings.physicsSettings);
             Combat = new CharacterCombat(this, settings.combatSettings);

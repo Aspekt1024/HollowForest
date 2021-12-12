@@ -54,8 +54,7 @@ namespace HollowForest.Physics
             {
                 var overshoot = remainingTime * (isDirectionRight ? settings.speed : -settings.speed);
                 velocity.x -= overshoot / Time.fixedDeltaTime;
-                isDashActive = false;
-                character.State.SetState(CharacterStates.IsDashing, false);
+                CancelDash();
             }
             
             // TODO hangtime if in air at end of dash
@@ -82,12 +81,14 @@ namespace HollowForest.Physics
             timeDashEnds = timeStartedDash + settings.distance / settings.speed;
             isDirectionRight = character.State.GetState(CharacterStates.IsFacingRight);
             character.State.SetState(CharacterStates.IsDashing, true);
+            character.Effects.BeginDash();
         }
 
         public void CancelDash()
         {
             isDashActive = false;
             character.State.SetState(CharacterStates.IsDashing, false);
+            character.Effects.EndDash();
         }
 
         private void OnWallHit(Vector3 wallPoint, Surface surface)
