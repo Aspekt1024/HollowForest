@@ -1,17 +1,22 @@
+using HollowForest.Combat;
 using UnityEngine;
 
 namespace HollowForest.AI
 {
-    public class AIAgent
+    public class AIAgent : Health.IDamageObserver
     {
         private readonly Character character;
 
         private Character threat;
+        private bool isEnabled;
         
         public AIAgent(Character character)
         {
             this.character = character;
             
+            character.State.RegisterStateObserver(CharacterStates.IsAlive, OnAliveStateChanged);
+            character.Health.RegisterObserver(this);
+            isEnabled = true;
         }
 
         public void ThreatDetected(Character other)
@@ -22,6 +27,8 @@ namespace HollowForest.AI
 
         public void Tick()
         {
+            if (!isEnabled) return;
+            
             if (threat != null)
             {
                 AttackThreat();
@@ -39,6 +46,12 @@ namespace HollowForest.AI
 
         private void AttackThreat()
         {
+            if (!threat.State.GetState(CharacterStates.IsAlive))
+            {
+                threat = null;
+                return;
+            }
+            
             var dist = threat.transform.position - character.transform.position;
             
             if (Mathf.Abs(dist.x) < 2f)
@@ -69,6 +82,24 @@ namespace HollowForest.AI
                 {
                     character.Physics.DashPressed();
                 }
+            }
+        }
+
+        private void OnAliveStateChanged(bool isAlive)
+        {
+            if (!isAlive)
+            {
+                isEnabled = false;
+            }
+        }
+
+        public void OnDamageTaken(HitDetails hitDetails)
+        {
+            character.Director.StopMoving();
+            character.Director.BlockInputs(0.8f);
+            if (hitDetails.source != null)
+            {
+                ThreatDetected(hitDetails.source);
             }
         }
     }

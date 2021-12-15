@@ -157,15 +157,15 @@ namespace HollowForest
 
         private Vector3 CalculateHorizontalInfluencedVelocity(Vector3 velocity)
         {
-            if (movementBlockList.Any() || wall.IsAttachedToWall)
-            {
-                velocity.x = 0;
-                return velocity;
-            }
-            
             if (Time.time < timeHorizontalVelocityOverrideEnds)
             {
                 velocity.x = horizontalVelocityOverride;
+                return velocity;
+            }
+            
+            if (movementBlockList.Any() || wall.IsAttachedToWall)
+            {
+                velocity.x = 0;
                 return velocity;
             }
             

@@ -1,4 +1,5 @@
 using System;
+using HollowForest.Combat;
 using UnityEngine;
 
 namespace HollowForest
@@ -11,19 +12,31 @@ namespace HollowForest
             public float lightAttackCooldown = 0.33f;
             public float heavyAttackCooldown = 0.95f;
             public float heavyAttackLockTime = 0.6f;
+
+            public int lightAttackBaseDamage = 1;
+            public int heavyAttackBaseDamage = 2;
+        }
+
+        [Serializable]
+        public class CollisionSettings
+        {
+            public AttackCollider lightAttackCollider;
+            public AttackCollider heavyAttackCollider;
         }
         
         private readonly Character character;
         private readonly Settings settings;
+        private readonly CollisionSettings collisions;
 
         private float timeNextAttackAvailable;
         private float timeAttackLockEnds;
         private bool isLockedForAttack;
         
-        public CharacterCombat(Character character, Settings settings)
+        public CharacterCombat(Character character, Settings settings, CollisionSettings collisions)
         {
             this.character = character;
             this.settings = settings;
+            this.collisions = collisions;
 
             timeNextAttackAvailable = -1000f;
         }
@@ -42,6 +55,16 @@ namespace HollowForest
             if (!CanAttack()) return;
             timeNextAttackAvailable = Time.time + settings.lightAttackCooldown;
             character.Animator.LightAttack();
+            collisions.lightAttackCollider.ActionAttack((c, dir) =>
+            {
+                var details = new HitDetails
+                {
+                    source = character,
+                    damage = settings.lightAttackBaseDamage,
+                    direction = dir,
+                };
+                c.TakeDamage(details);
+            });
         }
 
         public void AttackLightReleased()

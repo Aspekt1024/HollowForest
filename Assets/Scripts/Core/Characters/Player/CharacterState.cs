@@ -14,6 +14,7 @@ namespace HollowForest
         IsDashing,
         IsFacingRight,
         IsLockedForAttack,
+        IsAlive,
     }
     
     public class CharacterState

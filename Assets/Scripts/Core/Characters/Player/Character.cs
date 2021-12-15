@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using HollowForest.Combat;
 using HollowForest.Effects;
 using HollowForest.Interactivity;
 using UnityEngine;
@@ -9,8 +11,10 @@ namespace HollowForest
         public CharacterSettings settings;
         public CharacterAnimator.Settings animatorSettings;
         public CharacterEffects.Settings effectsSettings;
+        public CharacterCombat.CollisionSettings combatCollisionSettings;
         
         public CharacterState State { get; private set; }
+        public Health Health { get; private set; }
         public CharacterAbilities Abilities { get; private set; }
         public CharacterDirector Director { get; private set; }
         public CharacterPhysics Physics { get; private set; }
@@ -31,10 +35,11 @@ namespace HollowForest
             Rigidbody = GetComponent<Rigidbody2D>();
             
             State = new CharacterState();
+            Health = new Health(this, settings.healthSettings);
             Animator = new CharacterAnimator(this, animatorSettings, effectsSettings.model);
             Abilities = new CharacterAbilities();
             Physics = new CharacterPhysics(this, settings.physicsSettings);
-            Combat = new CharacterCombat(this, settings.combatSettings);
+            Combat = new CharacterCombat(this, settings.combatSettings, combatCollisionSettings);
             Director = new CharacterDirector(this, Physics, Combat);
             Afflictions = new CharacterAfflictions(this, settings.afflictionSettings);
             Effects = new CharacterEffects(this, effectsSettings);
@@ -64,6 +69,12 @@ namespace HollowForest
             {
                 Interaction.UnsetInteractive(other.GetComponent<IInteractive>());
             }
+        }
+
+        public void TakeDamage(HitDetails hitDetails)
+        {
+            Health.TakeDamage(hitDetails);
+            Physics.SetHorizontalVelocity(Mathf.Sign(hitDetails.direction.x) * 30f, 0.12f);
         }
 
         private void SetBaseAbilities()
