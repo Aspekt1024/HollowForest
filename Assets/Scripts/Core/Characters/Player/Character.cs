@@ -74,7 +74,7 @@ namespace HollowForest
         public void TakeDamage(HitDetails hitDetails)
         {
             Health.TakeDamage(hitDetails);
-            Physics.SetHorizontalVelocity(Mathf.Sign(hitDetails.direction.x) * 30f, 0.12f);
+            Physics.SetHorizontalVelocity(Mathf.Sign(hitDetails.direction.x) * 20f, 0.05f);
         }
 
         private void SetBaseAbilities()

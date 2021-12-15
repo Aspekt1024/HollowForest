@@ -54,16 +54,18 @@ namespace HollowForest
         {
             if (!CanAttack()) return;
             timeNextAttackAvailable = Time.time + settings.lightAttackCooldown;
-            character.Animator.LightAttack();
-            collisions.lightAttackCollider.ActionAttack((c, dir) =>
+            character.Animator.LightAttack(() =>
             {
-                var details = new HitDetails
+                collisions.lightAttackCollider.ActionAttack((c, dir) =>
                 {
-                    source = character,
-                    damage = settings.lightAttackBaseDamage,
-                    direction = dir,
-                };
-                c.TakeDamage(details);
+                    var details = new HitDetails
+                    {
+                        source = character,
+                        damage = settings.lightAttackBaseDamage,
+                        direction = dir,
+                    };
+                    c.TakeDamage(details);
+                });
             });
         }
 
@@ -79,7 +81,19 @@ namespace HollowForest
             timeNextAttackAvailable = Time.time + settings.heavyAttackCooldown;
             timeAttackLockEnds = Time.time + settings.heavyAttackLockTime;
             character.State.SetState(CharacterStates.IsLockedForAttack, true);
-            character.Animator.HeavyAttack();
+            character.Animator.HeavyAttack(() =>
+            {
+                collisions.heavyAttackCollider.ActionAttack((c, dir) =>
+                {
+                    var details = new HitDetails
+                    {
+                        source = character,
+                        damage = settings.heavyAttackBaseDamage,
+                        direction = dir,
+                    };
+                    c.TakeDamage(details);
+                });
+            });
         }
 
         public void AttackHeavyReleased()
@@ -90,6 +104,7 @@ namespace HollowForest
         public void BlockInput()
         {
             // TODO if holding an attack, cancel it with no effect
+            character.Animator.CancelAttack();
         }
 
         private bool CanAttack()

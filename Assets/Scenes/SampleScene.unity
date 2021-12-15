@@ -7091,6 +7091,7 @@ MonoBehaviour:
     falling: 
     lightAttack: AttackQuick2
     heavyAttack: AttackHeavy
+    cancelAttack: 
     dashing: 
     jumping: 
   effectsSettings:
@@ -7439,6 +7440,23 @@ MonoBehaviour:
     eventName: CompleteStickyRoom
     description: Obtain the item at the end of the sticky room
     abilityUnlock: 2000
+--- !u!1 &691179253 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1773606692048047715, guid: 74c7716169c302948b87366d4089f499, type: 3}
+  m_PrefabInstance: {fileID: 1854352126}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &691179256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691179253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee40bf28711947d69bb9b8c02918ffd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &691666242
 GameObject:
   m_ObjectHideFlags: 0
@@ -20888,6 +20906,7 @@ MonoBehaviour:
     falling: 
     lightAttack: 
     heavyAttack: 
+    cancelAttack: 
     dashing: 
     jumping: 
   effectsSettings:
@@ -21251,15 +21270,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 116549117, guid: 74c7716169c302948b87366d4089f499, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 168397944, guid: 74c7716169c302948b87366d4089f499, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1220760088, guid: 74c7716169c302948b87366d4089f499, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1025873488444032235, guid: 74c7716169c302948b87366d4089f499, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -21313,6 +21332,10 @@ PrefabInstance:
       propertyPath: effectsSettings.dashEffect
       value: 
       objectReference: {fileID: 892146080}
+    - target: {fileID: 1773606691725576322, guid: 74c7716169c302948b87366d4089f499, type: 3}
+      propertyPath: animatorSettings.cancelAttack
+      value: cancelAttack
+      objectReference: {fileID: 0}
     - target: {fileID: 1773606691725576326, guid: 74c7716169c302948b87366d4089f499, type: 3}
       propertyPath: m_Name
       value: CrystalEnemy
@@ -21377,6 +21400,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1773606692048047725, guid: 74c7716169c302948b87366d4089f499, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 87f97c4fc307d134c9cfbb82864fc7cd, type: 2}
     - target: {fileID: 2240440341632728658, guid: 74c7716169c302948b87366d4089f499, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.96331966

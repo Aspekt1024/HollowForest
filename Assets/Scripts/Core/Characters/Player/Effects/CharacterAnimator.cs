@@ -22,17 +22,20 @@ namespace HollowForest.Effects
             [Header("Animation Triggers")]
             public string lightAttack;
             public string heavyAttack;
+            public string cancelAttack;
             public string dashing;
             public string jumping;
         }
 
         private readonly Animator animator;
         private readonly Transform model;
+        private readonly AnimationEventListener animEvents;
 
         private readonly int groundHitLightAnim;
         private readonly int groundHitHeavyAnim;
         private readonly int lightAttackTrigger;
         private readonly int heavyAttackTrigger;
+        private readonly int cancelAttackTrigger;
         
         private readonly int dashTrigger;
         private readonly int jumpTrigger;
@@ -45,6 +48,7 @@ namespace HollowForest.Effects
         {
             animator = settings.animator;
             this.model = model;
+            animEvents = character.GetComponentInChildren<AnimationEventListener>();
 
             groundHitLightAnim = GetAnimationHash(settings.groundHitLight);
             groundHitHeavyAnim = GetAnimationHash(settings.groundHitHeavy);
@@ -55,6 +59,7 @@ namespace HollowForest.Effects
             
             lightAttackTrigger = GetAnimationHash(settings.lightAttack);
             heavyAttackTrigger = GetAnimationHash(settings.heavyAttack);
+            cancelAttackTrigger = GetAnimationHash(settings.cancelAttack);
             jumpTrigger = GetAnimationHash(settings.jumping);
             dashTrigger = GetAnimationHash(settings.dashing);
             
@@ -110,14 +115,21 @@ namespace HollowForest.Effects
             SetBool(walkBool, false);
         }
 
-        public void LightAttack()
+        public void LightAttack(Action actionAttackCallback)
         {
             SetTrigger(lightAttackTrigger);
+            animEvents.Attacked = actionAttackCallback;
         }
 
-        public void HeavyAttack()
+        public void HeavyAttack(Action actionAttackCallback)
         {
             SetTrigger(heavyAttackTrigger);
+            animEvents.Attacked = actionAttackCallback;
+        }
+
+        public void CancelAttack()
+        {
+            SetTrigger(cancelAttackTrigger);
         }
         
         private static int GetAnimationHash(string name)
