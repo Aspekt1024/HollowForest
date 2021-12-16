@@ -15,6 +15,7 @@ namespace HollowForest.Effects
             public string groundHitHeavy;
 
             [Header("Animation Booleans")]
+            public string alive;
             public string walking;
             public string running;
             public string falling;
@@ -39,7 +40,8 @@ namespace HollowForest.Effects
         
         private readonly int dashTrigger;
         private readonly int jumpTrigger;
-        
+
+        private readonly int aliveBool;
         private readonly int walkBool;
         private readonly int runBool;
         private readonly int fallBool;
@@ -53,6 +55,7 @@ namespace HollowForest.Effects
             groundHitLightAnim = GetAnimationHash(settings.groundHitLight);
             groundHitHeavyAnim = GetAnimationHash(settings.groundHitHeavy);
 
+            aliveBool = GetAnimationHash(settings.alive);
             walkBool = GetAnimationHash(settings.walking);
             runBool = GetAnimationHash(settings.running);
             fallBool = GetAnimationHash(settings.falling);
@@ -65,6 +68,7 @@ namespace HollowForest.Effects
             
             character.State.RegisterStateObserver(CharacterStates.IsFalling, OnFallStateChanged);
             character.State.RegisterStateObserver(CharacterStates.IsJumping, OnJumpStateChanged);
+            character.State.RegisterStateObserver(CharacterStates.IsAlive, OnAliveStateChanged);
         }
 
         public void GroundHitLight()
@@ -91,6 +95,11 @@ namespace HollowForest.Effects
             scale.x = Mathf.Abs(scale.x);
             model.localScale = scale;
             SetBool(runBool, true);
+        }
+
+        private void OnAliveStateChanged(bool isAlive)
+        {
+            SetBool(aliveBool, isAlive);
         }
 
         private void OnJumpStateChanged(bool isJumping)

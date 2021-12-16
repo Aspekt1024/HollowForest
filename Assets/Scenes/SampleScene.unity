@@ -7086,6 +7086,7 @@ MonoBehaviour:
     animator: {fileID: 506460652}
     groundHitLight: 
     groundHitHeavy: 
+    alive: 
     walking: isWalking
     running: isRunning
     falling: 
@@ -20901,6 +20902,7 @@ MonoBehaviour:
     animator: {fileID: 0}
     groundHitLight: 
     groundHitHeavy: 
+    alive: 
     walking: 
     running: 
     falling: 
@@ -21316,6 +21318,10 @@ PrefabInstance:
       propertyPath: settings
       value: 
       objectReference: {fileID: 11400000, guid: 12cf9feaae95e314884de005b0426dcc, type: 2}
+    - target: {fileID: 1773606691725576322, guid: 74c7716169c302948b87366d4089f499, type: 3}
+      propertyPath: animatorSettings.alive
+      value: isAlive
+      objectReference: {fileID: 0}
     - target: {fileID: 1773606691725576322, guid: 74c7716169c302948b87366d4089f499, type: 3}
       propertyPath: animatorSettings.dashing
       value: dash
