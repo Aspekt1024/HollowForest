@@ -19,6 +19,18 @@ namespace HollowForest
         private readonly Settings settings;
 
         private int currentHealth;
+        public event Action<int> HealthModified = delegate { };
+        
+        public int CurrentHealth
+        {
+            get => currentHealth;
+            set
+            {
+                currentHealth = value;
+                HealthModified?.Invoke(currentHealth);
+            }
+        }
+        
         private int MaxHealth => settings.baseHealth;
 
         public interface IDamageObserver
@@ -36,17 +48,17 @@ namespace HollowForest
             this.character = character;
             this.settings = settings;
 
-            currentHealth = MaxHealth;
+            CurrentHealth = MaxHealth;
             character.State.SetState(CharacterStates.IsAlive, true);
         }
 
         public void TakeDamage(HitDetails details)
         {
-            if (currentHealth <= 0) return;
+            if (CurrentHealth <= 0) return;
             
-            currentHealth = Mathf.Min(currentHealth - details.damage, MaxHealth);
+            CurrentHealth = Mathf.Min(CurrentHealth - details.damage, MaxHealth);
             damageObservers.ForEach(o => o.OnDamageTaken(details));
-            if (currentHealth <= 0)
+            if (CurrentHealth <= 0)
             {
                 character.State.SetState(CharacterStates.IsAlive, false);
             }
@@ -54,7 +66,7 @@ namespace HollowForest
 
         public void Heal(int health)
         {
-            currentHealth = Mathf.Min(currentHealth + health, MaxHealth);
+            CurrentHealth = Mathf.Min(CurrentHealth + health, MaxHealth);
         }
     }
 }

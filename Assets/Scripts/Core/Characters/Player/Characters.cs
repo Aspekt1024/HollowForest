@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using HollowForest.Events;
+using HollowForest.UI;
 using UnityEngine;
 
 namespace HollowForest
@@ -36,6 +37,7 @@ namespace HollowForest
         {
             trackedCharacters.Add(new TrackedCharacter(character));
             character.Physics.OnGoundHit += OnGoundHit;
+            Game.UI.GetUI<HUD>().SetupCharacter(character);
         }
 
         public void UnregisterCharacter(Character character)

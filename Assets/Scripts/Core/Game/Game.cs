@@ -26,6 +26,7 @@ namespace HollowForest
         public static Objects.Objects Objects => Instance.objects;
         public static Data.Data Data => Instance.data;
         public static GameplayEvents Events => Instance.events;
+        public static UserInterface UI => Instance.ui;
 
         private static Game instance;
 
