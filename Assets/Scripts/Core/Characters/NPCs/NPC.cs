@@ -1,20 +1,24 @@
 using System;
+using HollowForest.Effects;
 using HollowForest.Interactivity;
 using UnityEngine;
 
 namespace HollowForest
 {
-    public enum CharacterID
-    {
-        None = 0,
-        TestNPC = 1000,
-    }
-    
     public class NPC : MonoBehaviour, IInteractive
     {
         public CharacterProfile profile;
+        public CharacterAnimator.Settings animatorSettings;
+        public Transform model;
+
+        private CharacterAnimator anim;
         
         public event Action<Character, CharacterProfile> OnInteractedWith = delegate { };
+
+        private void Awake()
+        {
+            anim = new CharacterAnimator(null, animatorSettings, model);
+        }
 
         public void OnInteract(Character character)
         {

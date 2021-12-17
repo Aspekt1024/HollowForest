@@ -38,6 +38,14 @@ MonoBehaviour:
     eventName: CompleteStickyRoom
     description: Obtain the item at the end of the sticky room
     abilityUnlock: 2000
+  - eventID: 10006
+    eventName: EnterArena
+    description: Enter the arena for the first time
+    abilityUnlock: 0
+  - eventID: 10007
+    eventName: CompleteArena1
+    description: Defeat the crystal enemy in arena 1
+    abilityUnlock: 0
   characterProfiles:
   - guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
     characterName: Test character

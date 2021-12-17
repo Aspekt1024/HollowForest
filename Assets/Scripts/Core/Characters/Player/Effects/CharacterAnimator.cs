@@ -50,7 +50,7 @@ namespace HollowForest.Effects
         {
             animator = settings.animator;
             this.model = model;
-            animEvents = character.GetComponentInChildren<AnimationEventListener>();
+            animEvents = animator.GetComponentInChildren<AnimationEventListener>();
 
             groundHitLightAnim = GetAnimationHash(settings.groundHitLight);
             groundHitHeavyAnim = GetAnimationHash(settings.groundHitHeavy);
@@ -65,10 +65,15 @@ namespace HollowForest.Effects
             cancelAttackTrigger = GetAnimationHash(settings.cancelAttack);
             jumpTrigger = GetAnimationHash(settings.jumping);
             dashTrigger = GetAnimationHash(settings.dashing);
+
+            if (character != null)
+            {
+                character.State.RegisterStateObserver(CharacterStates.IsFalling, OnFallStateChanged);
+                character.State.RegisterStateObserver(CharacterStates.IsJumping, OnJumpStateChanged);
+                character.State.RegisterStateObserver(CharacterStates.IsAlive, OnAliveStateChanged);
+            }
             
-            character.State.RegisterStateObserver(CharacterStates.IsFalling, OnFallStateChanged);
-            character.State.RegisterStateObserver(CharacterStates.IsJumping, OnJumpStateChanged);
-            character.State.RegisterStateObserver(CharacterStates.IsAlive, OnAliveStateChanged);
+            SetBool(aliveBool, true);
         }
 
         public void GroundHitLight()
@@ -83,18 +88,28 @@ namespace HollowForest.Effects
 
         public void MoveLeft()
         {
-            var scale = model.localScale;
-            scale.x = -Mathf.Abs(scale.x);
-            model.localScale = scale;
+            LookLeft();
             SetBool(runBool, true);
         }
 
         public void MoveRight()
         {
+            LookRight();
+            SetBool(runBool, true);
+        }
+
+        public void LookLeft()
+        {
+            var scale = model.localScale;
+            scale.x = -Mathf.Abs(scale.x);
+            model.localScale = scale;
+        }
+
+        public void LookRight()
+        {
             var scale = model.localScale;
             scale.x = Mathf.Abs(scale.x);
             model.localScale = scale;
-            SetBool(runBool, true);
         }
 
         private void OnAliveStateChanged(bool isAlive)

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using HollowForest.Objects;
 using UnityEngine;
 
 namespace HollowForest.Events
@@ -9,20 +7,27 @@ namespace HollowForest.Events
     {
         public WorldEventTriggerPoint triggerPoint;
         public GameplayEvent startGameplayEvent;
-        public GameplayEvent endGameplayEvent;
+        public bool hasCinematic;
+        public float cinematicDuration;
         public bool centerCameraInZone;
+        public bool centerCameraAfterCompletion;
 
-        public List<Switchable> switchedObjects;
-
+        private float eventBeginTime;
+        private bool isAwaitingBegin;
+        
         private bool isTriggered;
         private bool isEnabled;
+        private bool isComplete;
 
+        private EventBehaviour[] events;
         private BoxCollider2D coll;
 
         private void Awake()
         {
             coll = GetComponent<BoxCollider2D>();
             triggerPoint.Init(this);
+            
+            events = GetComponentsInChildren<EventBehaviour>();
         }
 
         public void OnCharacterTriggered(Character character)
@@ -31,32 +36,58 @@ namespace HollowForest.Events
             {
                 isEnabled = true;
                 isTriggered = true;
+                
+                eventBeginTime = Time.time;
+                isAwaitingBegin = true;
+                if (hasCinematic)
+                {
+                    Game.Camera.SetCinematic(cinematicDuration);
+                    eventBeginTime += cinematicDuration;
+                }
+                
+                Game.Events.EventAchieved(startGameplayEvent.eventID);
+            
+                foreach (var eventBehaviour in events)
+                {
+                    eventBehaviour.OnWorldEventTriggered(this, character);
+                }
+            }
+        }
+
+        private void Update()
+        {
+            if (isAwaitingBegin && Time.time >= eventBeginTime)
+            {
+                isAwaitingBegin = false;
                 BeginEvent();
+            }
+        }
+
+        public void Complete()
+        {
+            isEnabled = false;
+            isComplete = true;
+
+            foreach (var eventBehaviour in events)
+            {
+                eventBehaviour.OnWorldEventComplete();
             }
         }
         
         private void BeginEvent()
         {
-            Game.Events.EventAchieved(startGameplayEvent.eventID);
-            switchedObjects.ForEach(s => s.SwitchOff());
-            Game.Camera.SetCinematic(2f);
-
-            Game.Events.RegisterEventObserver(endGameplayEvent, OnEndGameplayEventAchieved);
-        }
-
-        private void OnEndGameplayEventAchieved(GameplayEvent gameplayEvent)
-        {
-            Game.Events.UnregisterEventObserver(endGameplayEvent, OnEndGameplayEventAchieved);
-            isEnabled = false;
-            switchedObjects.ForEach(s => s.SwitchOn());
+            foreach (var eventBehaviour in events)
+            {
+                eventBehaviour.OnWorldEventBegin();
+            }
         }
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (!centerCameraInZone) return;
+            if (!CanCenterCamera()) return;
             
             var otherChar = other.GetComponent<Character>();
-            if (otherChar != null)
+            if (otherChar != null && otherChar.IsPlayer())
             {
                 Game.Camera.ApplyBounds(transform.position, coll.size);
             }
@@ -64,13 +95,17 @@ namespace HollowForest.Events
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (!centerCameraInZone) return;
-
             var otherChar = other.GetComponent<Character>();
-            if (otherChar != null)
+            if (otherChar != null && otherChar.IsPlayer())
             {
                 Game.Camera.ReleaseBounds();
             }
+        }
+
+        private bool CanCenterCamera()
+        {
+            if (isComplete && !centerCameraAfterCompletion) return false;
+            return centerCameraInZone;
         }
     }
 }

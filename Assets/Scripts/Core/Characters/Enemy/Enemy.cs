@@ -11,10 +11,17 @@ namespace HollowForest
 
         private AIAgent ai;
 
+        public event Action<Enemy> Defeated = delegate { };
+
         private void Awake()
         {
             sensor.InitAwake(this);
+        }
+
+        private void Start()
+        {
             ai = new AIAgent(character);
+            character.State.RegisterStateObserver(CharacterStates.IsAlive, OnAliveStateChanged);
         }
 
         private void FixedUpdate()
@@ -30,6 +37,14 @@ namespace HollowForest
         public void ThreatDetected(Character other)
         {
             ai.ThreatDetected(other);
+        }
+        
+        private void OnAliveStateChanged(bool isAlive)
+        {
+            if (!isAlive)
+            {
+                Defeated?.Invoke(this);
+            }
         }
     }
 }

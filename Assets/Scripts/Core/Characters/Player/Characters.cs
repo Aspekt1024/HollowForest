@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using HollowForest.Events;
 using HollowForest.UI;
 using UnityEngine;
@@ -21,6 +22,8 @@ namespace HollowForest
         
         private readonly List<TrackedCharacter> trackedCharacters = new List<TrackedCharacter>();
         private readonly List<NPC> npcs = new List<NPC>();
+
+        public bool IsPlayer(Character character) => trackedCharacters.Any(c => c.Character == character);
 
         public Characters(Game game)
         {

@@ -28,6 +28,8 @@ namespace HollowForest
         public Collider2D Collider { get; private set; }
         public Rigidbody2D Rigidbody { get; private set; }
 
+        public bool IsPlayer() => Game.Characters.IsPlayer(this);
+
         private void Awake()
         {
             Transform = transform;
