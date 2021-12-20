@@ -87,7 +87,7 @@ namespace HollowForest
         private void CancelMovementOverride() => timeHorizontalVelocityOverrideEnds = Time.time - 0.1f;
         private void CancelMovementOverride(Vector3 wallPos, Surface surface) => CancelMovementOverride();
 
-        private void SetOnGround()
+        public void SetOnGround()
         {
             var extent = character.Collider.bounds.extents.y;
             var pos = character.Transform.position;
@@ -97,6 +97,7 @@ namespace HollowForest
                 pos.y = hit.point.y + extent;
                 character.Transform.position = pos;
             }
+            velocity = Vector2.zero;
         }
 
         public void Tick_Fixed()

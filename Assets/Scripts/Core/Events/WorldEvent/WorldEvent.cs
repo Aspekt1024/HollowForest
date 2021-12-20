@@ -68,6 +68,11 @@ namespace HollowForest.Events
             isEnabled = false;
             isComplete = true;
 
+            if (!centerCameraAfterCompletion)
+            {
+                Game.Camera.ReleaseBounds();
+            }
+
             foreach (var eventBehaviour in events)
             {
                 eventBehaviour.OnWorldEventComplete();

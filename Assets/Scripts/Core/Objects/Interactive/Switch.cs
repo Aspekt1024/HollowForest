@@ -9,6 +9,7 @@ namespace HollowForest.Objects
     {
         public List<Switchable> switchedObjects;
         public GameplayEvent gameplayEvent;
+        public Transform interactionPos;
         
         private Animator anim;
 
@@ -31,6 +32,15 @@ namespace HollowForest.Objects
 
         public void OnOverlap(Character character) { }
         public void OnOverlapEnd(Character character) { }
+        public InteractiveOverlayDetails GetOverlayDetails()
+        {
+            return new InteractiveOverlayDetails
+            {
+                indicatorPos = interactionPos,
+                mainText = IsSwitchedOn ? "Turn Off" : "Turn On",
+                subText = "Press [E] to switch",
+            };
+        }
 
         protected override void OnSwitchedOn()
         {

@@ -23,6 +23,11 @@ namespace HollowForest.Interactivity
             lastInteractive?.OnOverlapEnd(character);
             lastInteractive = interactive;
             interactive.OnOverlap(character);
+
+            if (character.IsPlayer())
+            {
+                Game.UI.GetUI<InteractionUI>().SetupAndShow(interactive);
+            }
         }
 
         public void UnsetInteractive(IInteractive interactive)
@@ -31,6 +36,11 @@ namespace HollowForest.Interactivity
             
             interactive.OnOverlapEnd(character);
             lastInteractive = null;
+
+            if (character.IsPlayer())
+            {
+                Game.UI.GetUI<InteractionUI>().Hide();
+            }
         }
     }
 }

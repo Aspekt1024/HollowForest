@@ -28,12 +28,6 @@ namespace HollowForest
         public Characters(Game game)
         {
             this.game = game;
-            
-            var npcsInScene = Object.FindObjectsOfType<NPC>();
-            foreach (var npc in npcsInScene)
-            {
-                RegisterNPC(npc);
-            }
         }
         
         public void RegisterCharacter(Character character)
@@ -58,10 +52,13 @@ namespace HollowForest
             npc.OnInteractedWith += OnInteractedWith;
         }
 
-        public void UnregisterNPC(NPC npc)
+        public void UnregisterNPCs()
         {
-            npcs.Remove(npc);
-            npc.OnInteractedWith -= OnInteractedWith;
+            foreach (var npc in npcs)
+            {
+                npc.OnInteractedWith -= OnInteractedWith;
+            }
+            npcs.Clear();
         }
 
         public void Tick_Fixed()

@@ -16,6 +16,8 @@ namespace HollowForest.UI
         protected abstract void OnHideImmediate();
         protected abstract void OnAwake();
 
+        protected bool IsVisible => isVisible;
+
         private void Awake()
         {
             OnAwake();

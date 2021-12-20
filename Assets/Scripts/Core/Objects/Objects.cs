@@ -12,23 +12,6 @@ namespace HollowForest.Objects
         public Objects(Game game)
         {
             this.game = game;
-            
-            var itemsInScene = Object.FindObjectsOfType<Item>();
-            foreach (var item in itemsInScene)
-            {
-                RegisterItem(item);
-            }
-        }
-        
-        public void RegisterItem(Item item)
-        {
-            items.Add(item);
-            item.Init(game);
-        }
-
-        public void UnregisterItem(Item item)
-        {
-            items.Remove(item);
         }
     }
 }

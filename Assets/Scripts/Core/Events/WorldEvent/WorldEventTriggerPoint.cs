@@ -27,5 +27,10 @@ namespace HollowForest.Events
         {
             
         }
+
+        public InteractiveOverlayDetails GetOverlayDetails()
+        {
+            return InteractiveOverlayDetails.None;
+        }
     }
 }

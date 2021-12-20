@@ -8,13 +8,6 @@ namespace HollowForest.Objects
     {
         public GameplayEvent gameplayEvent;
         
-        private Game game;
-
-        public void Init(Game game)
-        {
-            this.game = game;
-        }
-        
         public void OnInteract(Character character)
         {
             
@@ -22,13 +15,17 @@ namespace HollowForest.Objects
 
         public void OnOverlap(Character character)
         {
-            game.events.EventAchieved(gameplayEvent.eventID);
-            game.objects.RegisterItem(this);
+            Game.Events.EventAchieved(gameplayEvent.eventID);
             Destroy(gameObject);
         }
 
         public void OnOverlapEnd(Character character)
         {
+        }
+
+        public InteractiveOverlayDetails GetOverlayDetails()
+        {
+            return InteractiveOverlayDetails.None;
         }
     }
 }

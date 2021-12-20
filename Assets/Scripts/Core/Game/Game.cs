@@ -1,6 +1,7 @@
 using HollowForest.Data;
 using HollowForest.Events;
 using HollowForest.UI;
+using HollowForest.World;
 using UnityEngine;
 
 namespace HollowForest
@@ -10,6 +11,7 @@ namespace HollowForest
         public InputManager inputManager;
         public CameraManager cameraManager;
         public UserInterface ui;
+        public WorldManager world;
 
         public Character player;
         public Configuration configuration;
@@ -27,6 +29,7 @@ namespace HollowForest
         public static Data.Data Data => Instance.data;
         public static GameplayEvents Events => Instance.events;
         public static UserInterface UI => Instance.ui;
+        public static WorldManager World => Instance.world;
 
         private static Game instance;
 
