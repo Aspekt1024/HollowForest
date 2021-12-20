@@ -5460,7 +5460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   takesFocus: 0
-  fadeTime: -0.2
+  fadeTime: 0.4
   canvasGroup: {fileID: 463042628}
 --- !u!1 &486170707
 GameObject:

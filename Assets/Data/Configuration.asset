@@ -53,3 +53,13 @@ MonoBehaviour:
   - guid: ebbf3a3d-71ee-4ffd-b4b4-01e59d4bea45
     characterName: Second character
     description: Another test character on a separate questline
+  zoneAreaReferences:
+  - zoneAreaID: 10000
+    zoneAreaName: Start
+    description: The player starting area
+  - zoneAreaID: 10001
+    zoneAreaName: Shop 1 Entrance
+    description: The entrance to the first shop
+  - zoneAreaID: 10002
+    zoneAreaName: Shop 1 Inside
+    description: The inside of the first shop

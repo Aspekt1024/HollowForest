@@ -1,10 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace HollowForest.World
 {
     public class Area : MonoBehaviour
     {
-        public Transform spawnPoint;
+        private List<ZoneArea> zoneAreas;
         
         public void Setup()
         {
@@ -13,6 +15,8 @@ namespace HollowForest.World
             {
                 Game.Characters.RegisterNPC(npc);
             }
+
+            zoneAreas = GetComponentsInChildren<ZoneArea>().ToList();
         }
 
         public void TearDown()
@@ -20,9 +24,15 @@ namespace HollowForest.World
             Game.Characters.UnregisterNPCs();
         }
 
-        public void SetAtSpawnPoint(Character character)
+        public void SetAtSpawnPoint(Character character, ZoneAreaReference zoneAreaReference)
         {
-            character.transform.position = spawnPoint.transform.position;
+            var zoneArea = zoneAreas.FirstOrDefault(a => a.id.zoneAreaID == zoneAreaReference.zoneAreaID);
+            if (zoneArea == null)
+            {
+                Debug.LogError($"Failed to find zone area: {zoneAreaReference.zoneAreaName}");
+                return;
+            }
+            character.transform.position = zoneArea.spawnPoint.transform.position;
             character.Physics.SetOnGround();
         }
     }

@@ -41,6 +41,7 @@ namespace HollowForest.Dialogue
             AddPage(new EventsPage(this));
             AddPage(new CharacterPage(this));
             AddPage(new ConfigPage(this));
+            AddPage(new ZoneAreaPage(this));
         }
     }
 }

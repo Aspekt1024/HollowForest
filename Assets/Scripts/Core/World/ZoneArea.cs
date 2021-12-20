@@ -6,8 +6,15 @@ namespace HollowForest.World
 {
     public class ZoneArea : MonoBehaviour, IInteractive
     {
-        public AssetReference areaReference;
+        [Header("Zone Area Details")]
+        public ZoneAreaReference id;
+        public Transform spawnPoint;
+        public Transform indicatorPos;
+        
+        [Header("Target Details")]
         public bool isAutomatic;
+        public AssetReference areaReference;
+        public ZoneAreaReference targetZoneArea;
 
         public void OnInteract(Character character)
         {
@@ -29,7 +36,7 @@ namespace HollowForest.World
                     Time.timeScale = 1f;
                     Game.UI.GetUI<Fadeout>().Hide();
                     area.Setup();
-                    area.SetAtSpawnPoint(character);
+                    area.SetAtSpawnPoint(character, targetZoneArea);
                 });
             };
             
@@ -58,7 +65,8 @@ namespace HollowForest.World
             return new InteractiveOverlayDetails
             {
                 mainText = "Enter",
-                subText = "Press [E] to Enter"
+                subText = "Press [E] to Enter",
+                indicatorPos = indicatorPos,
             };
         }
     }

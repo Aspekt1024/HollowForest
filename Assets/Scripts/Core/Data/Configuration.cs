@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using HollowForest.Dialogue;
 using HollowForest.Events;
+using HollowForest.World;
 using UnityEngine;
 
 namespace HollowForest.Data
@@ -11,6 +12,7 @@ namespace HollowForest.Data
         public DialogueConfig dialogue;
         public List<GameplayEvent> events;
         public List<CharacterProfile> characterProfiles;
+        public List<ZoneAreaReference> zoneAreaReferences;
 
         public void InitAwake(Data data)
         {

@@ -45,11 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 083ba5d3ad197c9458a70ab8d62426a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id:
+    zoneAreaID: 10002
+    zoneAreaName: Shop 1 Inside
+    description: The inside of the first shop
+  spawnPoint: {fileID: 7768270484629083826}
+  isAutomatic: 1
   areaReference:
     m_AssetGUID: 7292ef3407aa86541b28993c26d64da3
     m_SubObjectName: 
     m_SubObjectType: 
-  isAutomatic: 1
+  targetZoneArea:
+    zoneAreaID: 10001
+    zoneAreaName: Shop 1 Entrance
+    description: The entrance to the first shop
 --- !u!212 &7746265326095975192
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -784,7 +793,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95824d189fcc4e4d8cb016c03a6a0dff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPoint: {fileID: 7768270484629083826}
 --- !u!1 &8385464174373057171
 GameObject:
   m_ObjectHideFlags: 0
