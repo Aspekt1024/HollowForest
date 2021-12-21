@@ -128,10 +128,13 @@ namespace HollowForest
             var xExtent = boundsSize.x * 0.5f - mainCamera.aspect * mainCamera.orthographicSize;
             var yExtent = boundsSize.y * 0.5f - mainCamera.orthographicSize;
 
-            var newPos = new Vector2(
-                Mathf.Clamp(pos.x, boundsCentre.x - xExtent, boundsCentre.x + xExtent),
-                Mathf.Clamp(pos.y, boundsCentre.y - yExtent, boundsCentre.y + yExtent)
-            );
+            var minX = boundsCentre.x - xExtent;
+            var maxX = boundsCentre.x + xExtent;
+            var minY = boundsCentre.y - yExtent;
+            var maxY = boundsCentre.y + yExtent;
+            var xPos = minX < maxX ? Mathf.Clamp(pos.x, minX, maxX) : boundsCentre.x;
+            var yPos = minY < maxY ? Mathf.Clamp(pos.y, minY, maxY) : boundsCentre.y;
+            var newPos = new Vector2(xPos, yPos);
 
             var lerpRatio = (Time.time - boundStartTime) / BoundPositionLerpDuration;
             pos.x = Mathf.Lerp(pos.x, newPos.x, lerpRatio);

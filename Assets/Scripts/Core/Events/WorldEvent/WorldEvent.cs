@@ -25,7 +25,10 @@ namespace HollowForest.Events
         private void Awake()
         {
             coll = GetComponent<BoxCollider2D>();
-            triggerPoint.Init(this);
+            if (triggerPoint != null)
+            {
+                triggerPoint.Init(this);
+            }
             
             events = GetComponentsInChildren<EventBehaviour>();
         }
