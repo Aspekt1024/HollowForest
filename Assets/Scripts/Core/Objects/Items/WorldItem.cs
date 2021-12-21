@@ -4,9 +4,21 @@ using UnityEngine;
 
 namespace HollowForest.Objects
 {
-    public class Item : MonoBehaviour, IInteractive
+    public class WorldItem : MonoBehaviour, IInteractive
     {
-        public GameplayEvent gameplayEvent;
+        public ItemRef item;
+
+        private Item itemData;
+
+        public void Init()
+        {
+            itemData = Game.Objects.GetItemData(item);
+            if (itemData == null) return;
+            if (itemData.IsCollected(Game.Characters.GetPlayerCharacter()))
+            {
+                Destroy(gameObject);
+            }
+        }
         
         public void OnInteract(Character character)
         {
@@ -15,7 +27,8 @@ namespace HollowForest.Objects
 
         public void OnOverlap(Character character)
         {
-            Game.Events.EventAchieved(gameplayEvent.eventID);
+            itemData.Collect(character);
+            Game.Events.EventAchieved(itemData.collectionEvent.eventID);
             Destroy(gameObject);
         }
 

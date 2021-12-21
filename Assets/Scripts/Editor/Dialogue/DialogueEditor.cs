@@ -40,8 +40,9 @@ namespace HollowForest.Dialogue
             AddPage(new DialoguePage(this));
             AddPage(new EventsPage(this));
             AddPage(new CharacterPage(this));
-            AddPage(new ConfigPage(this));
             AddPage(new ZoneAreaPage(this));
+            AddPage(new ItemPage(this));
+            AddPage(new ConfigPage(this));
         }
     }
 }

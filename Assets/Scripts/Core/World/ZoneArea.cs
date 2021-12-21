@@ -28,9 +28,8 @@ namespace HollowForest.World
             
             var fadeUI = Game.UI.GetUI<Fadeout>();
             Time.timeScale = 0f;
-            fadeUI.FadeComplete = isHidden =>
+            fadeUI.FadeIn((isHidden) =>
             {
-                fadeUI.FadeComplete = null;
                 Game.World.LoadArea(areaReference, area =>
                 {
                     Time.timeScale = 1f;
@@ -38,9 +37,7 @@ namespace HollowForest.World
                     area.Setup();
                     area.SetAtSpawnPoint(character, targetZoneArea);
                 });
-            };
-            
-            fadeUI.Show();
+            });
         }
 
         public void OnOverlap(Character character)

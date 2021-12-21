@@ -17,35 +17,27 @@ MonoBehaviour:
   - eventID: 10000
     eventName: Get Lucky Coin
     description: Find and collect the lucky coin
-    abilityUnlock: 0
   - eventID: 10001
     eventName: Get Valuable Coin
     description: Find and collect the valuable coin
-    abilityUnlock: 0
   - eventID: 10002
     eventName: Test event
     description: A test event
-    abilityUnlock: 0
   - eventID: 10003
     eventName: My Event
     description: This is my event for testing
-    abilityUnlock: 0
   - eventID: 10004
     eventName: EnterStickyRoom
     description: Enter the sticky room for the first time
-    abilityUnlock: 0
   - eventID: 10005
     eventName: CompleteStickyRoom
     description: Obtain the item at the end of the sticky room
-    abilityUnlock: 2000
   - eventID: 10006
     eventName: EnterArena
     description: Enter the arena for the first time
-    abilityUnlock: 0
   - eventID: 10007
     eventName: CompleteArena1
     description: Defeat the crystal enemy in arena 1
-    abilityUnlock: 0
   characterProfiles:
   - guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
     characterName: Test character
@@ -63,3 +55,28 @@ MonoBehaviour:
   - zoneAreaID: 10002
     zoneAreaName: Shop 1 Inside
     description: The inside of the first shop
+  items:
+  - id: 10000
+    name: Lucky Coin
+    description: the lucky coin test item
+    collectionEvent:
+      eventID: 10000
+      eventName: Get Lucky Coin
+      description: Find and collect the lucky coin
+    behaviour: {fileID: 11400000, guid: 5a8d101f6870eab4593b35f7a50943af, type: 2}
+  - id: 10001
+    name: Grapple Ability
+    description: Attach to wall ability item
+    collectionEvent:
+      eventID: 10005
+      eventName: CompleteStickyRoom
+      description: Obtain the item at the end of the sticky room
+    behaviour: {fileID: 11400000, guid: 0660776e1726a2f4f92edcd6a982ea7c, type: 2}
+  - id: 10002
+    name: Valuable Coin
+    description: the valuable coin test tiem
+    collectionEvent:
+      eventID: 10001
+      eventName: Get Valuable Coin
+      description: Find and collect the valuable coin
+    behaviour: {fileID: 11400000, guid: 5a8d101f6870eab4593b35f7a50943af, type: 2}

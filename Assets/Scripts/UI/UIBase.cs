@@ -9,7 +9,10 @@ namespace HollowForest.UI
         
         private bool isVisible;
 
-        public abstract void OnAcceptPressed();
+        public virtual void OnAcceptPressed() { }
+        public virtual void OnBackPressed() { }
+        public virtual void OnUpPressed() { }
+        public virtual void OnDownPressed() { }
         
         protected abstract bool OnShow();
         protected abstract bool OnHide();

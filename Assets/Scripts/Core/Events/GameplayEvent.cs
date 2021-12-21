@@ -8,7 +8,5 @@ namespace HollowForest.Events
         public int eventID;
         public string eventName;
         public string description;
-
-        public CharacterAbility abilityUnlock;
     }
 }

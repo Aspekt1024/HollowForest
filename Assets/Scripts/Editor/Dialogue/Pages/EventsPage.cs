@@ -71,12 +71,6 @@ namespace HollowForest.Dialogue.Pages
             eventDescription.AddToClassList("event-description");
             eventDescription.RegisterValueChangedCallback(e => EventDescriptionUpdated(gameplayEvent, e.newValue));
             eventDetails.Add(eventDescription);
-
-            var choices = (CharacterAbility[]) Enum.GetValues(typeof(CharacterAbility));
-            var abilityUnlock = new PopupField<CharacterAbility>(choices.ToList(), gameplayEvent.abilityUnlock);
-            abilityUnlock.AddToClassList("event-name");
-            abilityUnlock.RegisterValueChangedCallback(e => AbilityUnlockUpdated(gameplayEvent, e.newValue));
-            eventDetails.Add(abilityUnlock);
             
             eventContents.Add(eventDetails);
             eventElement.Add(eventContents);
@@ -99,12 +93,6 @@ namespace HollowForest.Dialogue.Pages
         {
             Editor.RecordUndo(Editor.Config, "Change gameplay event description");
             e.description = newDescription;
-        }
-
-        private void AbilityUnlockUpdated(GameplayEvent e, CharacterAbility newAbility)
-        {
-            Editor.RecordUndo(Editor.Config, "Change gameplay event ability unlock");
-            e.abilityUnlock = newAbility;
         }
 
         private int GetUniqueEventID()

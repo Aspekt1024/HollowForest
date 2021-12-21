@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using HollowForest.Objects;
 using UnityEngine;
 
 namespace HollowForest.World
@@ -14,6 +15,12 @@ namespace HollowForest.World
             foreach (var npc in npcs)
             {
                 Game.Characters.RegisterNPC(npc);
+            }
+
+            var items = GetComponentsInChildren<WorldItem>();
+            foreach (var item in items)
+            {
+                item.Init();
             }
 
             zoneAreas = GetComponentsInChildren<ZoneArea>().ToList();

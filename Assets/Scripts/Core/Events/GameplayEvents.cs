@@ -22,6 +22,18 @@ namespace HollowForest.Events
             this.data = data;
         }
 
+        public void EventAchieved(GameplayEvent gameplayEvent)
+        {
+            if (gameplayEvent.eventID <= 0) return;
+            EventAchieved(gameplayEvent.eventID);
+        }
+
+        public bool IsAchieved(GameplayEvent gameplayEvent)
+        {
+            if (gameplayEvent.eventID <= 0) return true;
+            return data.GameData.achievedEvents.Contains(gameplayEvent.eventID);
+        }
+
         public void EventAchieved(int eventID)
         {
             var index = data.Config.events.FindIndex(e => e.eventID == eventID);

@@ -50,6 +50,7 @@ MonoBehaviour:
     zoneAreaName: Shop 1 Inside
     description: The inside of the first shop
   spawnPoint: {fileID: 7768270484629083826}
+  indicatorPos: {fileID: 0}
   isAutomatic: 1
   areaReference:
     m_AssetGUID: 7292ef3407aa86541b28993c26d64da3
@@ -238,7 +239,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5566651445781092621}
-  - component: {fileID: 7748599272001235412}
+  - component: {fileID: 2120217718281211888}
   - component: {fileID: 2471425249916914526}
   - component: {fileID: 104194356997673092}
   m_Layer: 7
@@ -264,7 +265,7 @@ Transform:
   m_Father: {fileID: 6051146302648643968}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7748599272001235412
+--- !u!114 &2120217718281211888
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -273,13 +274,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2561097555805742037}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2860b098ae194a9c9806be984a5df365, type: 3}
+  m_Script: {fileID: 11500000, guid: 6cb90ad4f8ec45cc9d675590ff971820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   profile:
     guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
     characterName: Test character
-    description: A test character
+    description: A test character who asks for a lucky coin
   animatorSettings:
     animator: {fileID: 7569924334196537186}
     groundHitLight: 
@@ -295,6 +296,7 @@ MonoBehaviour:
     jumping: 
   model: {fileID: 4125831070229789442}
   indicatorPos: {fileID: 2217658844720800212}
+  itemList: {fileID: 11400000, guid: fc9003d95935fd14e9dd310cb76517f6, type: 2}
 --- !u!61 &2471425249916914526
 BoxCollider2D:
   m_ObjectHideFlags: 0

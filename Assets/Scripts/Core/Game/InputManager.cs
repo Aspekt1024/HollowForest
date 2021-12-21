@@ -122,9 +122,36 @@ namespace HollowForest
 
         #region UIInputs
 
-        private void OnAccept()
+        private void OnAccept() => ui.OnAcceptReceived();
+        private void OnBack() => ui.OnBackReceived();
+
+        private void OnNavigate(InputValue value)
         {
-            ui.OnAcceptReceived();
+            var dir = value.Get<Vector2>();
+            if (dir.sqrMagnitude < 0.1f) return;
+            
+            if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+            {
+                if (dir.x > 0)
+                {
+                    
+                }
+                else
+                {
+                    
+                }
+            }
+            else
+            {
+                if (dir.y > 0)
+                {
+                    ui.OnUpReceived();
+                }
+                else
+                {
+                    ui.OnDownReceived();
+                }
+            }
         }
 
         #endregion

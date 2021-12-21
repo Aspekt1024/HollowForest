@@ -30,10 +30,22 @@ namespace HollowForest.UI
 
         public void OnAcceptReceived()
         {
-            if (focusedUI != null)
-            {
-                focusedUI.OnAcceptPressed();
-            }
+            if (focusedUI != null) focusedUI.OnAcceptPressed();
+        }
+
+        public void OnBackReceived()
+        {
+            if (focusedUI != null) focusedUI.OnBackPressed();
+        }
+
+        public void OnUpReceived()
+        {
+            if (focusedUI != null) focusedUI.OnUpPressed();
+        }
+
+        public void OnDownReceived()
+        {
+            if (focusedUI != null) focusedUI.OnDownPressed();
         }
 
         public T GetUI<T>() where T : UIBase

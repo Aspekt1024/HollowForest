@@ -42,17 +42,17 @@ namespace HollowForest
             }
         }
 
-        public void OnInteract(Character character)
+        public virtual void OnInteract(Character character)
         {
             OnInteractedWith?.Invoke(character, profile);
         }
 
-        public void OnOverlap(Character character)
+        public virtual void OnOverlap(Character character)
         {
             observedCharacter = character;
         }
 
-        public void OnOverlapEnd(Character character)
+        public virtual void OnOverlapEnd(Character character)
         {
             if (observedCharacter == character)
             {
