@@ -1,48 +1,47 @@
 using System;
 using HollowForest.AI;
-using UnityEngine;
 
 namespace HollowForest
 {
-    public class Enemy : MonoBehaviour
+    public class Enemy : Character
     {
-        public Character character;
-        public ProximitySensor sensor;
-
+        public AIModule module;
+        
         private AIAgent ai;
 
         public event Action<Enemy> Defeated = delegate { };
 
-        private void Awake()
-        {
-            sensor.InitAwake(this);
-        }
-
         private void Start()
         {
-            ai = new AIAgent(character);
-            character.State.RegisterStateObserver(CharacterStates.IsAlive, OnAliveStateChanged);
+            ai = new AIAgent(this);
+            var sensors = GetComponentsInChildren<AISensor>();
+            foreach (var sensor in sensors)
+            {
+                ai.RegisterSensor(sensor);
+            }
+            
+            State.RegisterStateObserver(CharacterStates.IsAlive, OnAliveStateChanged);
+            ai.Run(module);
         }
 
         private void FixedUpdate()
         {
-            character.Physics.Tick_Fixed();
+            Physics.Tick_Fixed();
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             ai.Tick();
         }
 
-        public void ThreatDetected(Character other)
-        {
-            ai.ThreatDetected(other);
-        }
+        public void Engage(Character character) => ai.Engage(character);
         
         private void OnAliveStateChanged(bool isAlive)
         {
             if (!isAlive)
             {
+                ai.Stop();
                 Defeated?.Invoke(this);
             }
         }

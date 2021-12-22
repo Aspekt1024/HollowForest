@@ -41,7 +41,7 @@ namespace HollowForest.Events
                 
                 foreach (var enemy in enemies)
                 {
-                    enemy.ThreatDetected(character);
+                    enemy.Engage(character);
                 }
             }
         }

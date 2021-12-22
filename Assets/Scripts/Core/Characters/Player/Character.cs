@@ -51,7 +51,7 @@ namespace HollowForest
             SetBaseAbilities();
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             Director.Tick();
             Afflictions.Tick();
