@@ -103,6 +103,8 @@ namespace Aspekt.Editors
             graph.Add(node.GetElement());
         }
 
+        public void RemoveNode(Node node) => RemoveNode(node.serializableGuid);
+
         public void RemoveNode(string guid)
         {
             var index = nodes.FindIndex(n => n.serializableGuid == guid);

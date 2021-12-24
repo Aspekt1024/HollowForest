@@ -1,0 +1,45 @@
+.side-panel {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    width: 300px;
+}
+
+.inspector {
+    border-color: #838383;
+    border-top-width: 1px;
+    padding: 5px;
+}
+
+.inspector-field {
+    display: flex;
+    flex-direction: row;
+}
+
+.eventlist-required {
+    min-height: 40px;
+    background-color: #889488;
+    border-color: green;
+    border-radius: 5px;
+    border-width: 1px;
+    margin: 3px;
+}
+
+.eventlist-required Label {
+    color: black;
+}
+
+.eventlist-invalidating {
+    min-height: 40px;
+    background-color: #9f8989;
+    border-color: #ff0000;
+    border-radius: 5px;
+    border-width: 1px;
+    margin: 3px;
+}
+
+.eventlist-invalidating Label {
+    color: black;
+}

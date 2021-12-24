@@ -25,7 +25,7 @@ namespace HollowForest.AI
             foreach (var action in module.actions)
             {
                 action.Init(agent);
-                if (action.actionID == module.defaultActionID)
+                if (action.guid == module.defaultActionGuid)
                 {
                     currentAction = action;
                 }
@@ -63,7 +63,7 @@ namespace HollowForest.AI
 
             if (validTransition != null)
             {
-                TransitionToAction(validTransition.actionID);
+                TransitionToAction(validTransition.actionGuid);
                 return;
             }
             
@@ -79,16 +79,16 @@ namespace HollowForest.AI
             var negConditionsMet = transition.nConditions.All(c => agent.memory.IsMatch(c, false));
             if (!negConditionsMet) return false;
             
-            var action = module.actions.FirstOrDefault(a => a.actionID == transition.actionID);
+            var action = module.actions.FirstOrDefault(a => a.guid == transition.actionGuid);
             return action != null && action.CanRun();
         }
 
-        private void TransitionToAction(int actionID)
+        private void TransitionToAction(string actionGuid)
         {
-            var action = module.actions.FirstOrDefault(a => a.actionID == actionID);
+            var action = module.actions.FirstOrDefault(a => a.guid == actionGuid);
             if (action == null)
             {
-                Debug.LogError($"Failed to find action with ID {actionID}");
+                Debug.LogError($"Failed to find action with ID {actionGuid} in module {module.name}");
                 return;
             }
 

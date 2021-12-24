@@ -1,0 +1,61 @@
+{
+    "currentPage": "Modules",
+    "nodes": [
+        {
+            "serializableGuid": "2fb5c985-d7d8-45c2-b6be-a87c76af4238",
+            "position": {
+                "x": 310.0,
+                "y": 340.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        },
+        {
+            "serializableGuid": "71468cbb-3607-43f1-8d4b-77d95032ea2a",
+            "position": {
+                "x": 260.0,
+                "y": 260.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        },
+        {
+            "serializableGuid": "452ec04f-47d7-4ac8-9221-3014d7c88a91",
+            "position": {
+                "x": 130.0,
+                "y": 90.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        },
+        {
+            "serializableGuid": "9973acc5-bec6-4af1-81f9-c198f837a4d2",
+            "position": {
+                "x": 50.0,
+                "y": 50.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        },
+        {
+            "serializableGuid": "65917dc3-b699-47d4-a470-def7048fb0b6",
+            "position": {
+                "x": 310.0,
+                "y": 50.0
+            },
+            "size": {
+                "x": 200.0,
+                "y": 120.0
+            }
+        }
+    ],
+    "aiModuleID": "CrystalAIModule"
+}

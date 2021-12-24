@@ -1,0 +1,12 @@
+.top-panel {
+    height: 30px;
+    width: 100%;
+    background-color: grey;
+}
+
+.node-page {
+    display: flex;
+    flex-direction: row;
+
+    flex-grow: 1;
+}

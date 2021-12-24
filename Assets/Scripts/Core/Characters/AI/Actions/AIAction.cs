@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace HollowForest.AI.States
 {
-    [Serializable]
     public abstract class AIAction : ScriptableObject
     {
         [Serializable]
@@ -13,18 +12,18 @@ namespace HollowForest.AI.States
         {
             public List<AIState> pConditions;
             public List<AIState> nConditions;
-            public int actionID;
+            public string actionGuid;
             public int priority;
         }
 
-        public int actionID;
-        public List<Transition> transitions;
+        public string guid;
+        public List<Transition> transitions = new List<Transition>();
 
         protected AIAgent Agent { get; private set; }
         protected Character Character => Agent.character;
 
-        private readonly Dictionary<AIState, bool> preconditions = new Dictionary<AIState, bool>(); 
-
+        private readonly Dictionary<AIState, bool> preconditions = new Dictionary<AIState, bool>();
+        
         public void Init(AIAgent agent)
         {
             Agent = agent;

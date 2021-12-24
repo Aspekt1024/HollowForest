@@ -7,8 +7,8 @@ namespace HollowForest.AI
     [CreateAssetMenu(menuName = "Game/AI/AI Module", fileName = "NewAIModule")]
     public class AIModule : ScriptableObject
     {
-        public int defaultActionID;
-        public List<AIAction.Transition> interrupts;
-        public List<AIAction> actions;
+        public string defaultActionGuid;
+        public List<AIAction.Transition> interrupts = new List<AIAction.Transition>();
+        public List<AIAction> actions = new List<AIAction>();
     }
 }
