@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: IdleAction
   m_EditorClassIdentifier: 
   guid: 9973acc5-bec6-4af1-81f9-c198f837a4d2
-  transitions: []
+  transitions:
+  - pConditions: 00000000
+    nConditions: 
+    actionGuid: 65917dc3-b699-47d4-a470-def7048fb0b6
+    priority: 1
 --- !u!114 &-4211146831701969407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41,7 +45,11 @@ MonoBehaviour:
   m_Name: CrystalAIModule
   m_EditorClassIdentifier: 
   defaultActionGuid: 9973acc5-bec6-4af1-81f9-c198f837a4d2
-  interrupts: []
+  interrupts:
+  - pConditions: 
+    nConditions: 00000000
+    actionGuid: 9973acc5-bec6-4af1-81f9-c198f837a4d2
+    priority: 1
   actions:
   - {fileID: -8716597777334947555}
   - {fileID: -4211146831701969407}

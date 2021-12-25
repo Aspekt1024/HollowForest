@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Aspekt.Editors;
 using HollowForest.AI.States;
@@ -21,12 +22,55 @@ namespace HollowForest.AI
             
             AddContextMenuItem("Create Transition", pos => modulePage.BeginLinkCreation(this, AINodeProfiles.ActionTransition));
             AddContextMenuItem("Remove Transition", pos => modulePage.BeginLinkRemoval(this, AINodeProfiles.ActionTransition));
+            AddContextMenuItem("Set Default Action", pos => modulePage.SetDefaultAction(this));
             AddContextMenuItem("Delete", pos => modulePage.RemoveAction(this));
         }
 
         public bool IsTransitionedFrom(ActionNode node)
         {
             return node.Action.transitions.Any(t => t.actionGuid == Action.guid);
+        }
+
+        public override bool CreateDependency(Node dependency)
+        {
+            if (dependency is ActionNode actionNode)
+            {
+                if (Action.transitions.Any(t => t.actionGuid == actionNode.Action.guid))
+                {
+                    return false;
+                }
+
+                modulePage.RecordModuleUndo("Add action transition");
+                actionNode.Action.transitions.Add(new AIAction.Transition(Action.guid));
+                modulePage.UpdateContents();
+                return true;
+            }
+            else if (dependency is InterruptNode)
+            {
+                return modulePage.AddInterrupt(this);
+            }
+
+            return false;
+        }
+
+        public override bool RemoveDependency(Node dependency)
+        {
+            if (dependency is ActionNode actionNode)
+            {
+                var transitionIndex = actionNode.Action.transitions.FindIndex(t => t.actionGuid == Action.guid);
+                if (transitionIndex < 0) return false;
+                
+                modulePage.RecordModuleUndo("Remove action transition");
+                actionNode.Action.transitions.RemoveAt(transitionIndex);
+                modulePage.UpdateContents();
+                return true;
+            }
+            else if (dependency is InterruptNode)
+            {
+                return modulePage.RemoveInterrupt(this);
+            }
+
+            return false;
         }
 
         protected override void Populate(VisualElement element)

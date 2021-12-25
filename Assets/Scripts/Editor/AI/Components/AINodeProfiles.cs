@@ -14,9 +14,13 @@ namespace HollowForest.AI
         };
 
         public const int ActionTransition = 1000;
+        public const int InterruptTransition = 1010;
+        public const int DefaultTransition = 1020;
         public static readonly List<Node.DependencyProfile> DependencyProfiles = new List<Node.DependencyProfile>
         {
-            new Node.DependencyProfile(ActionTransition, Color.cyan) { lineThickness = 1.5f }
+            new Node.DependencyProfile(ActionTransition, Color.cyan) { lineThickness = 1.5f },
+            new Node.DependencyProfile(InterruptTransition, Color.magenta) { lineThickness = 1.5f },
+            new Node.DependencyProfile(DefaultTransition, Color.green) { lineThickness = 1.5f },
         };
     }
 }

@@ -35,10 +35,32 @@
             }
         },
         {
+            "serializableGuid": "804d6bbc-9081-476d-91e3-dc6dff1d3f8b",
+            "position": {
+                "x": 140.0,
+                "y": 20.0
+            },
+            "size": {
+                "x": 60.0,
+                "y": 40.0
+            }
+        },
+        {
+            "serializableGuid": "bee395f0-c7d3-494f-be16-3f2abc46f8f1",
+            "position": {
+                "x": 130.0,
+                "y": 260.0
+            },
+            "size": {
+                "x": 80.0,
+                "y": 40.0
+            }
+        },
+        {
             "serializableGuid": "9973acc5-bec6-4af1-81f9-c198f837a4d2",
             "position": {
-                "x": 50.0,
-                "y": 50.0
+                "x": 70.0,
+                "y": 100.0
             },
             "size": {
                 "x": 200.0,
@@ -49,7 +71,7 @@
             "serializableGuid": "65917dc3-b699-47d4-a470-def7048fb0b6",
             "position": {
                 "x": 310.0,
-                "y": 50.0
+                "y": 100.0
             },
             "size": {
                 "x": 200.0,
@@ -57,5 +79,7 @@
             }
         }
     ],
-    "aiModuleID": "CrystalAIModule"
+    "aiModuleID": "CrystalAIModule",
+    "entryNodeGuid": "804d6bbc-9081-476d-91e3-dc6dff1d3f8b",
+    "interruptNodeGuid": "bee395f0-c7d3-494f-be16-3f2abc46f8f1"
 }

@@ -33,6 +33,9 @@ namespace HollowForest.AI
             
             var actionNodes = new List<ActionNode>();
             var actionTransitions = new Dictionary<Node, List<Node>>();
+            
+            var entryNode = new EntryNode(Editor.Data.GetEntryNodeGuid());
+            var interruptNode = new InterruptNode(this, Editor.Data.GetInterruptNodeGuid());
 
             foreach (var action in module.actions)
             {
@@ -41,10 +44,25 @@ namespace HollowForest.AI
 
             foreach (var node in actionNodes)
             {
-                var dependencies = actionNodes.Where(node.IsTransitionedFrom).Select(n => n as Node).ToList();
-                if (dependencies.Any())
+                foreach (var actionNode in actionNodes)
                 {
-                    actionTransitions.Add(node, dependencies);
+                    if (actionNode.IsTransitionedFrom(node))
+                    {
+                        AddTransition(actionTransitions, node, actionNode);
+                    }
+                }
+                
+                if (module.defaultActionGuid == node.Action.guid)
+                {
+                    AddTransition(actionTransitions, entryNode, node);
+                }
+
+                foreach (var interrupt in module.interrupts)
+                {
+                    if (interrupt.actionGuid == node.Action.guid)
+                    {
+                        AddTransition(actionTransitions, interruptNode, node);
+                    }
                 }
             }
 
@@ -55,10 +73,25 @@ namespace HollowForest.AI
                     nodeEditor.AddNodeDependency(transition.Key, actionNode, actionNode.GetDependencyProfile(AINodeProfiles.ActionTransition));
                 }
             }
+
+            nodeEditor.AddNode(entryNode);
+            nodeEditor.AddNode(interruptNode);
             
             foreach (var node in actionNodes)
             {
                 nodeEditor.AddNode(node);
+            }
+        }
+
+        private void AddTransition(Dictionary<Node, List<Node>> transitions, Node fromNode, Node toNode)
+        {
+            if (transitions.ContainsKey(toNode))
+            {
+                transitions[toNode].Add(fromNode);
+            }
+            else
+            {
+                transitions.Add(toNode, new List<Node> { fromNode });
             }
         }
 
@@ -70,14 +103,44 @@ namespace HollowForest.AI
             UpdateContents();
         }
 
-        public void BeginLinkCreation(ActionNode fromNode, int dependencyTypeID)
+        public void BeginLinkCreation(Node fromNode, int dependencyTypeID)
         {
             nodeEditor.StartDependencyModification(fromNode, dependencyTypeID, NodeEditor.DependencyMode.Create);
         }
 
-        public void BeginLinkRemoval(ActionNode fromNode, int dependencyTypeID)
+        public void BeginLinkRemoval(Node fromNode, int dependencyTypeID)
         {
             nodeEditor.StartDependencyModification(fromNode, dependencyTypeID, NodeEditor.DependencyMode.Remove);
+        }
+
+        public void SetDefaultAction(ActionNode node)
+        {
+            module.defaultActionGuid = node.Action.guid;
+            UpdateContents();
+        }
+
+        public bool AddInterrupt(ActionNode node)
+        {
+            if (module.interrupts.Any(i => i.actionGuid == node.Action.guid)) return false;
+            
+            RecordModuleUndo("Add interrupt");
+            module.interrupts.Add(new AIAction.Transition(node.Action.guid));
+            UpdateContents();
+            return true;
+        }
+
+        public bool RemoveInterrupt(ActionNode node)
+        {
+            var interruptIndex = module.interrupts.FindIndex(i => i.actionGuid == node.Action.guid);
+            if (interruptIndex >= 0)
+            {
+                RecordModuleUndo("Remove interrupt");
+                module.interrupts.RemoveAt(interruptIndex);
+                UpdateContents();
+                return true;
+            }
+
+            return false;
         }
 
         public void RecordModuleUndo(string undoMessage) => Editor.RecordUndo(module, undoMessage);

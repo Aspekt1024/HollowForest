@@ -14,6 +14,14 @@ namespace HollowForest.AI.States
             public List<AIState> nConditions;
             public string actionGuid;
             public int priority;
+
+            public Transition(string actionGuid)
+            {
+                this.actionGuid = actionGuid;
+                pConditions = new List<AIState>();
+                nConditions = new List<AIState>();
+                priority = 1;
+            }
         }
 
         public string guid;
