@@ -32,7 +32,9 @@ namespace HollowForest.AI
             if (module == null) return;
             
             var actionNodes = new List<ActionNode>();
+            ActionNode defaultAction = null;
             var actionTransitions = new Dictionary<Node, List<Node>>();
+            var interruptTransitions = new Dictionary<Node, List<Node>>();
             
             var entryNode = new EntryNode(Editor.Data.GetEntryNodeGuid());
             var interruptNode = new InterruptNode(this, Editor.Data.GetInterruptNodeGuid());
@@ -54,15 +56,28 @@ namespace HollowForest.AI
                 
                 if (module.defaultActionGuid == node.Action.guid)
                 {
-                    AddTransition(actionTransitions, entryNode, node);
+                    defaultAction = node;
                 }
 
                 foreach (var interrupt in module.interrupts)
                 {
                     if (interrupt.actionGuid == node.Action.guid)
                     {
-                        AddTransition(actionTransitions, interruptNode, node);
+                        AddTransition(interruptTransitions, interruptNode, node);
                     }
+                }
+            }
+
+            if (defaultAction != null)
+            {
+                nodeEditor.AddNodeDependency(defaultAction, entryNode, entryNode.GetDependencyProfile(AINodeProfiles.DefaultTransition));
+            }
+            
+            foreach (var transition in interruptTransitions)
+            {
+                foreach (var node in transition.Value)
+                {
+                    nodeEditor.AddNodeDependency(transition.Key, node, node.GetDependencyProfile(AINodeProfiles.InterruptTransition));
                 }
             }
 
@@ -125,7 +140,6 @@ namespace HollowForest.AI
             
             RecordModuleUndo("Add interrupt");
             module.interrupts.Add(new AIAction.Transition(node.Action.guid));
-            UpdateContents();
             return true;
         }
 

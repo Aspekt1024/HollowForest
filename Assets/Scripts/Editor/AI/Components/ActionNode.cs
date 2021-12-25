@@ -40,9 +40,7 @@ namespace HollowForest.AI
                     return false;
                 }
 
-                modulePage.RecordModuleUndo("Add action transition");
                 actionNode.Action.transitions.Add(new AIAction.Transition(Action.guid));
-                modulePage.UpdateContents();
                 return true;
             }
             else if (dependency is InterruptNode)
@@ -60,9 +58,7 @@ namespace HollowForest.AI
                 var transitionIndex = actionNode.Action.transitions.FindIndex(t => t.actionGuid == Action.guid);
                 if (transitionIndex < 0) return false;
                 
-                modulePage.RecordModuleUndo("Remove action transition");
                 actionNode.Action.transitions.RemoveAt(transitionIndex);
-                modulePage.UpdateContents();
                 return true;
             }
             else if (dependency is InterruptNode)

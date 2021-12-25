@@ -14,6 +14,7 @@ namespace HollowForest.AI
             this.modulePage = modulePage;
             
             AddContextMenuItem("Add Interrupt", pos => modulePage.BeginLinkCreation(this, AINodeProfiles.InterruptTransition));
+            AddContextMenuItem("Remove Interrupt", pos => modulePage.BeginLinkRemoval(this, AINodeProfiles.InterruptTransition));
         }
 
         protected override void Populate(VisualElement element)
