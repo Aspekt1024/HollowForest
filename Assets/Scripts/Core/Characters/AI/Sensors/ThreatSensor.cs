@@ -1,26 +1,18 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace HollowForest.AI
 {
     public class ThreatSensor : AISensor
     {
-        public interface IObserver
-        {
-            void OnThreatDetected(Character threat);
-            void OnThreatLost(Character threat);
-        }
-
-        private readonly List<IObserver> observers = new List<IObserver>();
-
-        public void RegisterObserver(IObserver observer) => observers.Add(observer);
-        public void UnregisterObserver(IObserver observer) => observers.Remove(observer);
-
+        public float threatLostDistance = 10f;
+        
         private Character currentThreat;
+        private bool isLockedOn;
 
         protected override void OnInit()
         {
-            
+            agent.memory.RegisterObjectObserver(AIObject.PotentialThreat, OnLastDamagedByUpdated);
+            agent.memory.RegisterObjectObserver(AIObject.LockedOnThreat, OnLockedOnThreatUpdated);
         }
 
         private void Update()
@@ -31,10 +23,7 @@ namespace HollowForest.AI
         private void OnTriggerEnter2D(Collider2D other)
         {
             var character = other.GetComponent<Character>();
-            if (IsValidThreat(character))
-            {
-                RegisterThreat(character);
-            }
+            RegisterThreat(character, false);
         }
 
         private bool IsValidThreat(Character character)
@@ -43,19 +32,21 @@ namespace HollowForest.AI
             return character.State.GetState(CharacterStates.IsAlive);
         }
 
-        private void RegisterThreat(Character threat)
+        private void RegisterThreat(Character threat, bool lockOn)
         {
+            if (currentThreat != null && isLockedOn) return;
+            if (!IsValidThreat(threat)) return;
+            
             currentThreat = threat;
+            isLockedOn = lockOn;
             agent.memory.SetState(AIState.HasThreat, true);
             agent.memory.SetObject(AIObject.Threat, threat);
-            observers.ForEach(o => o.OnThreatDetected(threat));
         }
 
         private void UnregisterThreat()
         {
             agent.memory.SetState(AIState.HasThreat, false);
             agent.memory.SetObject(AIObject.Threat, null);
-            observers.ForEach(o => o.OnThreatLost(currentThreat));
             currentThreat = null;
         }
 
@@ -68,9 +59,26 @@ namespace HollowForest.AI
                 UnregisterThreat();
                 return;
             }
-            
-            // TODO check distance
-            
+
+            if (!isLockedOn)
+            {
+                var distVector = currentThreat.transform.position - agent.character.transform.position;
+                distVector.z = 0f;
+                if (distVector.sqrMagnitude > threatLostDistance * threatLostDistance)
+                {
+                    UnregisterThreat();
+                }
+            }
+        }
+
+        private void OnLastDamagedByUpdated(object other)
+        {
+            RegisterThreat(other as Character, false);
+        }
+
+        private void OnLockedOnThreatUpdated(object other)
+        {
+            RegisterThreat(other as Character, true);
         }
     }
 }

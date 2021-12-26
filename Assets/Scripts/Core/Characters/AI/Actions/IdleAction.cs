@@ -10,7 +10,15 @@ namespace HollowForest.AI.States
         {
             Agent.memory.RegisterStateObserver(AIState.IsNearLeftEdge, OnNearLeftEdgeStateChanged);
             Agent.memory.RegisterStateObserver(AIState.IsNearRightEdge, OnNearRightEdgeStateChanged);
-            
+
+            if (Agent.memory.IsTrue(AIState.IsNearLeftEdge))
+            {
+                isMovingRight = true;
+            }
+            else if (Agent.memory.IsTrue(AIState.IsNearRightEdge))
+            {
+                isMovingRight = false;
+            }
             BeginMoving();
         }
 

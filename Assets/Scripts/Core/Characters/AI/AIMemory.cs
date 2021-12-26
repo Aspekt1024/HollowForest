@@ -13,6 +13,8 @@ namespace HollowForest.AI
     public enum AIObject
     {
         Threat,
+        PotentialThreat,
+        LockedOnThreat,
     }
     
     public class AIMemory
@@ -20,25 +22,28 @@ namespace HollowForest.AI
         private readonly Dictionary<AIState, bool> states = new Dictionary<AIState, bool>();
         private readonly Dictionary<AIObject, object> objects = new Dictionary<AIObject, object>();
         
-        private readonly Dictionary<AIState, List<Action<bool>>> observations = new Dictionary<AIState, List<Action<bool>>>();
+        private readonly Dictionary<AIState, List<Action<bool>>> stateObservations = new Dictionary<AIState, List<Action<bool>>>();
         private readonly List<Action<AIState, bool>> allStateObservations = new List<Action<AIState, bool>>();
+        
+        private readonly Dictionary<AIObject, List<Action<object>>> objectObservations = new Dictionary<AIObject, List<Action<object>>>();
+
 
         public void RegisterStateObserver(AIState state, Action<bool> stateChangeCallback)
         {
-            if (!observations.ContainsKey(state))
+            if (!stateObservations.ContainsKey(state))
             {
-                observations.Add(state, new List<Action<bool>>());
+                stateObservations.Add(state, new List<Action<bool>>());
             }
-            observations[state].Add(stateChangeCallback);
+            stateObservations[state].Add(stateChangeCallback);
         }
 
         public void UnregisterStateObserver(AIState state, Action<bool> stateChangeCallback)
         {
-            if (!observations.ContainsKey(state)) return;
-            var index = observations[state].FindIndex(c => c == stateChangeCallback);
+            if (!stateObservations.ContainsKey(state)) return;
+            var index = stateObservations[state].FindIndex(c => c == stateChangeCallback);
             if (index >= 0)
             {
-                observations[state].RemoveAt(index);
+                stateObservations[state].RemoveAt(index);
             }
         }
         
@@ -53,6 +58,25 @@ namespace HollowForest.AI
             if (index >= 0)
             {
                 allStateObservations.RemoveAt(index);
+            }
+        }
+
+        public void RegisterObjectObserver(AIObject aiObject, Action<object> objectChangeCallback)
+        {
+            if (!objectObservations.ContainsKey(aiObject))
+            {
+                objectObservations.Add(aiObject, new List<Action<object>>());
+            }
+            objectObservations[aiObject].Add(objectChangeCallback);
+        }
+
+        public void UnregisterObjectObserver(AIObject aiObject, Action<object> objectChangeCallback)
+        {
+            if (!objectObservations.ContainsKey(aiObject)) return;
+            var index = objectObservations[aiObject].FindIndex(c => c == objectChangeCallback);
+            if (index >= 0)
+            {
+                objectObservations[aiObject].RemoveAt(index);
             }
         }
         
@@ -75,13 +99,18 @@ namespace HollowForest.AI
 
         public void SetObject(AIObject aiObject, object obj)
         {
-            if (!objects.ContainsKey(aiObject))
+            if (objects.ContainsKey(aiObject))
             {
-                objects.Add(aiObject, obj);
+                if (objects[aiObject] != obj)
+                {
+                    objects[aiObject] = obj;
+                    NotifyObjectChange(aiObject, obj);
+                }
             }
             else
             {
-                objects[aiObject] = obj;
+                objects.Add(aiObject, obj);
+                NotifyObjectChange(aiObject, obj);
             }
         }
 
@@ -109,11 +138,21 @@ namespace HollowForest.AI
                 allStateObservations[i].Invoke(state, value);
             }
             
-            if (!observations.ContainsKey(state)) return;
+            if (!stateObservations.ContainsKey(state)) return;
 
-            for (int i = observations[state].Count - 1; i >= 0; i--)
+            for (int i = stateObservations[state].Count - 1; i >= 0; i--)
             {
-                observations[state][i].Invoke(value);
+                stateObservations[state][i].Invoke(value);
+            }
+        }
+
+        private void NotifyObjectChange(AIObject aiObject, object value)
+        {
+            if (!objectObservations.ContainsKey(aiObject)) return;
+
+            for (int i = objectObservations[aiObject].Count - 1; i >= 0; i--)
+            {
+                objectObservations[aiObject][i].Invoke(value);
             }
         }
     }

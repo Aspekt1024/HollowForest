@@ -31,6 +31,8 @@ namespace HollowForest.AI.States
         protected Character Character => Agent.character;
 
         private readonly Dictionary<AIState, bool> preconditions = new Dictionary<AIState, bool>();
+
+        protected bool isRunning;
         
         public void Init(AIAgent agent)
         {
@@ -44,11 +46,13 @@ namespace HollowForest.AI.States
 
         public void Start()
         {
+            isRunning = true;
             OnStart();
         }
 
         public void Stop()
         {
+            isRunning = false;
             OnStop();
         }
 
@@ -70,6 +74,7 @@ namespace HollowForest.AI.States
 
         protected void ActionFailure()
         {
+            isRunning = false;
             Debug.LogError("Action failed");
         }
 

@@ -15,7 +15,7 @@ namespace HollowForest.AI
             agent.character.Director.BlockInputs(0.8f);
             if (hitDetails.source != null)
             {
-                agent.Engage(hitDetails.source);
+                agent.memory.SetObject(AIObject.PotentialThreat, hitDetails.source);
             }
         }
     }

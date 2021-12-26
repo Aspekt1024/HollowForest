@@ -42,10 +42,16 @@ namespace HollowForest.AI
             sensor.Init(this);
         }
 
-        public void Engage(Character threat)
+        public void Engage(Character threat, bool lockOn)
         {
-            memory.SetState(AIState.HasThreat, true);
-            memory.SetObject(AIObject.Threat, threat);
+            if (lockOn)
+            {
+                memory.SetObject(AIObject.LockedOnThreat, threat);
+            }
+            else
+            {
+                memory.SetObject(AIObject.PotentialThreat, threat);
+            }
         }
 
     }

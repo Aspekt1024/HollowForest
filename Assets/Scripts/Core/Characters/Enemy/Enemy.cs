@@ -35,7 +35,7 @@ namespace HollowForest
             ai.Tick();
         }
 
-        public void Engage(Character character) => ai.Engage(character);
+        public void Engage(Character character, bool lockOn) => ai.Engage(character, lockOn);
         
         private void OnAliveStateChanged(bool isAlive)
         {
