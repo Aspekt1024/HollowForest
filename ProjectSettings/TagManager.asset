@@ -14,8 +14,8 @@ TagManager:
   - World
   - Interactive
   - EventTrigger
-  - 
-  - 
+  - WorldSensor
+  - Character
   - 
   - 
   - 

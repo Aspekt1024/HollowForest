@@ -5279,7 +5279,7 @@ GameObject:
   - component: {fileID: 1773606691725576322}
   - component: {fileID: 1773606691725576321}
   - component: {fileID: 1773606691725576320}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CrystalChar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

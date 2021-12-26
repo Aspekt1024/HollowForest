@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using HollowForest.AI;
 using UnityEngine;
 
-namespace HollowForest
+namespace HollowForest.AI
 {
     public class ThreatSensor : AISensor
     {
@@ -32,21 +31,43 @@ namespace HollowForest
         private void OnTriggerEnter2D(Collider2D other)
         {
             var character = other.GetComponent<Character>();
-            if (character != null)
+            if (IsValidThreat(character))
             {
                 RegisterThreat(character);
             }
         }
 
+        private bool IsValidThreat(Character character)
+        {
+            if (character == null || !character.IsPlayer()) return false;
+            return character.State.GetState(CharacterStates.IsAlive);
+        }
+
         private void RegisterThreat(Character threat)
         {
             currentThreat = threat;
+            agent.memory.SetState(AIState.HasThreat, true);
+            agent.memory.SetObject(AIObject.Threat, threat);
             observers.ForEach(o => o.OnThreatDetected(threat));
+        }
+
+        private void UnregisterThreat()
+        {
+            agent.memory.SetState(AIState.HasThreat, false);
+            agent.memory.SetObject(AIObject.Threat, null);
+            observers.ForEach(o => o.OnThreatLost(currentThreat));
+            currentThreat = null;
         }
 
         private void CheckThreatConditions()
         {
             if (currentThreat == null) return;
+
+            if (!IsValidThreat(currentThreat))
+            {
+                UnregisterThreat();
+                return;
+            }
             
             // TODO check distance
             

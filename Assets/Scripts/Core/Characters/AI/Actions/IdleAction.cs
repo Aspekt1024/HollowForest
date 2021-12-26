@@ -2,17 +2,24 @@ using UnityEngine;
 
 namespace HollowForest.AI.States
 {
-    [CreateAssetMenu(menuName = "Game/AI/Actions/Idle Action", fileName = "IdleAction")]
     public class IdleAction : AIAction
     {
+        private bool isMovingRight;
+        
         protected override void OnStart()
         {
+            Agent.memory.RegisterStateObserver(AIState.IsNearLeftEdge, OnNearLeftEdgeStateChanged);
+            Agent.memory.RegisterStateObserver(AIState.IsNearRightEdge, OnNearRightEdgeStateChanged);
             
+            BeginMoving();
         }
 
         protected override void OnStop()
         {
+            Agent.memory.UnregisterStateObserver(AIState.IsNearLeftEdge, OnNearLeftEdgeStateChanged);
+            Agent.memory.UnregisterStateObserver(AIState.IsNearRightEdge, OnNearRightEdgeStateChanged);
             
+            Agent.character.Director.StopMoving();
         }
 
         protected override void OnTick()
@@ -22,6 +29,32 @@ namespace HollowForest.AI.States
 
         protected override void SetupPreconditions()
         {
+        }
+
+        private void BeginMoving()
+        {
+            if (isMovingRight)
+            {
+                Agent.character.Director.MoveRight();
+            }
+            else
+            {
+                Agent.character.Director.MoveLeft();
+            }
+        }
+
+        private void OnNearLeftEdgeStateChanged(bool isNearEdge)
+        {
+            if (!isNearEdge) return;
+            isMovingRight = true;
+            BeginMoving();
+        }
+
+        private void OnNearRightEdgeStateChanged(bool isNearEdge)
+        {
+            if (!isNearEdge) return;
+            isMovingRight = false;
+            BeginMoving();
         }
     }
 }

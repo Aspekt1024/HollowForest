@@ -1,7 +1,6 @@
-using HollowForest.AI;
 using HollowForest.Combat;
 
-namespace HollowForest
+namespace HollowForest.AI
 {
     public class HealthSensor : AISensor, Health.IDamageObserver
     {

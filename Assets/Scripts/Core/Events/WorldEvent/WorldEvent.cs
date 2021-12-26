@@ -35,6 +35,8 @@ namespace HollowForest.Events
 
         public void OnCharacterTriggered(Character character)
         {
+            if (!character.IsPlayer()) return;
+            
             if (!isTriggered)
             {
                 isEnabled = true;

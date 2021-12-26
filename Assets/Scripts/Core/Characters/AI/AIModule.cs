@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using HollowForest.AI.States;
 using UnityEngine;
@@ -10,5 +11,15 @@ namespace HollowForest.AI
         public string defaultActionGuid;
         public List<AIAction.Transition> interrupts = new List<AIAction.Transition>();
         public List<AIAction> actions = new List<AIAction>();
+
+        [NonSerialized] public readonly List<AIAction> runningActions = new List<AIAction>();
+        
+        public void Init()
+        {
+            foreach (var action in actions)
+            {
+                runningActions.Add(Instantiate(action));
+            }
+        }
     }
 }

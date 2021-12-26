@@ -13,17 +13,20 @@ namespace HollowForest.AI
         private readonly AIAgent agent;
 
         private bool isRunning;
+        private bool isInterruptCheckRequired;
 
         public AIExecutor(AIAgent agent)
         {
             this.agent = agent;
+            agent.memory.RegisterAllStateObserver(OnAIMemoryChanged);
         }
         
-        public void Run(AIModule module)
+        public void Run(AIModule aiModule)
         {
-            this.module = module;
+            module = Object.Instantiate(aiModule);
+            module.Init();
 
-            foreach (var action in module.actions)
+            foreach (var action in module.runningActions)
             {
                 action.Init(agent);
                 if (action.guid == module.defaultActionGuid)
@@ -45,15 +48,51 @@ namespace HollowForest.AI
                 currentAction.Stop();
                 currentAction = null;
             }
+
+            if (module != null)
+            {
+                Object.Destroy(module);
+                module = null;
+            }
         }
 
         public void Tick()
         {
             if (!isRunning) return;
-            
+
+            var isTransitioned = false;
+            if (isInterruptCheckRequired)
+            {
+                isInterruptCheckRequired = false;
+                isTransitioned = TryTransition(module.interrupts);
+                if (isTransitioned)
+                {
+                    return;
+                }
+            }
+
+            isTransitioned = TryTransition(currentAction.transitions);
+            if (isTransitioned)
+            {
+                return;
+            }
+
+            if (currentAction != null)
+            {
+                currentAction.Tick();
+            }
+        }
+
+        private void OnAIMemoryChanged(AIState state, bool value)
+        {
+            isInterruptCheckRequired = true;
+        }
+
+        private bool TryTransition(List<AIAction.Transition> transitions)
+        {
             var validTransitions = new List<AIAction.Transition>();
             var priority = -1;
-            foreach (var transition in currentAction.transitions)
+            foreach (var transition in transitions)
             {
                 if (!IsValidTransition(transition)) continue;
                 
@@ -72,13 +111,10 @@ namespace HollowForest.AI
             {
                 var index = Random.Range(0, validTransitions.Count);
                 TransitionToAction(validTransitions[index].actionGuid);
-                return;
+                return true;
             }
 
-            if (currentAction != null)
-            {
-                currentAction.Tick();
-            }
+            return false;
         }
 
         private bool IsValidTransition(AIAction.Transition transition)
@@ -89,19 +125,24 @@ namespace HollowForest.AI
             var negConditionsMet = transition.nConditions.All(c => agent.memory.IsMatch(c, false));
             if (!negConditionsMet) return false;
             
-            var action = module.actions.FirstOrDefault(a => a.guid == transition.actionGuid);
+            var action = module.runningActions.FirstOrDefault(a => a.guid == transition.actionGuid);
             return action != null && action.CanRun();
         }
 
         private void TransitionToAction(string actionGuid)
         {
-            var action = module.actions.FirstOrDefault(a => a.guid == actionGuid);
+            var action = module.runningActions.FirstOrDefault(a => a.guid == actionGuid);
             if (action == null)
             {
                 Debug.LogError($"Failed to find action with ID {actionGuid} in module {module.name}");
                 return;
             }
 
+            if (currentAction != null)
+            {
+                currentAction.Stop();
+            }
+            
             currentAction = action;
             currentAction.Start();
         }

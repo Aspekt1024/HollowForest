@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace HollowForest.AI.States
 {
-    [CreateAssetMenu(menuName = "Game/AI/Actions/Attack Action", fileName = "AttackAction")]
     public class AttackAction : AIAction
     {
         private Character threat;
@@ -28,6 +27,12 @@ namespace HollowForest.AI.States
         
         protected override void OnTick()
         {
+            if (threat == null)
+            {
+                ActionFailure();
+                return;
+            }
+            
             if (!threat.State.GetState(CharacterStates.IsAlive))
             {
                 threat = null;
