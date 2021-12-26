@@ -52,5 +52,7 @@ namespace Aspekt.Editors
             }
             AssetDatabase.Refresh();
         }
+
+        public abstract void OnNodeRemoved(string guid);
     }
 }

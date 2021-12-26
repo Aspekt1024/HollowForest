@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aspekt.Editors;
 
 namespace HollowForest.Dialogue
@@ -13,5 +14,13 @@ namespace HollowForest.Dialogue
         public List<Node> nodes = new List<Node>();
         public string conversationSetGuid;
 
+        public override void OnNodeRemoved(string guid)
+        {
+            var index = nodes.FindIndex(n => n.serializableGuid == guid);
+            if (index >= 0)
+            {
+                nodes.RemoveAt(index);
+            }
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace HollowForest.AI
             header.AddToClassList("inspector-header");
             container.Add(header);
             
-            var module = modulePage.GetSelectedModule();
+            var module = modulePage.Module;
             foreach (var interrupt in module.interrupts)
             {
                 container.Add(TransitionDisplay.Create(interrupt, module, (action, msg) =>

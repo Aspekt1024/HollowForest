@@ -1,63 +1,114 @@
 {
     "currentPage": "Modules",
-    "nodes": [
+    "selectedModule": {
+        "instanceID": 7376
+    },
+    "moduleDataSets": [
         {
-            "serializableGuid": "c29149d6-9100-4191-bf99-dd87682bf84f",
-            "position": {
-                "x": 200.0,
-                "y": 190.0
+            "module": {
+                "instanceID": 7376
             },
-            "size": {
-                "x": 100.0,
-                "y": 40.0
-            }
+            "nodes": [
+                {
+                    "serializableGuid": "a496e7fa-5502-41b2-8371-0f5028c1ecb0",
+                    "position": {
+                        "x": 200.0,
+                        "y": 160.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "a6e09cae-00a4-4df9-8fb2-dcec3c48c62d",
+                    "position": {
+                        "x": 230.0,
+                        "y": 70.0
+                    },
+                    "size": {
+                        "x": 60.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "799b2dee-b797-4daa-8dcb-f18211421480",
+                    "position": {
+                        "x": 70.0,
+                        "y": 160.0
+                    },
+                    "size": {
+                        "x": 80.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "c90867ac-d905-43ca-bf62-8a5e2d759822",
+                    "position": {
+                        "x": 350.0,
+                        "y": 160.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "4b305fad-215d-4ed3-82f3-cdb03f5600ab",
+                    "position": {
+                        "x": 210.0,
+                        "y": 160.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                }
+            ],
+            "entryNodeGuid": "a6e09cae-00a4-4df9-8fb2-dcec3c48c62d",
+            "interruptNodeGuid": "799b2dee-b797-4daa-8dcb-f18211421480"
         },
         {
-            "serializableGuid": "804d6bbc-9081-476d-91e3-dc6dff1d3f8b",
-            "position": {
-                "x": 220.0,
-                "y": 110.0
+            "module": {
+                "instanceID": -9730
             },
-            "size": {
-                "x": 60.0,
-                "y": 40.0
-            }
-        },
-        {
-            "serializableGuid": "bee395f0-c7d3-494f-be16-3f2abc46f8f1",
-            "position": {
-                "x": 60.0,
-                "y": 190.0
-            },
-            "size": {
-                "x": 80.0,
-                "y": 40.0
-            }
-        },
-        {
-            "serializableGuid": "a5428d34-be25-45af-91f9-568e29413742",
-            "position": {
-                "x": 330.0,
-                "y": 190.0
-            },
-            "size": {
-                "x": 100.0,
-                "y": 40.0
-            }
-        },
-        {
-            "serializableGuid": "a496e7fa-5502-41b2-8371-0f5028c1ecb0",
-            "position": {
-                "x": 200.0,
-                "y": 190.0
-            },
-            "size": {
-                "x": 100.0,
-                "y": 40.0
-            }
+            "nodes": [
+                {
+                    "serializableGuid": "87b00d59-4d58-47d9-83a2-c913300a2b3f",
+                    "position": {
+                        "x": 280.0,
+                        "y": 100.0
+                    },
+                    "size": {
+                        "x": 60.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "626fa20c-ffe6-4ebb-9c8b-acb8bc5ff171",
+                    "position": {
+                        "x": 80.0,
+                        "y": 180.0
+                    },
+                    "size": {
+                        "x": 80.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "c29149d6-9100-4191-bf99-dd87682bf84f",
+                    "position": {
+                        "x": 260.0,
+                        "y": 180.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                }
+            ],
+            "entryNodeGuid": "87b00d59-4d58-47d9-83a2-c913300a2b3f",
+            "interruptNodeGuid": "626fa20c-ffe6-4ebb-9c8b-acb8bc5ff171"
         }
-    ],
-    "aiModuleID": "CrystalAIModule",
-    "entryNodeGuid": "804d6bbc-9081-476d-91e3-dc6dff1d3f8b",
-    "interruptNodeGuid": "bee395f0-c7d3-494f-be16-3f2abc46f8f1"
+    ]
 }

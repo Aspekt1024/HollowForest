@@ -96,7 +96,7 @@ namespace HollowForest.AI
             transitionHeader.AddToClassList("inspector-header");
             container.Add(transitionHeader);
 
-            var module = modulePage.GetSelectedModule();
+            var module = modulePage.Module;
             foreach (var transition in Action.transitions)
             {
                 container.Add(TransitionDisplay.Create(transition, module, (action, msg) =>

@@ -63,7 +63,7 @@ namespace HollowForest.AI
         {
             moduleList.Clear();
 
-            var currentModule = page.GetSelectedModule();
+            var currentModule = page.Module;
             var dropdown = new PopupField<AIModule>(modules, currentModule,
             m =>
             {

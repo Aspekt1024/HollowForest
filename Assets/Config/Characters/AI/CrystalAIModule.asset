@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-1468732212822933525
+--- !u!114 &-556644727903597279
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,15 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ce1cbcfe6a64f8981403243cce46e37, type: 3}
-  m_Name: IdleAction
+  m_Script: {fileID: 11500000, guid: 1a412933bb6443198d753a69783f56e2, type: 3}
+  m_Name: AttackAction
   m_EditorClassIdentifier: 
-  guid: a496e7fa-5502-41b2-8371-0f5028c1ecb0
-  transitions:
-  - pConditions: 00000000
-    nConditions: 
-    actionGuid: a5428d34-be25-45af-91f9-568e29413742
-    priority: 1
+  guid: c90867ac-d905-43ca-bf62-8a5e2d759822
+  transitions: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30,16 +26,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c092d46f5544f3ab51fdf5d09bd3772, type: 3}
   m_Name: CrystalAIModule
   m_EditorClassIdentifier: 
-  defaultActionGuid: a496e7fa-5502-41b2-8371-0f5028c1ecb0
+  defaultActionGuid: 4b305fad-215d-4ed3-82f3-cdb03f5600ab
   interrupts:
   - pConditions: 
     nConditions: 00000000
-    actionGuid: a496e7fa-5502-41b2-8371-0f5028c1ecb0
+    actionGuid: 4b305fad-215d-4ed3-82f3-cdb03f5600ab
     priority: 1
   actions:
-  - {fileID: 239844626920172558}
-  - {fileID: -1468732212822933525}
---- !u!114 &239844626920172558
+  - {fileID: -556644727903597279}
+  - {fileID: 2859913372651865288}
+--- !u!114 &2859913372651865288
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48,8 +44,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a412933bb6443198d753a69783f56e2, type: 3}
-  m_Name: AttackAction
+  m_Script: {fileID: 11500000, guid: 4ce1cbcfe6a64f8981403243cce46e37, type: 3}
+  m_Name: IdleAction
   m_EditorClassIdentifier: 
-  guid: a5428d34-be25-45af-91f9-568e29413742
-  transitions: []
+  guid: 4b305fad-215d-4ed3-82f3-cdb03f5600ab
+  transitions:
+  - pConditions: 00000000
+    nConditions: 
+    actionGuid: c90867ac-d905-43ca-bf62-8a5e2d759822
+    priority: 1

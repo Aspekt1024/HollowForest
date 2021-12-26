@@ -17,10 +17,9 @@ namespace HollowForest.AI
         private NodeEditor nodeEditor;
         private ModuleSidePanel moduleSidePanel;
 
-        private AIModule module;
         private Node selectedNode;
 
-        public AIModule GetSelectedModule() => module;
+        public AIModule Module => Editor.Data.selectedModule;
         
         public ModulePage(AIEditor editor) : base(editor)
         {
@@ -31,7 +30,7 @@ namespace HollowForest.AI
             moduleSidePanel.Populate(Editor.Modules);
             nodeEditor.UpdateContents();
             
-            if (module == null) return;
+            if (Module == null) return;
             
             var actionNodes = new List<ActionNode>();
             ActionNode defaultAction = null;
@@ -41,7 +40,7 @@ namespace HollowForest.AI
             var entryNode = new EntryNode(Editor.Data.GetEntryNodeGuid());
             var interruptNode = new InterruptNode(this, Editor.Data.GetInterruptNodeGuid());
 
-            foreach (var action in module.actions)
+            foreach (var action in Module.actions)
             {
                 actionNodes.Add(new ActionNode(this, action));
             }
@@ -56,12 +55,12 @@ namespace HollowForest.AI
                     }
                 }
                 
-                if (module.defaultActionGuid == node.Action.guid)
+                if (Module.defaultActionGuid == node.Action.guid)
                 {
                     defaultAction = node;
                 }
 
-                foreach (var interrupt in module.interrupts)
+                foreach (var interrupt in Module.interrupts)
                 {
                     if (interrupt.actionGuid == node.Action.guid)
                     {
@@ -114,10 +113,12 @@ namespace HollowForest.AI
 
         public void SelectModule(AIModule newModule)
         {
-            if (newModule == module) return;
-            module = newModule;
-            Editor.Data.aiModuleID = module.name;
-            UpdateContents();
+            var success = Editor.Data.SetModule(newModule);
+            if (success)
+            {
+                nodeEditor.SetNodeList(Editor.Data.GetNodes());
+                UpdateContents();
+            }
         }
 
         public void BeginLinkCreation(Node fromNode, int dependencyTypeID)
@@ -132,26 +133,26 @@ namespace HollowForest.AI
 
         public void SetDefaultAction(ActionNode node)
         {
-            module.defaultActionGuid = node.Action.guid;
+            Module.defaultActionGuid = node.Action.guid;
             UpdateContents();
         }
 
         public bool AddInterrupt(ActionNode node)
         {
-            if (module.interrupts.Any(i => i.actionGuid == node.Action.guid)) return false;
+            if (Module.interrupts.Any(i => i.actionGuid == node.Action.guid)) return false;
             
             RecordModuleUndo("Add interrupt");
-            module.interrupts.Add(new AIAction.Transition(node.Action.guid));
+            Module.interrupts.Add(new AIAction.Transition(node.Action.guid));
             return true;
         }
 
         public bool RemoveInterrupt(ActionNode node)
         {
-            var interruptIndex = module.interrupts.FindIndex(i => i.actionGuid == node.Action.guid);
+            var interruptIndex = Module.interrupts.FindIndex(i => i.actionGuid == node.Action.guid);
             if (interruptIndex >= 0)
             {
                 RecordModuleUndo("Remove interrupt");
-                module.interrupts.RemoveAt(interruptIndex);
+                Module.interrupts.RemoveAt(interruptIndex);
                 UpdateContents();
                 return true;
             }
@@ -159,7 +160,7 @@ namespace HollowForest.AI
             return false;
         }
 
-        public void RecordModuleUndo(string undoMessage) => Editor.RecordUndo(module, undoMessage);
+        public void RecordModuleUndo(string undoMessage) => Editor.RecordUndo(Module, undoMessage);
 
         protected override void SetupUI(VisualElement root)
         {
@@ -179,7 +180,6 @@ namespace HollowForest.AI
             nodeEditor = new NodeEditor();
             nodeEditor.NodeSelected += OnNodeSelected;
             nodeEditor.OnNodeUnselected += OnNodeUnselected;
-            nodeEditor.SetNodeList(Editor.Data.nodes);
             page.Add(nodeEditor.Element);
             
             var mi = typeof(ModulePage).GetMethod(nameof(CreateNewAction), BindingFlags.NonPublic | BindingFlags.Instance);
@@ -195,9 +195,8 @@ namespace HollowForest.AI
             
             nodeEditor.AddContextMenuItem("Reset Zoom", (pos) => nodeEditor.ResetZoom());
             nodeEditor.AddContextMenuItem("Find Starting Node", pos => nodeEditor.FindNodeZero());
-            
-            SelectModule(Editor.Modules[0]);
-            UpdateContents();
+
+            SelectModule(Module == null ? Editor.Modules[0] : Module);
         }
         
         private void CreateNewAction<T>(object mousePos) where T : AIAction
@@ -206,34 +205,35 @@ namespace HollowForest.AI
             newAction.name = typeof(T).Name;
             newAction.guid = Guid.NewGuid().ToString();
             
-            Editor.RecordUndo(module, "Add new action");
+            Editor.RecordUndo(Module, "Add new action");
 
-            if (string.IsNullOrEmpty(module.defaultActionGuid) || module.actions.Count == 0)
-            {
-                module.defaultActionGuid = newAction.guid;
-            }
-
-            module.actions.Add(newAction);
-            AssetDatabase.AddObjectToAsset(newAction, module);
-            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(module));
+            Module.actions.Add(newAction);
+            AssetDatabase.AddObjectToAsset(newAction, Module);
+            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Module));
             
             var node = new ActionNode(this, newAction);
             nodeEditor.AddNode(node);
             node.SetPosition((Vector2)mousePos);
+
+            if (string.IsNullOrEmpty(Module.defaultActionGuid) || Module.actions.Count == 0)
+            {
+                Module.defaultActionGuid = newAction.guid;
+                UpdateContents();
+            }
         }
 
         public void RemoveAction(ActionNode node)
         {
-            Editor.RecordUndo(module, "Remove action");
+            Editor.RecordUndo(Module, "Remove action");
 
-            module.actions.Remove(node.Action);
-            if (module.defaultActionGuid == node.Action.guid)
+            Module.actions.Remove(node.Action);
+            if (Module.defaultActionGuid == node.Action.guid)
             {
-                module.defaultActionGuid = module.actions.Any() ? module.actions[0].guid : "";
+                Module.defaultActionGuid = Module.actions.Any() ? Module.actions[0].guid : "";
             }
             
             AssetDatabase.RemoveObjectFromAsset(node.Action);
-            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(module));
+            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Module));
             nodeEditor.RemoveNode(node);
         }
 
