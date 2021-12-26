@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using HollowForest.AI.States;
 using UnityEngine;
@@ -50,25 +51,34 @@ namespace HollowForest.AI
         {
             if (!isRunning) return;
             
-            AIAction.Transition validTransition = null;
+            var validTransitions = new List<AIAction.Transition>();
             var priority = -1;
             foreach (var transition in currentAction.transitions)
             {
-                if (transition.priority > priority && IsValidTransition(transition))
+                if (!IsValidTransition(transition)) continue;
+                
+                if (transition.priority > priority)
                 {
-                    validTransition = transition;
+                    validTransitions = new List<AIAction.Transition> { transition };
                     priority = transition.priority;
+                }
+                else if (transition.priority == priority)
+                {
+                    validTransitions.Add(transition);
                 }
             }
 
-            if (validTransition != null)
+            if (validTransitions.Any())
             {
-                TransitionToAction(validTransition.actionGuid);
+                var index = Random.Range(0, validTransitions.Count);
+                TransitionToAction(validTransitions[index].actionGuid);
                 return;
             }
-            
-            currentAction?.Tick();
-            
+
+            if (currentAction != null)
+            {
+                currentAction.Tick();
+            }
         }
 
         private bool IsValidTransition(AIAction.Transition transition)
