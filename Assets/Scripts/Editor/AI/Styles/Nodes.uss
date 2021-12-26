@@ -10,3 +10,40 @@
 
     flex-grow: 1;
 }
+
+.event-node {
+    border-width: 2px;
+    border-radius: 6px;
+    -unity-text-align: middle-center;
+}
+
+.event-node-label {
+    color: black;
+    font-size: 12px;
+    -unity-font-style: bold;
+    height: 38px;
+}
+
+.entry-node-unselected {
+    border-color: green;
+    background-color: #67b41b;
+}
+.entry-node-selected {
+    border-color: #02f102;
+    background-color: #c6f5a0;
+}
+.entry-node-activating-link {
+}
+
+.interrupt-node-unselected {
+    border-color: #6e0404;
+    background-color: #f52828;
+}
+.interrupt-node-selected {
+    border-color: #c50909;
+    background-color: #fa7a7a;
+}
+.interrupt-node-activating-link {
+    border-color: #6e0404;
+    background-color: #c03b74;
+}

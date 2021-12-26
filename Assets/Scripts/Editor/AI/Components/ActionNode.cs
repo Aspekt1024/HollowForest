@@ -76,28 +76,37 @@ namespace HollowForest.AI
             element.AddToClassList("action-node");
             
             SetStyle(AINodeProfiles.StandardStyle);
-            SetSize(new Vector2(200, 120));
+            SetSize(new Vector2(100, 40));
 
-            SetupTopSection();
-
-            CreateDisplay(element);
+            var label = new Label(Action.name);
+            label.AddToClassList("action-node-label");
+            
+            element.Add(label);
         }
         
-        private void SetupTopSection()
+        public override void PopulateInspector(VisualElement container)
         {
-            var topSection = new VisualElement();
-            topSection.AddToClassList("top-section");
-            var label = new Label(Action.name);
-            topSection.Add(label);
-            element.Add(topSection);
-        }
+            container.Clear();
 
-        private void CreateDisplay(VisualElement element)
-        {
-            var actionDisplay = new VisualElement();
+            var header = new Label($"{Action.name} ({Action.guid.Substring(0, 7)}...)");
+            header.AddToClassList("inspector-header");
+            container.Add(header);
+            
+            var transitionHeader = new Label("Transitions");
+            transitionHeader.AddToClassList("inspector-header");
+            container.Add(transitionHeader);
 
-
-            element = actionDisplay;
+            var module = modulePage.GetSelectedModule();
+            foreach (var transition in Action.transitions)
+            {
+                container.Add(TransitionDisplay.Create(transition, module, (action, msg) =>
+                {
+                    modulePage.RecordModuleUndo(msg);
+                    action.Invoke();
+                    PopulateInspector(container);
+                    modulePage.UpdateContents();
+                }));
+            }
         }
     }
 }

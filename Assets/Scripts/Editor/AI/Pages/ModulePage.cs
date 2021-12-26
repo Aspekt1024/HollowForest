@@ -19,6 +19,8 @@ namespace HollowForest.AI
 
         private AIModule module;
         private Node selectedNode;
+
+        public AIModule GetSelectedModule() => module;
         
         public ModulePage(AIEditor editor) : base(editor)
         {

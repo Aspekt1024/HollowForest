@@ -1,60 +1,26 @@
 .action-node {
-    border-color: black;
-    border-width: 1px;
+    border-width: 2px;
     border-radius: 6px;
+    -unity-text-align: middle-center;
 }
 
-.top-section {
-    height: 17px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    margin-bottom: 4px;
-    border-bottom-width: 1px;
-    background-color: #4e4e4e;
-    border-color: #626262;
+.action-node-label {
+    color: black;
+    height: 38px;
+    -unity-font-style: bold;
 }
 
-.dialogue-node-unselected {
-    background-color: grey;
+.action-node-unselected {
+    border-color: #0b1672;
+    background-color: #2e5be3;
 }
 
-.dialogue-node-selected {
-    background-color: #acacac;
+.action-node-selected {
+    border-color: #4983ef;
+    background-color: #a6b7f3;
 }
 
-.dialogue-node-activating-link {
-    background-color: #bfbfbf;
-}
-
-.dialogue-node-onetime-unselected {
-    border-color: #2a2839;
-    background-color: #49385f;
-}
-
-.dialogue-node-onetime-selected {
-    border-color: #2a2839;
-    background-color: #695d83;
-}
-
-.dialogue-node-onetime-activating-link {
-    background-color: #b7b7b7;
-}
-
-.dialogue-line {
-    display: flex;
-    flex-direction: row;
-}
-
-.dialogue-line-text {
-    width: 150px;
-    white-space: normal;
-}
-
-.dialogue-event-item {
-    display: flex;
-    flex-direction: row;
-}
-
-.dialogue-button {
-
+.action-node-activating-link {
+    border-color: #50e4fc;
+    background-color: #b1b9fc;
 }

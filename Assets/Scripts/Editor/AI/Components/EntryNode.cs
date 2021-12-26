@@ -17,7 +17,7 @@ namespace HollowForest.AI
             element.AddToClassList("event-node");
             element.AddToClassList("entry-node");
             
-            SetStyle(AINodeProfiles.StandardStyle);
+            SetStyle(AINodeProfiles.EntryNodeStyle);
             SetSize(new Vector2(60, 40));
 
             var label = new Label("Entry");

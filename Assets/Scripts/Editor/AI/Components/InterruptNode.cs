@@ -23,12 +23,33 @@ namespace HollowForest.AI
             element.AddToClassList("event-node");
             element.AddToClassList("interrupt-node");
             
-            SetStyle(AINodeProfiles.StandardStyle);
+            SetStyle(AINodeProfiles.InterruptNodeStyle);
             SetSize(new Vector2(80, 40));
 
             var label = new Label("Interrupts");
             label.AddToClassList("event-node-label");
             element.Add(label);
+        }
+
+        public override void PopulateInspector(VisualElement container)
+        {
+            container.Clear();
+            
+            var header = new Label("Interrupts");
+            header.AddToClassList("inspector-header");
+            container.Add(header);
+            
+            var module = modulePage.GetSelectedModule();
+            foreach (var interrupt in module.interrupts)
+            {
+                container.Add(TransitionDisplay.Create(interrupt, module, (action, msg) =>
+                {
+                    modulePage.RecordModuleUndo(msg);
+                    action.Invoke();
+                    PopulateInspector(container);
+                    modulePage.UpdateContents();
+                }));
+            }
         }
     }
 }

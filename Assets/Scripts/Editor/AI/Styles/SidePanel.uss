@@ -13,33 +13,31 @@
     padding: 5px;
 }
 
+.inspector-header {
+    -unity-font-style: bold;
+}
+
 .inspector-field {
     display: flex;
     flex-direction: row;
 }
 
-.eventlist-required {
-    min-height: 40px;
-    background-color: #889488;
-    border-color: green;
-    border-radius: 5px;
+.transition-display {
     border-width: 1px;
-    margin: 3px;
+    border-color: black;
 }
 
-.eventlist-required Label {
-    color: black;
+.transition-condition {
+    display: flex;
+    flex-direction: row;
+    margin-left: 12px;
 }
 
-.eventlist-invalidating {
-    min-height: 40px;
-    background-color: #9f8989;
-    border-color: #ff0000;
-    border-radius: 5px;
-    border-width: 1px;
-    margin: 3px;
+.transition-condition-positive {
+    color: green;
 }
 
-.eventlist-invalidating Label {
-    color: black;
+.transition-condition-negative {
+    color: #fa4646;
 }
+
