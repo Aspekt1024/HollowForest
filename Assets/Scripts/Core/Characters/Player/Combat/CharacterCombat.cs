@@ -15,6 +15,8 @@ namespace HollowForest
 
             public int lightAttackBaseDamage = 1;
             public int heavyAttackBaseDamage = 2;
+
+            public bool lockPositionForLightAttack = true;
         }
 
         [Serializable]
@@ -53,9 +55,11 @@ namespace HollowForest
         public void AttackLightRequested()
         {
             if (!CanAttack()) return;
+            character.State.SetState(CharacterStates.IsLockedForAttack, settings.lockPositionForLightAttack);
             timeNextAttackAvailable = Time.time + settings.lightAttackCooldown;
             character.Animator.LightAttack(() =>
             {
+                character.State.SetState(CharacterStates.IsLockedForAttack, false);
                 collisions.lightAttackCollider.ActionAttack((c, dir) =>
                 {
                     var details = new HitDetails
