@@ -11,7 +11,7 @@ namespace HollowForest.AI
 
         protected override void OnInit()
         {
-            agent.memory.RegisterObjectObserver(AIObject.PotentialThreat, OnLastDamagedByUpdated);
+            agent.memory.RegisterObjectObserver(AIObject.PotentialThreat, OnPotentialThreatUpdated);
             agent.memory.RegisterObjectObserver(AIObject.LockedOnThreat, OnLockedOnThreatUpdated);
         }
 
@@ -71,9 +71,10 @@ namespace HollowForest.AI
             }
         }
 
-        private void OnLastDamagedByUpdated(object other)
+        private void OnPotentialThreatUpdated(object other)
         {
-            RegisterThreat(other as Character, false);
+            if (!(other is Character character)) return;
+            RegisterThreat(character, false);
         }
 
         private void OnLockedOnThreatUpdated(object other)

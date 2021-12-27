@@ -44,14 +44,7 @@ namespace HollowForest.AI
 
         public void Engage(Character threat, bool lockOn)
         {
-            if (lockOn)
-            {
-                memory.SetObject(AIObject.LockedOnThreat, threat);
-            }
-            else
-            {
-                memory.SetObject(AIObject.PotentialThreat, threat);
-            }
+            memory.SetObject(lockOn ? AIObject.LockedOnThreat : AIObject.PotentialThreat, threat);
         }
 
     }
