@@ -46,7 +46,7 @@ namespace HollowForest.AI
         
         protected override void AddPages()
         {
-            AddPage(new ModulePage(this));
+            AddPage(new ModuleEditorPage(this));
             AddPage(new DiagnosticsPage(this));
         }
     }

@@ -30,7 +30,10 @@ namespace HollowForest.AI
         private readonly List<Action<AIState, bool>> allStateObservations = new List<Action<AIState, bool>>();
         
         private readonly Dictionary<AIObject, List<Action<object>>> objectObservations = new Dictionary<AIObject, List<Action<object>>>();
+        private readonly List<Action<AIObject, object>> allObjectObservations = new List<Action<AIObject, object>>();
 
+        public Dictionary<AIState, bool> GetStateCopy() => new Dictionary<AIState, bool>(states);
+        public Dictionary<AIObject, object> GetObjectsCopy() => new Dictionary<AIObject, object>(objects);
 
         public void RegisterStateObserver(AIState state, Action<bool> stateChangeCallback)
         {
@@ -81,6 +84,20 @@ namespace HollowForest.AI
             if (index >= 0)
             {
                 objectObservations[aiObject].RemoveAt(index);
+            }
+        }
+
+        public void RegisterAllObjectObserver(Action<AIObject, object> objectChangeCallback)
+        {
+            allObjectObservations.Add(objectChangeCallback);
+        }
+        
+        public void UnregisterAllObjectObserver(Action<AIObject, object> objectChangeCallback)
+        {
+            var index = allObjectObservations.FindIndex(o => o == objectChangeCallback);
+            if (index >= 0)
+            {
+                allObjectObservations.RemoveAt(index);
             }
         }
         

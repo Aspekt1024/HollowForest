@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace HollowForest.AI
 {
-    public class DiagnosticsPage : Page<AIEditor, AIEditorData>
+    public class DiagnosticsPage : ModuleBasePage
     {
         public override string Title => "Diagnostics";
 
@@ -21,7 +21,9 @@ namespace HollowForest.AI
         {
         }
 
-        public override void UpdateContents()
+        public override bool CanEdit => false;
+
+        protected override void OnUpdateContents()
         {
             if (Application.isPlaying)
             {
@@ -30,41 +32,25 @@ namespace HollowForest.AI
                     .Select(e => e.GetAI()).ToList();
             
                 sidePanel.Populate(agents);
-                nodeEditor.UpdateContents();
             }
             else
             {
                 sidePanel.PopulateOffline();
+                SelectModule(null);
             }
         }
 
-        protected override void SetupUI(VisualElement root)
+        protected override void PreNodeEditorUISetup(VisualElement page)
         {
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
             
-            var nodesStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/Nodes.uss");
-            var sidePanelStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/SidePanel.uss");
-            var actionStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/ActionNode.uss");
-            root.styleSheets.Add(nodesStyleSheet);
-            root.styleSheets.Add(sidePanelStyleSheet);
-            root.styleSheets.Add(actionStyleSheet);
-            
-            var page = new VisualElement();
-            page.AddToClassList("node-page");
-            root.Add(page);
-            
             sidePanel = new DiagnosticsSidePanel(this, page);
+        }
 
-            nodeEditor = new NodeEditor();
-            
-            nodeEditor.NodeSelected += OnNodeSelected;
-            nodeEditor.OnNodeUnselected += OnNodeUnselected;
-            page.Add(nodeEditor.Element);
-            
-            nodeEditor.AddContextMenuItem("Reset Zoom", (pos) => nodeEditor.ResetZoom());
-            nodeEditor.AddContextMenuItem("Find Starting Node", pos => nodeEditor.FindNodeZero());
-            
+
+        protected override void PostNodeEditorUISetup()
+        {
             UpdateContents();
         }
 
@@ -72,22 +58,18 @@ namespace HollowForest.AI
         {
             if (Agent == agent) return;
             Agent = agent;
-            UpdateContents();
+            sidePanel.SetAgent(agent);
+            SelectModule(agent.GetRunningModule());
         }
 
-        private void OnNodeSelected(Node node)
+        protected override void OnNodeSelected(Node node)
         {
-            selectedNode = node;
             sidePanel.OnNodeSelected(node);
         }
 
-        private void OnNodeUnselected(Node node)
+        protected override void OnNodeUnselected(Node node)
         {
-            if (selectedNode == node)
-            {
-                selectedNode = null;
-                sidePanel.OnNodeUnselected(node);
-            }
+            sidePanel.OnNodeUnselected(node);
         }
 
         ~DiagnosticsPage()

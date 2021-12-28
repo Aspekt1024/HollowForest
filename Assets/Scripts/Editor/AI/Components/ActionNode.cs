@@ -8,20 +8,23 @@ namespace HollowForest.AI
 {
     public class ActionNode : Node
     {
-        private readonly ModulePage modulePage;
+        private readonly ModuleBasePage modulePage;
         public readonly AIAction Action;
 
         private VisualElement element;
         
-        public ActionNode(ModulePage modulePage, AIAction action) : base(new Guid(action.guid), AINodeProfiles.DependencyProfiles)
+        public ActionNode(ModuleBasePage modulePage, AIAction action) : base(new Guid(action.guid), AINodeProfiles.DependencyProfiles)
         {
             this.modulePage = modulePage;
             Action = action;
-            
-            AddContextMenuItem("Create Transition", pos => modulePage.BeginLinkCreation(this, AINodeProfiles.ActionTransition));
-            AddContextMenuItem("Remove Transition", pos => modulePage.BeginLinkRemoval(this, AINodeProfiles.ActionTransition));
-            AddContextMenuItem("Set Default Action", pos => modulePage.SetDefaultAction(this));
-            AddContextMenuItem("Delete", pos => modulePage.RemoveAction(this));
+
+            if (modulePage.CanEdit)
+            {
+                AddContextMenuItem("Create Transition", pos => modulePage.BeginLinkCreation(this, AINodeProfiles.ActionTransition));
+                AddContextMenuItem("Remove Transition", pos => modulePage.BeginLinkRemoval(this, AINodeProfiles.ActionTransition));
+                AddContextMenuItem("Set Default Action", pos => modulePage.SetDefaultAction(this));
+                AddContextMenuItem("Delete", pos => modulePage.RemoveAction(this));
+            }
         }
 
         public bool IsTransitionedFrom(ActionNode node)
@@ -94,6 +97,7 @@ namespace HollowForest.AI
             {
                 container.Add(TransitionDisplay.Create(transition, module, (action, msg) =>
                 {
+                    if (modulePage == null) return;
                     modulePage.RecordModuleUndo(msg);
                     action.Invoke();
                     PopulateInspector(container);

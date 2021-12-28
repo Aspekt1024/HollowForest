@@ -17,7 +17,10 @@ namespace HollowForest.AI
         private readonly VisualElement agentList;
         private readonly VisualElement nodeDetails;
 
+        private readonly VisualElement agentDetails;
+
         private Node selectedNode;
+        private AIAgent selectedAgent;
         
         public DiagnosticsSidePanel(DiagnosticsPage page, VisualElement rootElement)
         {
@@ -37,6 +40,10 @@ namespace HollowForest.AI
             nodeDetails = new VisualElement();
             nodeDetails.AddToClassList("inspector");
             topSection.Add(nodeDetails);
+
+            agentDetails = new VisualElement();
+            agentDetails.AddToClassList("inspector");
+            bottomSection.Add(agentDetails);
             
             rootElement.Add(panel);
         }
@@ -45,6 +52,7 @@ namespace HollowForest.AI
         {
             CreateAIAgentSelection(agents);
             OnNodeSelected(selectedNode);
+            PopulateAgentStateDisplay();
         }
 
         public void PopulateOffline()
@@ -52,6 +60,17 @@ namespace HollowForest.AI
             agentList.Clear();
             nodeDetails.Clear();
             nodeDetails.Add(new Label("only available during runtime"));
+        }
+
+        public void SetAgent(AIAgent agent)
+        {
+            if (selectedAgent != null)
+            {
+                UnregisterAgentObservations(agent);
+            }
+            selectedAgent = agent;
+            RegisterAgentObservations(agent);
+            PopulateAgentStateDisplay();
         }
 
         public void OnNodeSelected(Node node)
@@ -85,6 +104,50 @@ namespace HollowForest.AI
 
             agentList.Clear();
             agentList.Add(dropdown);
+        }
+
+        private void RegisterAgentObservations(AIAgent agent)
+        {
+            agent.memory.RegisterAllStateObserver(OnAIStateChanged);
+            agent.memory.RegisterAllObjectObserver(OnAIObjectChanged);
+            agent.character.State.RegisterAllStateObserver(OnCharacterStateChanged);
+        }
+
+        private void UnregisterAgentObservations(AIAgent agent)
+        {
+            agent.memory.UnregisterAllStateObserver(OnAIStateChanged);
+            agent.memory.UnregisterAllObjectObserver(OnAIObjectChanged);
+            agent.character.State.UnregisterAllStateObserver(OnCharacterStateChanged);
+        }
+
+        private void OnAIStateChanged(AIState state, bool value) => PopulateAgentStateDisplay();
+        private void OnAIObjectChanged(AIObject state, object value) => PopulateAgentStateDisplay();
+        private void OnCharacterStateChanged(CharacterStates state, bool value) => PopulateAgentStateDisplay();
+
+        private void PopulateAgentStateDisplay()
+        {
+            agentDetails.Clear();
+
+            if (selectedAgent == null) return;
+
+            var aiStates = selectedAgent.memory.GetStateCopy();
+            var aiObjects = selectedAgent.memory.GetObjectsCopy();
+            var charStates = selectedAgent.character.State.GetStateCopy();
+            
+            foreach (var state in aiStates)
+            {
+                agentDetails.Add(new Label($"{state.Key}: {state.Value}"));
+            }
+
+            foreach (var aiObject in aiObjects)
+            {
+                agentDetails.Add(new Label($"{aiObject.Key}: {aiObject.Value}"));
+            }
+
+            foreach (var state in charStates)
+            {
+                agentDetails.Add(new Label($"{state.Key}: {state.Value}"));
+            }
         }
     }
 }

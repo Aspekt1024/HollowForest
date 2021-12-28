@@ -7,14 +7,17 @@ namespace HollowForest.AI
 {
     public class InterruptNode : Node
     {
-        private readonly ModulePage modulePage;
+        private readonly ModuleBasePage modulePage;
         
-        public InterruptNode(ModulePage modulePage, string nodeGuid) : base(new Guid(nodeGuid), AINodeProfiles.DependencyProfiles)
+        public InterruptNode(ModuleBasePage modulePage, string nodeGuid) : base(new Guid(nodeGuid), AINodeProfiles.DependencyProfiles)
         {
             this.modulePage = modulePage;
-            
-            AddContextMenuItem("Add Interrupt", pos => modulePage.BeginLinkCreation(this, AINodeProfiles.InterruptTransition));
-            AddContextMenuItem("Remove Interrupt", pos => modulePage.BeginLinkRemoval(this, AINodeProfiles.InterruptTransition));
+
+            if (modulePage.CanEdit)
+            {
+                AddContextMenuItem("Add Interrupt", pos => modulePage.BeginLinkCreation(this, AINodeProfiles.InterruptTransition));
+                AddContextMenuItem("Remove Interrupt", pos => modulePage.BeginLinkRemoval(this, AINodeProfiles.InterruptTransition));
+            }
         }
 
         protected override void Populate(VisualElement element)

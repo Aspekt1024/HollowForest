@@ -9,24 +9,24 @@ using UnityEngine.UIElements;
 
 namespace HollowForest.AI
 {
-    public class ModulePage : Page<AIEditor, AIEditorData>
+    public abstract class ModuleBasePage : Page<AIEditor, AIEditorData>
     {
-        public override string Title => "Modules";
-
-        private AIModuleNodeEditor nodeEditor;
-        private ModuleSidePanel moduleSidePanel;
-
+        private NodeEditor nodeEditor;
+        
         private Node selectedNode;
 
         public AIModule Module => Editor.Data.selectedModule;
-        
-        public ModulePage(AIEditor editor) : base(editor)
-        {
-        }
 
+        public abstract bool CanEdit { get; }
+        
+        protected ModuleBasePage(AIEditor editor) : base(editor)
+        {
+            
+        }
+        
         public override void UpdateContents()
         {
-            moduleSidePanel.Populate(Editor.Modules);
+            OnUpdateContents();
             nodeEditor.UpdateContents();
             
             if (Module == null) return;
@@ -98,6 +98,80 @@ namespace HollowForest.AI
             }
         }
 
+        protected abstract void OnUpdateContents();
+
+        protected override void SetupUI(VisualElement root)
+        {
+            var nodesStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/Nodes.uss");
+            var sidePanelStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/SidePanel.uss");
+            var actionStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/ActionNode.uss");
+            root.styleSheets.Add(nodesStyleSheet);
+            root.styleSheets.Add(sidePanelStyleSheet);
+            root.styleSheets.Add(actionStyleSheet);
+
+            var page = new VisualElement();
+            page.AddToClassList("node-page");
+            root.Add(page);
+
+            PreNodeEditorUISetup(page);
+
+            nodeEditor = new NodeEditor();
+            nodeEditor.NodeSelected += NodeSelected;
+            nodeEditor.OnNodeUnselected += NodeUnselected;
+            page.Add(nodeEditor.Element);
+            
+            SetupNodeEditorContextMenu();
+            
+            PostNodeEditorUISetup();
+        }
+
+        protected abstract void PreNodeEditorUISetup(VisualElement page);
+        protected abstract void PostNodeEditorUISetup();
+
+        private void SetupNodeEditorContextMenu()
+        {
+            if (!CanEdit) return;
+            
+            var mi = typeof(ModuleBasePage).GetMethod(nameof(CreateNewAction), BindingFlags.NonPublic | BindingFlags.Instance);
+            var actionTypes = typeof(AIAction).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(AIAction)));
+            foreach (var actionType in actionTypes)
+            {
+                var newActionMethod = mi.MakeGenericMethod(actionType);
+                var action = ScriptableObject.CreateInstance(actionType) as AIAction;
+                nodeEditor.AddContextMenuItem(
+                    $"Create Action/{action.MenuCategory}/{action.DisplayName}",
+                    pos => newActionMethod.Invoke(this, new[] {pos})
+                );
+                ScriptableObject.DestroyImmediate(action);
+            }
+            
+            nodeEditor.AddContextMenuItem("Reset Zoom", (pos) => nodeEditor.ResetZoom());
+            nodeEditor.AddContextMenuItem("Find Starting Node", pos => nodeEditor.FindNodeZero());
+        }
+
+        private void CreateNewAction<T>(AIAction action, Vector2 mousePos) where T : AIAction
+        {
+            var newAction = ScriptableObject.CreateInstance<T>();
+            newAction.name = typeof(T).Name;
+            newAction.guid = Guid.NewGuid().ToString();
+            
+            Editor.RecordUndo(Module, "Add new action");
+
+            Module.actions.Add(newAction);
+            AssetDatabase.AddObjectToAsset(newAction, Module);
+            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Module));
+            
+            var node = new ActionNode(this, action);
+            nodeEditor.AddNode(node);
+            node.SetPosition(mousePos);
+
+            if (string.IsNullOrEmpty(Module.defaultActionGuid) || Module.actions.Count == 0)
+            {
+                Module.defaultActionGuid = action.guid;
+                UpdateContents();
+            }
+        }
+
         private void AddTransition(Dictionary<Node, List<Node>> transitions, Node fromNode, Node toNode)
         {
             if (transitions.ContainsKey(toNode))
@@ -160,48 +234,7 @@ namespace HollowForest.AI
         }
 
         public void RecordModuleUndo(string undoMessage) => Editor.RecordUndo(Module, undoMessage);
-
-        protected override void SetupUI(VisualElement root)
-        {
-            var nodesStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/Nodes.uss");
-            var sidePanelStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/SidePanel.uss");
-            var actionStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{Editor.DirectoryRoot}/Styles/ActionNode.uss");
-            root.styleSheets.Add(nodesStyleSheet);
-            root.styleSheets.Add(sidePanelStyleSheet);
-            root.styleSheets.Add(actionStyleSheet);
-
-            var page = new VisualElement();
-            page.AddToClassList("node-page");
-            root.Add(page);
-
-            moduleSidePanel = new ModuleSidePanel(this, page);
-
-            nodeEditor = new AIModuleNodeEditor(Editor, OnNewActionCreated);
-            nodeEditor.NodeSelected += OnNodeSelected;
-            nodeEditor.OnNodeUnselected += OnNodeUnselected;
-            page.Add(nodeEditor.Element);
-
-            SelectModule(Module == null ? Editor.Modules[0] : Module);
-        }
-
-        private void OnNewActionCreated(AIAction action, Vector2 mousePos)
-        {
-            var node = new ActionNode(this, action); // TODO because this requires a module page, we can't abstract this to another page
-            nodeEditor.AddNode(node);
-            node.SetPosition(mousePos);
-
-            if (string.IsNullOrEmpty(Module.defaultActionGuid) || Module.actions.Count == 0)
-            {
-                Module.defaultActionGuid = action.guid;
-                UpdateContents();
-            }
-        }
-
-        public override void OnClear()
-        {
-            Editor.Data.OnModulePageCleared();
-        }
-
+        
         public void RemoveAction(ActionNode node)
         {
             Editor.RecordUndo(Module, "Remove action");
@@ -217,19 +250,22 @@ namespace HollowForest.AI
             nodeEditor.RemoveNode(node);
         }
 
-        private void OnNodeSelected(Node node)
+        private void NodeSelected(Node node)
         {
             selectedNode = node;
-            moduleSidePanel.OnNodeSelected(node);
+            OnNodeSelected(node);
         }
 
-        private void OnNodeUnselected(Node node)
+        private void NodeUnselected(Node node)
         {
             if (selectedNode == node)
             {
                 selectedNode = null;
-                moduleSidePanel.OnNodeUnselected(node);
+                OnNodeUnselected(node);
             }
         }
+
+        protected abstract void OnNodeSelected(Node node);
+        protected abstract void OnNodeUnselected(Node node);
     }
 }

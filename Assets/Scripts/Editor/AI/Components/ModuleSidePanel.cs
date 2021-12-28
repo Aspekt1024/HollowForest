@@ -7,7 +7,7 @@ namespace HollowForest.AI
 {
     public class ModuleSidePanel
     {
-        private readonly ModulePage page;
+        private readonly ModuleEditorPage page;
         private readonly VisualElement panel;
 
         private readonly VisualElement topSection;
@@ -18,7 +18,7 @@ namespace HollowForest.AI
 
         private Node selectedNode;
         
-        public ModuleSidePanel(ModulePage page, VisualElement rootElement)
+        public ModuleSidePanel(ModuleEditorPage page, VisualElement rootElement)
         {
             this.page = page;
             
