@@ -16,7 +16,6 @@ namespace HollowForest.Events
         private bool isAwaitingBegin;
         
         private bool isTriggered;
-        private bool isEnabled;
         private bool isComplete;
 
         private EventBehaviour[] events;
@@ -39,7 +38,6 @@ namespace HollowForest.Events
             
             if (!isTriggered)
             {
-                isEnabled = true;
                 isTriggered = true;
                 
                 eventBeginTime = Time.time;
@@ -70,7 +68,6 @@ namespace HollowForest.Events
 
         public void Complete()
         {
-            isEnabled = false;
             isComplete = true;
 
             if (!centerCameraAfterCompletion)

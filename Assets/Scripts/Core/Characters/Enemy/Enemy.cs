@@ -11,6 +11,8 @@ namespace HollowForest
 
         public event Action<Enemy> Defeated = delegate { };
 
+        public AIAgent GetAI() => ai;
+
         private void Start()
         {
             ai = new AIAgent(this);

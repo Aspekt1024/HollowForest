@@ -14,6 +14,8 @@ namespace HollowForest.AI
         private bool isRunning;
         private bool isInterruptCheckRequired;
 
+        public AIModule GetRunningModule() => module;
+
         public AIExecutor(AIAgent agent)
         {
             this.agent = agent;

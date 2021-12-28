@@ -10,6 +10,8 @@ namespace HollowForest.AI
         public readonly AIMemory memory;
         
         private readonly AIExecutor executor;
+
+        public AIModule GetRunningModule() => executor.GetRunningModule();
         
         public AIAgent(Character character)
         {
