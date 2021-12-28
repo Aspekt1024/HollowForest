@@ -64,7 +64,10 @@ namespace Aspekt.Editors
 
         private void DataFilesUpdated()
         {
-            pages.ForEach(p => p.UpdateContents());
+            pages.ForEach(p =>
+            {
+                if (p.IsSetup) p.UpdateContents();
+            });
         }
 
         private void OnDisable()
@@ -81,6 +84,7 @@ namespace Aspekt.Editors
 
         private void OnPageSelected(Page<T, D> page)
         {
+            currentPage?.OnClear();
             currentPage = page;
             pageContainer.Clear();
             page.DrawPage(pageContainer);

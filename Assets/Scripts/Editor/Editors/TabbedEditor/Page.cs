@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine.UIElements;
 
 namespace Aspekt.Editors
@@ -9,6 +8,8 @@ namespace Aspekt.Editors
         public VisualElement Root { get; private set; }
 
         public readonly T Editor;
+        
+        public bool IsSetup { get; private set; }
         
         protected Page(T editor)
         {
@@ -22,9 +23,11 @@ namespace Aspekt.Editors
             container.Add(Root);
             
             SetupUI(Root);
+            IsSetup = true;
         }
 
         public abstract void UpdateContents();
+        public virtual void OnClear() {}
         protected abstract void SetupUI(VisualElement root);
         
         public virtual void OnGUI() { }

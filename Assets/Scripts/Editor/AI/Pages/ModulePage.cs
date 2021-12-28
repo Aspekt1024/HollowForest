@@ -186,11 +186,12 @@ namespace HollowForest.AI
             foreach (var actionType in actionTypes)
             {
                 var newActionMethod = mi.MakeGenericMethod(actionType);
-                var action = Activator.CreateInstance(actionType) as AIAction;
+                var action = ScriptableObject.CreateInstance(actionType) as AIAction;
                 nodeEditor.AddContextMenuItem(
                     $"Create Action/{action.MenuCategory}/{action.DisplayName}",
                     pos => newActionMethod.Invoke(this, new[] {pos})
                 );
+                ScriptableObject.DestroyImmediate(action);
             }
             
             nodeEditor.AddContextMenuItem("Reset Zoom", (pos) => nodeEditor.ResetZoom());
@@ -198,7 +199,12 @@ namespace HollowForest.AI
 
             SelectModule(Module == null ? Editor.Modules[0] : Module);
         }
-        
+
+        public override void OnClear()
+        {
+            Editor.Data.OnModulePageCleared();
+        }
+
         private void CreateNewAction<T>(object mousePos) where T : AIAction
         {
             var newAction = ScriptableObject.CreateInstance<T>();

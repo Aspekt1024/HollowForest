@@ -29,6 +29,7 @@ namespace Aspekt.Editors
 
         public void Save()
         {
+            OnPreSave();
             var data = this as T;
             var json = JsonUtility.ToJson(data, true);
             try
@@ -54,5 +55,7 @@ namespace Aspekt.Editors
         }
 
         public abstract void OnNodeRemoved(string guid);
+
+        protected virtual void OnPreSave() {}
     }
 }

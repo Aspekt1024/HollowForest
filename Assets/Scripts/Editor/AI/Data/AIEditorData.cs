@@ -30,10 +30,14 @@ namespace HollowForest.AI
 
         public List<ModuleData> moduleDataSets = new List<ModuleData>();
 
+        private bool isModuleReloadRequired;
+
         public bool SetModule(AIModule module)
         {
             var moduleData = moduleDataSets.FirstOrDefault(s => s.module == module);
-            if (moduleData != null && selectedModuleData == moduleData) return false;
+            if (moduleData != null && selectedModuleData == moduleData && !isModuleReloadRequired) return false;
+
+            isModuleReloadRequired = false;
             
             selectedModule = module;
             selectedModuleData = moduleData;
@@ -44,6 +48,11 @@ namespace HollowForest.AI
             }
 
             return true;
+        }
+
+        public void OnModulePageCleared()
+        {
+            isModuleReloadRequired = true;
         }
 
         public List<Node> GetNodes()
@@ -69,6 +78,18 @@ namespace HollowForest.AI
             if (index >= 0)
             {
                 selectedModuleData.nodes.RemoveAt(index);
+            }
+        }
+
+        protected override void OnPreSave()
+        {
+            for (int i = 0; i < moduleDataSets.Count; i++)
+            {
+                var set = moduleDataSets[i];
+                if (set.module == null)
+                {
+                    moduleDataSets.RemoveAt(i);
+                }
             }
         }
     }
