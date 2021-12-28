@@ -6,6 +6,7 @@ namespace HollowForest
     {
         public const string Interactive = "Interactive";
         public const string World = "World";
+        public const string Character = "Character";
 
         public static int GetLayerFromName(string layer)
         {

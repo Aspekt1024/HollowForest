@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Aspekt.Editors;
-using HollowForest.AI.States;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -35,11 +33,6 @@ namespace HollowForest.AI
         {
             if (dependency is ActionNode actionNode)
             {
-                if (Action.transitions.Any(t => t.actionGuid == actionNode.Action.guid))
-                {
-                    return false;
-                }
-
                 actionNode.Action.transitions.Add(new AIAction.Transition(Action.guid));
                 return true;
             }
@@ -78,7 +71,7 @@ namespace HollowForest.AI
             SetStyle(AINodeProfiles.StandardStyle);
             SetSize(new Vector2(100, 40));
 
-            var label = new Label(Action.name);
+            var label = new Label(Action.DisplayName);
             label.AddToClassList("action-node-label");
             
             element.Add(label);
@@ -88,7 +81,7 @@ namespace HollowForest.AI
         {
             container.Clear();
 
-            var header = new Label($"{Action.name} ({Action.guid.Substring(0, 7)}...)");
+            var header = new Label($"{Action.DisplayName} ({Action.guid.Substring(0, 8)}...)");
             header.AddToClassList("inspector-header");
             container.Add(header);
             

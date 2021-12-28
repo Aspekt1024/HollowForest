@@ -16,7 +16,7 @@ TagManager:
   - EventTrigger
   - WorldSensor
   - Character
-  - 
+  - CharacterSensor
   - 
   - 
   - 

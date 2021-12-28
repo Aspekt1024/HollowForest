@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Aspekt.Editors;
-using HollowForest.AI.States;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -187,8 +186,9 @@ namespace HollowForest.AI
             foreach (var actionType in actionTypes)
             {
                 var newActionMethod = mi.MakeGenericMethod(actionType);
+                var action = Activator.CreateInstance(actionType) as AIAction;
                 nodeEditor.AddContextMenuItem(
-                    $"Create Action/{actionType.Name}",
+                    $"Create Action/{action.MenuCategory}/{action.DisplayName}",
                     pos => newActionMethod.Invoke(this, new[] {pos})
                 );
             }

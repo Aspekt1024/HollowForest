@@ -5,9 +5,13 @@ namespace HollowForest.AI
 {
     public enum AIState
     {
-        HasThreat,
-        IsNearLeftEdge,
-        IsNearRightEdge,
+        HasThreat = 1000,
+        IsInAttackRange = 1100,
+        
+        IsNearLeftEdge = 9000,
+        IsNearRightEdge = 9010,
+        IsNearLeftWall = 9020,
+        IsNearRightWall = 9030,
     }
     
     public enum AIObject

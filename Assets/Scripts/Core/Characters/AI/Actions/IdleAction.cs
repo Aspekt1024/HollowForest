@@ -1,15 +1,19 @@
-using UnityEngine;
 
-namespace HollowForest.AI.States
+namespace HollowForest.AI
 {
     public class IdleAction : AIAction
     {
         private bool isMovingRight;
         
+        public override string DisplayName => "Idle v1";
+        public override string MenuCategory => "Idle";
+
         protected override void OnStart()
         {
             Agent.memory.RegisterStateObserver(AIState.IsNearLeftEdge, OnNearLeftEdgeStateChanged);
+            Agent.memory.RegisterStateObserver(AIState.IsNearLeftWall, OnNearLeftEdgeStateChanged);
             Agent.memory.RegisterStateObserver(AIState.IsNearRightEdge, OnNearRightEdgeStateChanged);
+            Agent.memory.RegisterStateObserver(AIState.IsNearRightWall, OnNearRightEdgeStateChanged);
 
             if (Agent.memory.IsTrue(AIState.IsNearLeftEdge))
             {
@@ -25,7 +29,9 @@ namespace HollowForest.AI.States
         protected override void OnStop()
         {
             Agent.memory.UnregisterStateObserver(AIState.IsNearLeftEdge, OnNearLeftEdgeStateChanged);
+            Agent.memory.UnregisterStateObserver(AIState.IsNearLeftWall, OnNearLeftEdgeStateChanged);
             Agent.memory.UnregisterStateObserver(AIState.IsNearRightEdge, OnNearRightEdgeStateChanged);
+            Agent.memory.UnregisterStateObserver(AIState.IsNearRightWall, OnNearRightEdgeStateChanged);
             
             Agent.character.Director.StopMoving();
         }

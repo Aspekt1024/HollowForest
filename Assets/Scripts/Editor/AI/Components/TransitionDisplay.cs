@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using HollowForest.AI.States;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace HollowForest.AI
@@ -19,7 +19,7 @@ namespace HollowForest.AI
             }
             else
             {
-                display.Add(new Label($"{action.name} ({action.guid.Substring(0, 7)}...)"));
+                display.Add(new Label($"{action.DisplayName} ({action.guid.Substring(0, 8)}...)"));
             }
 
             var numConditions = transition.nConditions.Count + transition.pConditions.Count;
@@ -44,7 +44,7 @@ namespace HollowForest.AI
             createConditionButton.clicked += () =>
             {
                 updateCallback?.Invoke(
-                    () => transition.pConditions.Add(0),
+                    () => transition.pConditions.Add(((AIState[])Enum.GetValues(typeof(AIState)))[0]),
                     "Add transition condition"
                 );
             };
@@ -58,13 +58,34 @@ namespace HollowForest.AI
         private static VisualElement CreateConditionDisplay(AIAction.Transition transition, int index, bool isTrue, Action<Action, string> updateCallback)
         {
             var state = isTrue ? transition.pConditions[index] : transition.nConditions[index];
+            state = ValidateState(state);
             
             var container = new VisualElement();
             container.AddToClassList("transition-condition");
-            
-            var conditionLabel = new Label(state.ToString());
-            conditionLabel.AddToClassList(isTrue ? "transition-condition-positive" : "transition-condition-negative");
-            container.Add(conditionLabel);
+
+            var states = ((AIState[])Enum.GetValues(typeof(AIState))).ToList();
+            var conditionPopup = new PopupField<AIState>(states, state,
+                newState =>
+                {
+                    if (state == newState) return state.ToString();
+                    updateCallback.Invoke(() =>
+                    {
+                        if (isTrue)
+                        {
+                            transition.pConditions[index] = newState;
+                        }
+                        else
+                        {
+                            transition.nConditions[index] = newState;
+                        }
+                    },
+                    "Modify transition condition");
+                    return newState.ToString();
+                },
+                s => s.ToString()
+            );
+            conditionPopup.AddToClassList(isTrue ? "transition-condition-positive" : "transition-condition-negative");
+            container.Add(conditionPopup);
 
             var toggle = new Toggle { value = isTrue };
             toggle.RegisterValueChangedCallback(e =>
@@ -104,6 +125,17 @@ namespace HollowForest.AI
             container.Add(removeButton);
             
             return container;
+        }
+
+        private static AIState ValidateState(AIState state)
+        {
+            var success = Enum.IsDefined(typeof(AIState), state);
+            if (!success)
+            {
+                state = ((AIState[])Enum.GetValues(typeof(AIState)))[0];
+            }
+
+            return state;
         }
     }
 }

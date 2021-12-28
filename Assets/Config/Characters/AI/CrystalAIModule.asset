@@ -29,7 +29,7 @@ MonoBehaviour:
   defaultActionGuid: 4b305fad-215d-4ed3-82f3-cdb03f5600ab
   interrupts:
   - pConditions: 
-    nConditions: 00000000
+    nConditions: e8030000
     actionGuid: 4b305fad-215d-4ed3-82f3-cdb03f5600ab
     priority: 1
   actions:
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 4b305fad-215d-4ed3-82f3-cdb03f5600ab
   transitions:
-  - pConditions: 00000000
+  - pConditions: e8030000
     nConditions: 
     actionGuid: c90867ac-d905-43ca-bf62-8a5e2d759822
     priority: 1

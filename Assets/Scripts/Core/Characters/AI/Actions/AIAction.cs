@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace HollowForest.AI.States
+namespace HollowForest.AI
 {
     public abstract class AIAction : ScriptableObject
     {
@@ -32,8 +32,9 @@ namespace HollowForest.AI.States
 
         private readonly Dictionary<AIState, bool> preconditions = new Dictionary<AIState, bool>();
 
-        protected bool isRunning;
-        
+        public abstract string DisplayName { get; }
+        public abstract string MenuCategory { get; }
+
         public void Init(AIAgent agent)
         {
             Agent = agent;
@@ -46,13 +47,11 @@ namespace HollowForest.AI.States
 
         public void Start()
         {
-            isRunning = true;
             OnStart();
         }
 
         public void Stop()
         {
-            isRunning = false;
             OnStop();
         }
 
@@ -61,11 +60,11 @@ namespace HollowForest.AI.States
             OnTick();
         }
 
+        protected abstract void SetupPreconditions();
+        
         protected abstract void OnStart();
         protected abstract void OnStop();
         protected abstract void OnTick();
-
-        protected abstract void SetupPreconditions();
 
         protected void AddPrecondition(AIState precondition, bool value)
         {
@@ -74,7 +73,6 @@ namespace HollowForest.AI.States
 
         protected void ActionFailure()
         {
-            isRunning = false;
             Debug.LogError("Action failed");
         }
 

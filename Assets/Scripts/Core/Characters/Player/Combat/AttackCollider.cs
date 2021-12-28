@@ -8,7 +8,7 @@ namespace HollowForest
     {
         private Collider2D coll;
         private Character owner;
-        
+
         private void Awake()
         {
             owner = GetComponentInParent<Character>();

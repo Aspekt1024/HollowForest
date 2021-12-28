@@ -1,11 +1,14 @@
 using UnityEngine;
 
-namespace HollowForest.AI.States
+namespace HollowForest.AI
 {
     public class AttackAction : AIAction
     {
-        private Character threat;
+        public override string DisplayName => "Attack v1";
+        public override string MenuCategory => "Attack";
         
+        private Character threat;
+
         protected override void SetupPreconditions()
         {
             AddPrecondition(AIState.HasThreat, true);

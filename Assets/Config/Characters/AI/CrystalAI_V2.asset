@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c092d46f5544f3ab51fdf5d09bd3772, type: 3}
+  m_Name: CrystalAI_V2
+  m_EditorClassIdentifier: 
+  defaultActionGuid: c79a48e3-26cb-41d0-9f4f-eb7db3efad88
+  interrupts:
+  - pConditions: 
+    nConditions: e8030000
+    actionGuid: c79a48e3-26cb-41d0-9f4f-eb7db3efad88
+    priority: 1
+  actions:
+  - {fileID: 4014484411426147167}
+  - {fileID: 2816366510067124741}
+  - {fileID: 3608789550619414921}
+--- !u!114 &2816366510067124741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133fa971dc79438593a34deb328c0545, type: 3}
+  m_Name: FollowThreatAction
+  m_EditorClassIdentifier: 
+  guid: 75c2a659-c331-49b7-8da8-3e79ab7edda7
+  transitions:
+  - pConditions: 4c040000e8030000
+    nConditions: 
+    actionGuid: e25966c0-dd29-484b-8c54-fca4b114d67c
+    priority: 1
+  followDistance: 2
+  canDash: 1
+  canJump: 1
+--- !u!114 &3608789550619414921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96683b849e38495f85a0f20efa4280c7, type: 3}
+  m_Name: LightAttackAction
+  m_EditorClassIdentifier: 
+  guid: e25966c0-dd29-484b-8c54-fca4b114d67c
+  transitions:
+  - pConditions: e8030000
+    nConditions: 4c040000
+    actionGuid: 75c2a659-c331-49b7-8da8-3e79ab7edda7
+    priority: 1
+--- !u!114 &4014484411426147167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce1cbcfe6a64f8981403243cce46e37, type: 3}
+  m_Name: IdleAction
+  m_EditorClassIdentifier: 
+  guid: c79a48e3-26cb-41d0-9f4f-eb7db3efad88
+  transitions:
+  - pConditions: e8030000
+    nConditions: 
+    actionGuid: 75c2a659-c331-49b7-8da8-3e79ab7edda7
+    priority: 1

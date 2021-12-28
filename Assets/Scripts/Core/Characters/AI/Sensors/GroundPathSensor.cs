@@ -21,14 +21,16 @@ namespace HollowForest.AI
         private void Update()
         {
             var hasLeftGround = leftGroundCollider.GetContacts(colliders) > 0;
+            agent.memory.SetState(AIState.IsNearLeftEdge, !hasLeftGround);
+            
             var hasLeftWall = leftWallCollider.GetContacts(colliders) > 0;
-            var isLeftPathObstructed = !hasLeftGround || hasLeftWall;
-            agent.memory.SetState(AIState.IsNearLeftEdge, isLeftPathObstructed);
+            agent.memory.SetState(AIState.IsNearLeftWall, hasLeftWall);
             
             var hasRightGround = rightGroundCollider.GetContacts(colliders) > 0;
+            agent.memory.SetState(AIState.IsNearRightEdge, !hasRightGround);
+            
             var hasRighttWall = rightWallCollider.GetContacts(colliders) > 0;
-            var isRightPathObstructed = !hasRightGround || hasRighttWall;
-            agent.memory.SetState(AIState.IsNearRightEdge, isRightPathObstructed);
+            agent.memory.SetState(AIState.IsNearRightWall, hasRighttWall);
         }
     }
 }

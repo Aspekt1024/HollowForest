@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using HollowForest.AI.States;
 using UnityEngine;
 
 namespace HollowForest.AI
@@ -119,6 +118,8 @@ namespace HollowForest.AI
 
         private bool IsValidTransition(AIAction.Transition transition)
         {
+            if (currentAction != null && transition.actionGuid == currentAction.guid) return false;
+            
             var posConditionsMet = transition.pConditions.All(c => agent.memory.IsMatch(c, true));
             if (!posConditionsMet) return false;
 
