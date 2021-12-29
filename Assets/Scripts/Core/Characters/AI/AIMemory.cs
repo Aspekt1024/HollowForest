@@ -138,7 +138,11 @@ namespace HollowForest.AI
         public bool IsTrue(AIState state) => states.ContainsKey(state) && states[state];
         public bool GetState(AIState state) => IsTrue(state);
 
-        public bool IsMatch(AIState state, bool value) => states.ContainsKey(state) && states[state] == value || value == false;
+        public bool IsMatch(AIState state, bool value)
+        {
+            if (!states.ContainsKey(state)) return value == false;
+            return states[state] == value;
+        }
 
         public bool IsMatch(AIObject aiObject, object obj)
         {

@@ -1,3 +1,4 @@
+using System;
 using HollowForest.Combat;
 
 namespace HollowForest.AI
@@ -48,6 +49,9 @@ namespace HollowForest.AI
         {
             memory.SetObject(lockOn ? AIObject.LockedOnThreat : AIObject.PotentialThreat, threat);
         }
+
+        public void RegisterActionObserver(Action<AIExecutor.TransitionInfo> callback) => executor.OnTransition += callback;
+        public void UnregisterActionObserver(Action<AIExecutor.TransitionInfo> callback) => executor.OnTransition -= callback;
 
     }
 }

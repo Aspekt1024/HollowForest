@@ -1,7 +1,7 @@
 {
-    "currentPage": "Diagnostics",
+    "currentPage": "Log",
     "selectedModule": {
-        "instanceID": -19428
+        "instanceID": -80682
     },
     "moduleDataSets": [
         {
@@ -157,5 +157,19 @@
             "entryNodeGuid": "e75159bb-9c43-4821-bfed-74601e42d890",
             "interruptNodeGuid": "cd295f92-a7b5-43e8-b46b-da28bb1ff366"
         }
-    ]
+    ],
+    "logFilter": {
+        "suppressedCharStates": [
+            7,
+            6,
+            0
+        ],
+        "suppressedAItates": [
+            9000,
+            9010,
+            9020,
+            9030
+        ],
+        "suppressedAIObjects": []
+    }
 }

@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace HollowForest.AI
 {
@@ -15,6 +18,14 @@ namespace HollowForest.AI
         private bool isInterruptCheckRequired;
 
         public AIModule GetRunningModule() => module;
+
+        public struct TransitionInfo
+        {
+            public AIAction action;
+            public bool isInterrupt;
+        }
+        
+        public event Action<TransitionInfo> OnTransition = delegate { };
 
         public AIExecutor(AIAgent agent)
         {
@@ -68,6 +79,7 @@ namespace HollowForest.AI
                 isTransitioned = TryTransition(module.interrupts);
                 if (isTransitioned)
                 {
+                    OnTransition?.Invoke(new TransitionInfo { action = currentAction, isInterrupt = true});
                     return;
                 }
             }
@@ -75,6 +87,7 @@ namespace HollowForest.AI
             isTransitioned = TryTransition(currentAction.transitions);
             if (isTransitioned)
             {
+                OnTransition?.Invoke(new TransitionInfo { action = currentAction, isInterrupt = false});
                 return;
             }
 

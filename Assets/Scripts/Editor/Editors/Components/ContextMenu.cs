@@ -19,6 +19,11 @@ namespace Aspekt.Editors
             menuItems.Add(new MenuItem { text = label, function = function });
         }
 
+        public void ClearContextMenuItems()
+        {
+            menuItems.Clear();
+        }
+
         public void ShowContextMenu(Vector2 mousePos)
         {
             var menu = new GenericMenu();

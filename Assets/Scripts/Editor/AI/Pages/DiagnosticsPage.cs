@@ -10,12 +10,9 @@ namespace HollowForest.AI
     {
         public override string Title => "Diagnostics";
 
-        private NodeEditor nodeEditor;
         private DiagnosticsSidePanel sidePanel;
 
-        public AIAgent Agent;
-        
-        private Node selectedNode;
+        public AIAgent Agent => Editor.Data.selectedAgent;
         
         public DiagnosticsPage(AIEditor editor) : base(editor)
         {
@@ -47,7 +44,7 @@ namespace HollowForest.AI
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
             
-            sidePanel = new DiagnosticsSidePanel(this, page);
+            sidePanel = new DiagnosticsSidePanel(this, page, SelectAgent);
         }
 
 
@@ -56,12 +53,14 @@ namespace HollowForest.AI
             UpdateContents();
         }
 
-        public void SelectAgent(AIAgent agent)
+        private void SelectAgent(AIAgent agent)
         {
-            if (Agent == agent) return;
-            Agent = agent;
-            sidePanel.SetAgent(agent);
-            SelectModule(agent.GetRunningModule());
+            var success = Editor.Data.SetAgent(agent);
+            if (success)
+            {
+                sidePanel.SetAgent(agent);
+                SelectModule(agent.GetRunningModule());
+            }
         }
 
         protected override void OnNodeSelected(Node node)

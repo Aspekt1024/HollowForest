@@ -32,7 +32,8 @@ namespace HollowForest.AI
 
         public override void OnClear()
         {
-            Editor.Data.OnModulePageCleared();
+            Editor.Data.AllowAgentReload();
+            Editor.Data.AllowModuleReload();
         }
 
         protected override void OnNodeSelected(Node node)

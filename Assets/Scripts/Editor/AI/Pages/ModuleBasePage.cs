@@ -21,7 +21,7 @@ namespace HollowForest.AI
         
         protected ModuleBasePage(AIEditor editor) : base(editor)
         {
-            
+            nodeEditor = new NodeEditor();
         }
         
         public override void UpdateContents()
@@ -116,13 +116,16 @@ namespace HollowForest.AI
 
             PreNodeEditorUISetup(page);
 
-            nodeEditor = new NodeEditor();
+            nodeEditor.NodeSelected -= NodeSelected;
+            nodeEditor.OnNodeUnselected -= NodeUnselected;
             nodeEditor.NodeSelected += NodeSelected;
             nodeEditor.OnNodeUnselected += NodeUnselected;
             page.Add(nodeEditor.Element);
             
             SetupNodeEditorContextMenu();
             
+            Editor.Data.AllowAgentReload();
+            Editor.Data.AllowModuleReload();
             PostNodeEditorUISetup();
         }
 

@@ -13,6 +13,7 @@ namespace HollowForest.AI
 
         public AIModule selectedModule;
         [NonSerialized] public ModuleData selectedModuleData;
+        [NonSerialized] public AIAgent selectedAgent;
 
         [Serializable]
         public class ModuleData
@@ -34,9 +35,12 @@ namespace HollowForest.AI
 
         public List<ModuleData> moduleDataSets = new List<ModuleData>();
 
+        public LogFilter logFilter = new LogFilter();
+
         public readonly List<AIModule> ModuleCache = new List<AIModule>();
 
         private bool isModuleReloadRequired;
+        private bool isAgentReloadRequired;
 
         public AIEditorData()
         {
@@ -45,7 +49,14 @@ namespace HollowForest.AI
 
         public bool SetModule(AIModule module)
         {
-            if (module == null) return ClearModule();
+            if (module == null)
+            {
+                if (selectedModule == null) return false;
+            
+                selectedModule = null;
+                selectedModuleData = null;
+                return true;
+            }
             
             var moduleData = moduleDataSets.FirstOrDefault(s => s.moduleGuid == module.moduleGuid);
             if (moduleData != null && selectedModuleData == moduleData && !isModuleReloadRequired) return false;
@@ -63,19 +74,25 @@ namespace HollowForest.AI
             return true;
         }
 
-        private bool ClearModule()
+        public bool SetAgent(AIAgent agent)
         {
-            if (selectedModule == null) return false;
-            
-            selectedModule = null;
-            selectedModuleData = null;
+            if (agent == null)
+            {
+                if (selectedAgent == null) return false;
+
+                selectedAgent = null;
+                return true;
+            }
+
+            if (agent == selectedAgent && !isAgentReloadRequired) return false;
+
+            isAgentReloadRequired = false;
+            selectedAgent = agent;
             return true;
         }
 
-        public void OnModulePageCleared()
-        {
-            isModuleReloadRequired = true;
-        }
+        public void AllowModuleReload() => isModuleReloadRequired = true;
+        public void AllowAgentReload() => isAgentReloadRequired = true;
 
         public List<Node> GetNodes()
         {

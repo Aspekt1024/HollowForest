@@ -30,6 +30,7 @@ namespace HollowForest.AI
         {
             AddPage(new ModuleEditorPage(this));
             AddPage(new DiagnosticsPage(this));
+            AddPage(new LogPage(this));
         }
     }
 }

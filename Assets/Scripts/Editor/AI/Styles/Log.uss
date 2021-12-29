@@ -1,0 +1,60 @@
+.log-page {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.log-view {
+    background-color: #000000;
+    flex-grow: 1;
+}
+
+.log-message-container {
+    display: flex;
+    flex-direction: row;
+
+    border-color: #0f1718;
+    border-width: 1px;
+    
+    height: 20px;
+    min-height: 20px;
+    
+    background-color: #000000;
+}
+
+.log-header-container {
+    border-bottom-width: 2px;
+    background-color: #8899ab;
+    height: 22px;
+    min-height: 22px;
+}
+
+.log-timestamp {
+    color: #85eade;
+    width: 100px;
+}
+
+.log-message {
+    color: #c2f3eb;
+}
+
+.log-header-text {
+    color: black;
+    -unity-font-style: bold;
+}
+
+.log-message-warning {
+    background-color: yellow;
+}
+
+.log-message-error {
+    background-color: red;
+}
+
+.attribute-display {
+    
+}
+
+.action-message {
+    color: mediumpurple;
+}

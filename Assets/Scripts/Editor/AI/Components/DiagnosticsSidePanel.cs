@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Aspekt.Editors;
 using UnityEditor.UIElements;
@@ -8,23 +9,26 @@ namespace HollowForest.AI
 {
     public class DiagnosticsSidePanel
     {
-        private readonly DiagnosticsPage page;
+        private readonly Page<AIEditor, AIEditorData> page;
         private readonly VisualElement panel;
+        private readonly Action<AIAgent> agentSelectedCallback;
 
         private readonly VisualElement topSection;
         private readonly VisualElement bottomSection;
 
         private readonly VisualElement agentList;
         private readonly VisualElement nodeDetails;
+        private readonly VisualElement logFilterDetails;
 
         private readonly VisualElement agentDetails;
 
         private Node selectedNode;
         private AIAgent selectedAgent;
         
-        public DiagnosticsSidePanel(DiagnosticsPage page, VisualElement rootElement)
+        public DiagnosticsSidePanel(Page<AIEditor, AIEditorData> page, VisualElement rootElement, Action<AIAgent> agentSelectedCallback)
         {
             this.page = page;
+            this.agentSelectedCallback = agentSelectedCallback;
             
             panel = new VisualElement();
             panel.AddToClassList("side-panel");
@@ -41,6 +45,10 @@ namespace HollowForest.AI
             nodeDetails.AddToClassList("inspector");
             topSection.Add(nodeDetails);
 
+            logFilterDetails = new VisualElement();
+            logFilterDetails.AddToClassList("inspector");
+            topSection.Add(logFilterDetails);
+
             agentDetails = new VisualElement();
             agentDetails.AddToClassList("inspector");
             bottomSection.Add(agentDetails);
@@ -55,11 +63,17 @@ namespace HollowForest.AI
             PopulateAgentStateDisplay();
         }
 
+        public void PopulateLogFilterDisplay(LogFilter filter)
+        {
+            logFilterDetails.Clear();
+            filter.Populate(logFilterDetails);
+        }
+
         public void PopulateOffline()
         {
             agentList.Clear();
             nodeDetails.Clear();
-            nodeDetails.Add(new Label("only available during runtime"));
+            nodeDetails.Add(new Label("Agent list only available during runtime"));
         }
 
         public void SetAgent(AIAgent agent)
@@ -88,7 +102,7 @@ namespace HollowForest.AI
 
         private void CreateAIAgentSelection(List<AIAgent> agents)
         {
-            var currentAgentIndex = Mathf.Max(agents.FindIndex(a => a == page.Agent), 0);
+            var currentAgentIndex = Mathf.Max(agents.FindIndex(a => a == page.Editor.Data.selectedAgent), 0);
             var agentIndexes = new List<int>();
             for (int i = 0; i < agents.Count; i++)
             {
@@ -97,7 +111,7 @@ namespace HollowForest.AI
             var dropdown = new PopupField<int>(agentIndexes, currentAgentIndex,
             agentIndex =>
             {
-                page.SelectAgent(agents[agentIndex]);
+                agentSelectedCallback?.Invoke(agents[agentIndex]);
                 return agents[agentIndex].character.name;
             },
             agentIndex => agents[agentIndex].character.name);
