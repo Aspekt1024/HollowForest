@@ -39,7 +39,8 @@ namespace HollowForest.AI
             var entryNode = new EntryNode(Editor.Data.GetEntryNodeGuid());
             var interruptNode = new InterruptNode(this, Editor.Data.GetInterruptNodeGuid());
 
-            foreach (var action in Module.actions)
+            var actions = Application.isPlaying ? Module.runningActions : Module.actions;
+            foreach (var action in actions)
             {
                 actionNodes.Add(new ActionNode(this, action));
             }

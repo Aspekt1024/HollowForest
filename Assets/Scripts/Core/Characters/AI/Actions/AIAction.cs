@@ -26,6 +26,11 @@ namespace HollowForest.AI
 
         public string guid;
         public List<Transition> transitions = new List<Transition>();
+        
+        public event Action Started = delegate { };
+        public event Action Stopped = delegate { };
+        
+        public bool IsRunning { get; private set; }
 
         protected AIAgent Agent { get; private set; }
         protected Character Character => Agent.character;
@@ -48,11 +53,15 @@ namespace HollowForest.AI
         public void Start()
         {
             OnStart();
+            Started?.Invoke();
+            IsRunning = true;
         }
 
         public void Stop()
         {
+            IsRunning = false;
             OnStop();
+            Stopped?.Invoke();
         }
 
         public void Tick()

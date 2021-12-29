@@ -26,6 +26,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c092d46f5544f3ab51fdf5d09bd3772, type: 3}
   m_Name: CrystalAIModule
   m_EditorClassIdentifier: 
+  moduleGuid: ae3534ad-d403-41d5-a488-b6801026682a
   defaultActionGuid: 4b305fad-215d-4ed3-82f3-cdb03f5600ab
   interrupts:
   - pConditions: 

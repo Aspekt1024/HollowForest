@@ -1,6 +1,6 @@
 .action-node {
     border-width: 2px;
-    border-radius: 6px;
+    border-radius: 2px;
     -unity-text-align: middle-center;
 }
 
@@ -12,15 +12,19 @@
 
 .action-node-unselected {
     border-color: #0b1672;
-    background-color: #2e5be3;
+    background-color: #466ddc;
 }
 
 .action-node-selected {
-    border-color: #4983ef;
-    background-color: #a6b7f3;
+    border-color: #2540a2;
+    background-color: #7c8fd2;
 }
 
 .action-node-activating-link {
-    border-color: #50e4fc;
+    border-color: #26494f;
     background-color: #b1b9fc;
+}
+
+.action-running {
+    border-color: #f6ff8d;
 }

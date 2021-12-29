@@ -18,6 +18,9 @@ namespace HollowForest.AI
             this.modulePage = modulePage;
             Action = action;
 
+            Action.Started += OnActionStarted;
+            Action.Stopped += OnActionStopped;
+
             if (modulePage.CanEdit)
             {
                 AddContextMenuItem("Create Transition", pos => modulePage.BeginLinkCreation(this, AINodeProfiles.ActionTransition));
@@ -69,6 +72,16 @@ namespace HollowForest.AI
         {
             this.element = element;
             element.Clear();
+
+            if (Action.IsRunning)
+            {
+                OnActionStarted();
+            }
+            else
+            {
+                OnActionStopped();
+            }
+            
             element.AddToClassList("action-node");
             
             SetStyle(AINodeProfiles.StandardStyle);
@@ -104,6 +117,27 @@ namespace HollowForest.AI
                     modulePage.UpdateContents();
                 }));
             }
+        }
+
+        ~ActionNode()
+        {
+            Action.Started -= OnActionStarted;
+            Action.Stopped -= OnActionStopped;
+        }
+
+        private const string ActionRunningStyle = "action-running";
+        
+        private void OnActionStarted()
+        {
+            if (!element.ClassListContains(ActionRunningStyle))
+            {
+                element.AddToClassList(ActionRunningStyle);
+            }
+        }
+
+        private void OnActionStopped()
+        {
+            element.RemoveFromClassList(ActionRunningStyle);
         }
     }
 }

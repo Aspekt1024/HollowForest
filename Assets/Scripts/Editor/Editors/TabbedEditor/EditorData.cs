@@ -18,6 +18,7 @@ namespace Aspekt.Editors
             {
                 var text = File.ReadAllText(FilePath);
                 var data = JsonUtility.FromJson<T>(text);
+                OnPostLoad(data);
                 return data;
             }
             catch
@@ -57,5 +58,6 @@ namespace Aspekt.Editors
         public abstract void OnNodeRemoved(string guid);
 
         protected virtual void OnPreSave() {}
+        protected virtual void OnPostLoad(T data) {}
     }
 }

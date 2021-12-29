@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Aspekt.Editors;
+using UnityEditor;
 
 namespace HollowForest.AI
 {
     public class AIEditorData : EditorData<AIEditorData>
     {
         protected override string FilePath => "Assets/Scripts/Editor/AI/Data/aiEditorData.json";
+        public string ModulesDirectory => "Assets/Config/Characters/AI";
 
         public AIModule selectedModule;
         [NonSerialized] public ModuleData selectedModuleData;
@@ -15,7 +17,8 @@ namespace HollowForest.AI
         [Serializable]
         public class ModuleData
         {
-            public AIModule module;
+            public string moduleGuid;
+            [NonSerialized] public AIModule module;
             public List<Node> nodes = new List<Node>();
             public string entryNodeGuid;
             public string interruptNodeGuid;
@@ -23,6 +26,7 @@ namespace HollowForest.AI
             public ModuleData(AIModule module)
             {
                 this.module = module;
+                moduleGuid = module.moduleGuid;
                 entryNodeGuid = Guid.NewGuid().ToString();
                 interruptNodeGuid = Guid.NewGuid().ToString();
             }
@@ -30,11 +34,20 @@ namespace HollowForest.AI
 
         public List<ModuleData> moduleDataSets = new List<ModuleData>();
 
+        public readonly List<AIModule> ModuleCache = new List<AIModule>();
+
         private bool isModuleReloadRequired;
+
+        public AIEditorData()
+        {
+            SetupModuleCache();
+        }
 
         public bool SetModule(AIModule module)
         {
-            var moduleData = moduleDataSets.FirstOrDefault(s => s.module == module);
+            if (module == null) return ClearModule();
+            
+            var moduleData = moduleDataSets.FirstOrDefault(s => s.moduleGuid == module.moduleGuid);
             if (moduleData != null && selectedModuleData == moduleData && !isModuleReloadRequired) return false;
 
             isModuleReloadRequired = false;
@@ -50,6 +63,15 @@ namespace HollowForest.AI
             return true;
         }
 
+        private bool ClearModule()
+        {
+            if (selectedModule == null) return false;
+            
+            selectedModule = null;
+            selectedModuleData = null;
+            return true;
+        }
+
         public void OnModulePageCleared()
         {
             isModuleReloadRequired = true;
@@ -58,7 +80,11 @@ namespace HollowForest.AI
         public List<Node> GetNodes()
         {
             if (selectedModule == null) return new List<Node>();
-            var moduleData = moduleDataSets.FirstOrDefault(s => s.module == selectedModule);
+            var moduleData = moduleDataSets.FirstOrDefault(s => s.module.moduleGuid == selectedModule.moduleGuid);
+            if (moduleData.module == null)
+            {
+                moduleData.module = selectedModule;
+            }
             return moduleData.nodes;
         }
 
@@ -83,12 +109,37 @@ namespace HollowForest.AI
 
         protected override void OnPreSave()
         {
-            for (int i = 0; i < moduleDataSets.Count; i++)
+            for (int i = moduleDataSets.Count - 1; i >= 0; i--)
             {
-                var set = moduleDataSets[i];
-                if (set.module == null)
+                var moduleIndex = ModuleCache.FindIndex(m => m.moduleGuid == moduleDataSets[i].moduleGuid);
+                if (moduleIndex < 0)
                 {
                     moduleDataSets.RemoveAt(i);
+                }
+            }
+        }
+
+        protected override void OnPostLoad(AIEditorData data)
+        {
+            foreach (var moduleDataSet in data.moduleDataSets)
+            {
+                var moduleIndex = ModuleCache.FindIndex(m => m.moduleGuid == moduleDataSet.moduleGuid);
+                moduleDataSet.module = moduleIndex >= 0 ? ModuleCache[moduleIndex] : null;
+            }
+        }
+
+        private void SetupModuleCache()
+        {
+            ModuleCache.Clear();
+            if (!string.IsNullOrEmpty(ModulesDirectory))
+            {
+                var moduleType = typeof(AIModule).FullName;
+                var moduleGUIDs = AssetDatabase.FindAssets($"t:{moduleType}", new [] { ModulesDirectory });
+                foreach (var moduleGUID in moduleGUIDs)
+                {
+                    var path = AssetDatabase.GUIDToAssetPath(moduleGUID);
+                    var module = AssetDatabase.LoadAssetAtPath<AIModule>(path);
+                    ModuleCache.Add(module);
                 }
             }
         }

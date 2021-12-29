@@ -13,7 +13,9 @@
 
 .event-node {
     border-width: 2px;
-    border-radius: 6px;
+    border-radius: 3px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
     -unity-text-align: middle-center;
 }
 
@@ -26,22 +28,22 @@
 
 .entry-node-unselected {
     border-color: green;
-    background-color: #67b41b;
+    background-color: #7fbe43;
 }
 .entry-node-selected {
-    border-color: #02f102;
-    background-color: #c6f5a0;
+    border-color: #08b708;
+    background-color: #abe083;
 }
 .entry-node-activating-link {
 }
 
 .interrupt-node-unselected {
-    border-color: #6e0404;
-    background-color: #f52828;
+    border-color: #a13636;
+    background-color: rgba(217, 120, 120, 0.93);
 }
 .interrupt-node-selected {
-    border-color: #c50909;
-    background-color: #fa7a7a;
+    border-color: #e03c3c;
+    background-color: rgba(241, 154, 154, 0.93);
 }
 .interrupt-node-activating-link {
     border-color: #6e0404;
