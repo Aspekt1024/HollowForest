@@ -3,9 +3,11 @@ namespace HollowForest.AI
 {
     public class IdleAction : AIAction
     {
+        public float moveSpeed = 5f;
+        
         private bool isMovingRight;
         
-        public override string DisplayName => "Idle v1";
+        public override string DisplayName => "Patrol";
         public override string MenuCategory => "Idle";
 
         protected override void OnStart()
@@ -49,11 +51,11 @@ namespace HollowForest.AI
         {
             if (isMovingRight)
             {
-                Agent.character.Director.MoveRight();
+                Agent.character.Physics.MoveRight();
             }
             else
             {
-                Agent.character.Director.MoveLeft();
+                Agent.character.Physics.MoveLeft();
             }
         }
 

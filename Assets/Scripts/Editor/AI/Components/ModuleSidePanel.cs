@@ -15,6 +15,7 @@ namespace HollowForest.AI
 
         private readonly VisualElement moduleList;
         private readonly VisualElement nodeDetails;
+        private readonly VisualElement nodeAttributes;
 
         private Node selectedNode;
         
@@ -36,6 +37,10 @@ namespace HollowForest.AI
             nodeDetails = new VisualElement();
             nodeDetails.AddToClassList("inspector");
             topSection.Add(nodeDetails);
+
+            nodeAttributes = new VisualElement();
+            nodeAttributes.AddToClassList("inspector");
+            bottomSection.Add(nodeAttributes);
             
             rootElement.Add(panel);
         }
@@ -49,13 +54,16 @@ namespace HollowForest.AI
         public void OnNodeSelected(Node node)
         {
             nodeDetails.Clear();
+            nodeAttributes.Clear();
             selectedNode = node;
             node?.PopulateInspector(nodeDetails);
+            node?.PopulateAttributeEditor(nodeAttributes);
         }
 
         public void OnNodeUnselected(Node node)
         {
             nodeDetails.Clear();
+            nodeAttributes.Clear();
             selectedNode = null;
         }
 

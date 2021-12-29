@@ -56,6 +56,8 @@ namespace HollowForest
 
         private float timeHorizontalVelocityOverrideEnds;
         private float horizontalVelocityOverride;
+
+        private float moveSpeed;
         
         public CollisionSensor Collision { get; }
 
@@ -175,10 +177,10 @@ namespace HollowForest
             switch (horizontal)
             {
                 case HorizontalInput.Left:
-                    newVelocity.x = -settings.moveSpeed;
+                    newVelocity.x = -moveSpeed;
                     break;
                 case HorizontalInput.Right:
-                    newVelocity.x = settings.moveSpeed;
+                    newVelocity.x = moveSpeed;
                     break;
                 default:
                     newVelocity.x = 0f;
@@ -205,15 +207,17 @@ namespace HollowForest
             movementBlockList.Remove(MovementBlocks.Master);
         }
 
-        public void MoveLeft()
+        public void MoveLeft(float speed = -1f)
         {
+            moveSpeed = speed < 0 ? settings.moveSpeed : speed;
             horizontal = HorizontalInput.Left;
             character.State.SetState(CharacterStates.IsFacingRight, false);
             character.Animator.MoveLeft();
         }
 
-        public void MoveRight()
+        public void MoveRight(float speed = -1f)
         {
+            moveSpeed = speed < 0 ? settings.moveSpeed : speed;
             horizontal = HorizontalInput.Right;
             character.State.SetState(CharacterStates.IsFacingRight, true);
             character.Animator.MoveRight();

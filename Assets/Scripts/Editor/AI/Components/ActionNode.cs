@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using Aspekt.Editors;
+using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -117,6 +119,14 @@ namespace HollowForest.AI
                     modulePage.UpdateContents();
                 }));
             }
+        }
+
+        public override void PopulateAttributeEditor(VisualElement container)
+        {
+            // var serializedObject = new SerializedObject(Action);
+            // var propField = new PropertyField(serializedObject.GetIterator());
+            // propField.Bind(serializedObject);
+            // container.Add(propField);
         }
 
         ~ActionNode()

@@ -1,7 +1,7 @@
 {
-    "currentPage": "Log",
+    "currentPage": "Modules",
     "selectedModule": {
-        "instanceID": -80682
+        "instanceID": 20868
     },
     "moduleDataSets": [
         {
@@ -123,8 +123,8 @@
                 {
                     "serializableGuid": "e75159bb-9c43-4821-bfed-74601e42d890",
                     "position": {
-                        "x": 0.0,
-                        "y": 0.0
+                        "x": 180.0,
+                        "y": -20.0
                     },
                     "size": {
                         "x": 60.0,
@@ -134,8 +134,8 @@
                 {
                     "serializableGuid": "cd295f92-a7b5-43e8-b46b-da28bb1ff366",
                     "position": {
-                        "x": 0.0,
-                        "y": 0.0
+                        "x": 20.0,
+                        "y": 90.0
                     },
                     "size": {
                         "x": 80.0,
@@ -145,8 +145,8 @@
                 {
                     "serializableGuid": "c29149d6-9100-4191-bf99-dd87682bf84f",
                     "position": {
-                        "x": 0.0,
-                        "y": 0.0
+                        "x": 160.0,
+                        "y": 90.0
                     },
                     "size": {
                         "x": 100.0,
@@ -162,7 +162,8 @@
         "suppressedCharStates": [
             7,
             6,
-            0
+            0,
+            2
         ],
         "suppressedAItates": [
             9000,
