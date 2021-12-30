@@ -98,7 +98,7 @@ namespace HollowForest.AI
         public List<Node> GetNodes()
         {
             if (selectedModule == null) return new List<Node>();
-            var moduleData = moduleDataSets.FirstOrDefault(s => s.module.moduleGuid == selectedModule.moduleGuid);
+            var moduleData = moduleDataSets.FirstOrDefault(s => s.module != null && s.module.moduleGuid == selectedModule.moduleGuid);
             if (moduleData.module == null)
             {
                 moduleData.module = selectedModule;

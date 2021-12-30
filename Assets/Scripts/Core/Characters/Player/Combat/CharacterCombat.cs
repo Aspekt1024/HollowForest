@@ -109,6 +109,8 @@ namespace HollowForest
         {
             // TODO if holding an attack, cancel it with no effect
             character.Animator.CancelAttack();
+            isLockedForAttack = false;
+            character.State.SetState(CharacterStates.IsLockedForAttack, false);
         }
 
         private bool CanAttack()

@@ -35,6 +35,12 @@ namespace HollowForest.AI
         
         public void Run(AIModule aiModule)
         {
+            if (aiModule == null)
+            {
+                Debug.LogWarning("AI Agent was told to run with a null aiModule!");
+                return;
+            }
+            
             module = Object.Instantiate(aiModule);
             module.Init();
 

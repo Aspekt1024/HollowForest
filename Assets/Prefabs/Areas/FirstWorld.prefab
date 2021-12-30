@@ -94,7 +94,7 @@ MonoBehaviour:
   combatCollisionSettings:
     lightAttackCollider: {fileID: 1190853196315265087}
     heavyAttackCollider: {fileID: 0}
-  module: {fileID: 11400000, guid: c0179fce13282ca44a64c6b199cd9a3c, type: 2}
+  module: {fileID: 11400000, guid: 3634b865dc338b745aa78384d10a2d93, type: 2}
 --- !u!1 &731727343803010969
 GameObject:
   m_ObjectHideFlags: 0
@@ -7836,7 +7836,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1773606691725576326, guid: 74c7716169c302948b87366d4089f499, type: 3}
       propertyPath: m_Name
-      value: CrystalEnemy (2)
+      value: TestEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 1773606691725576327, guid: 74c7716169c302948b87366d4089f499, type: 3}
       propertyPath: m_RootOrder

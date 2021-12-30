@@ -169,7 +169,7 @@ namespace HollowForest.AI
             nodeEditor.AddContextMenuItem("Find Starting Node", pos => nodeEditor.FindNodeZero());
         }
 
-        private void CreateNewAction<T>(AIAction action, Vector2 mousePos) where T : AIAction
+        private void CreateNewAction<T>(Vector2 mousePos) where T : AIAction
         {
             var newAction = ScriptableObject.CreateInstance<T>();
             newAction.name = typeof(T).Name;
@@ -181,13 +181,13 @@ namespace HollowForest.AI
             AssetDatabase.AddObjectToAsset(newAction, Module);
             AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Module));
             
-            var node = new ActionNode(this, action);
+            var node = new ActionNode(this, newAction);
             nodeEditor.AddNode(node);
             node.SetPosition(mousePos);
 
             if (string.IsNullOrEmpty(Module.defaultActionGuid) || Module.actions.Count == 0)
             {
-                Module.defaultActionGuid = action.guid;
+                Module.defaultActionGuid = newAction.guid;
                 UpdateContents();
             }
         }

@@ -1,7 +1,7 @@
 {
-    "currentPage": "Diagnostics",
+    "currentPage": "Log",
     "selectedModule": {
-        "instanceID": -30874
+        "instanceID": 19960
     },
     "moduleDataSets": [
         {
@@ -156,6 +156,123 @@
             ],
             "entryNodeGuid": "288fe452-edb5-4d98-a4d1-d87a1127ecd0",
             "interruptNodeGuid": "0da76dc4-591d-4083-974e-65580dcd649e"
+        },
+        {
+            "moduleGuid": "af396387-ff52-4e32-8c8f-6db2bb0d723e",
+            "nodes": [
+                {
+                    "serializableGuid": "d0f69332-da7f-42b3-bc7b-6a8e53e540ac",
+                    "position": {
+                        "x": 260.0,
+                        "y": 40.0
+                    },
+                    "size": {
+                        "x": 60.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "f8efa113-56ee-43fc-a1f7-a3016d76f8e5",
+                    "position": {
+                        "x": 120.0,
+                        "y": 150.0
+                    },
+                    "size": {
+                        "x": 80.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "8df003db-209d-482d-b905-61a849af83d9",
+                    "position": {
+                        "x": 240.0,
+                        "y": 150.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "44330ab0-c55a-42e0-9eac-464dc39a0949",
+                    "position": {
+                        "x": 240.0,
+                        "y": 250.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "01d46596-0b89-444d-a084-34028d9e4313",
+                    "position": {
+                        "x": 390.0,
+                        "y": 250.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "cce88d01-65b7-4dbd-ba29-872f8ee900de",
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "size": {
+                        "x": 60.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "8ec115af-dda8-40ce-a6f1-4f88b45a7d01",
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "size": {
+                        "x": 80.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "75c2a659-c331-49b7-8da8-3e79ab7edda7",
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "c79a48e3-26cb-41d0-9f4f-eb7db3efad88",
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "e25966c0-dd29-484b-8c54-fca4b114d67c",
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                }
+            ],
+            "entryNodeGuid": "d0f69332-da7f-42b3-bc7b-6a8e53e540ac",
+            "interruptNodeGuid": "f8efa113-56ee-43fc-a1f7-a3016d76f8e5"
         }
     ],
     "logFilter": {

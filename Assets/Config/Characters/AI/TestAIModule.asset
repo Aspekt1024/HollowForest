@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9029329060702121698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce1cbcfe6a64f8981403243cce46e37, type: 3}
+  m_Name: PatrolAction
+  m_EditorClassIdentifier: 
+  guid: 8df003db-209d-482d-b905-61a849af83d9
+  transitions:
+  - pConditions: e8030000
+    nConditions: 
+    actionGuid: 44330ab0-c55a-42e0-9eac-464dc39a0949
+    priority: 1
+  moveSpeed: 2
+--- !u!114 &-3982472257388393456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96683b849e38495f85a0f20efa4280c7, type: 3}
+  m_Name: LightAttackAction
+  m_EditorClassIdentifier: 
+  guid: 01d46596-0b89-444d-a084-34028d9e4313
+  transitions:
+  - pConditions: e8030000
+    nConditions: 4c040000
+    actionGuid: 44330ab0-c55a-42e0-9eac-464dc39a0949
+    priority: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c092d46f5544f3ab51fdf5d09bd3772, type: 3}
+  m_Name: TestAIModule
+  m_EditorClassIdentifier: 
+  moduleGuid: af396387-ff52-4e32-8c8f-6db2bb0d723e
+  defaultActionGuid: 8df003db-209d-482d-b905-61a849af83d9
+  interrupts:
+  - pConditions: 
+    nConditions: e8030000
+    actionGuid: 8df003db-209d-482d-b905-61a849af83d9
+    priority: 1
+  actions:
+  - {fileID: -9029329060702121698}
+  - {fileID: 2740191891710447321}
+  - {fileID: -3982472257388393456}
+--- !u!114 &2740191891710447321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133fa971dc79438593a34deb328c0545, type: 3}
+  m_Name: FollowThreatAction
+  m_EditorClassIdentifier: 
+  guid: 44330ab0-c55a-42e0-9eac-464dc39a0949
+  transitions:
+  - pConditions: e80300004c040000
+    nConditions: 
+    actionGuid: 01d46596-0b89-444d-a084-34028d9e4313
+    priority: 1
+  followDistance: 2
+  canDash: 1
+  canJump: 1
