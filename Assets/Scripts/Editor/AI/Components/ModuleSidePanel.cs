@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Aspekt.Editors;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -34,13 +35,13 @@ namespace HollowForest.AI
             moduleList = new VisualElement();
             topSection.Add(moduleList);
 
+            nodeAttributes = new VisualElement();
+            topSection.Add(nodeAttributes);
+            
             nodeDetails = new VisualElement();
             nodeDetails.AddToClassList("inspector");
             topSection.Add(nodeDetails);
 
-            nodeAttributes = new VisualElement();
-            nodeAttributes.AddToClassList("inspector");
-            bottomSection.Add(nodeAttributes);
             
             rootElement.Add(panel);
         }
@@ -55,9 +56,18 @@ namespace HollowForest.AI
         {
             nodeDetails.Clear();
             nodeAttributes.Clear();
+            nodeAttributes.ClearClassList();
             selectedNode = node;
-            node?.PopulateInspector(nodeDetails);
-            node?.PopulateAttributeEditor(nodeAttributes);
+            
+            if (node != null)
+            {
+                var isPopulated = node.PopulateAttributeEditor(nodeAttributes);
+                if (isPopulated)
+                {
+                    nodeAttributes.AddToClassList("inspector");
+                }
+                node.PopulateInspector(nodeDetails);
+            }
         }
 
         public void OnNodeUnselected(Node node)
@@ -72,6 +82,11 @@ namespace HollowForest.AI
             moduleList.Clear();
 
             var currentModule = page.Module;
+            if (!modules.Contains(currentModule))
+            {
+                // Occurs in runtime when the current module is set as a clone from the Diagnostics page
+                currentModule = modules.FirstOrDefault(m => currentModule.moduleGuid == m.moduleGuid);
+            }
             var dropdown = new PopupField<AIModule>(modules, currentModule,
             m =>
             {

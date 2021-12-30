@@ -1,7 +1,7 @@
 {
     "currentPage": "Modules",
     "selectedModule": {
-        "instanceID": 20868
+        "instanceID": 19960
     },
     "moduleDataSets": [
         {
@@ -118,13 +118,13 @@
             "interruptNodeGuid": "8ec115af-dda8-40ce-a6f1-4f88b45a7d01"
         },
         {
-            "moduleGuid": "b196e957-c9fe-40d5-854b-aa0023983a22",
+            "moduleGuid": "f8645608-6d1f-4bdb-a625-57ef95dc901e",
             "nodes": [
                 {
-                    "serializableGuid": "e75159bb-9c43-4821-bfed-74601e42d890",
+                    "serializableGuid": "288fe452-edb5-4d98-a4d1-d87a1127ecd0",
                     "position": {
-                        "x": 180.0,
-                        "y": -20.0
+                        "x": 210.0,
+                        "y": 20.0
                     },
                     "size": {
                         "x": 60.0,
@@ -132,9 +132,9 @@
                     }
                 },
                 {
-                    "serializableGuid": "cd295f92-a7b5-43e8-b46b-da28bb1ff366",
+                    "serializableGuid": "0da76dc4-591d-4083-974e-65580dcd649e",
                     "position": {
-                        "x": 20.0,
+                        "x": 70.0,
                         "y": 90.0
                     },
                     "size": {
@@ -145,7 +145,7 @@
                 {
                     "serializableGuid": "c29149d6-9100-4191-bf99-dd87682bf84f",
                     "position": {
-                        "x": 160.0,
+                        "x": 190.0,
                         "y": 90.0
                     },
                     "size": {
@@ -154,8 +154,8 @@
                     }
                 }
             ],
-            "entryNodeGuid": "e75159bb-9c43-4821-bfed-74601e42d890",
-            "interruptNodeGuid": "cd295f92-a7b5-43e8-b46b-da28bb1ff366"
+            "entryNodeGuid": "288fe452-edb5-4d98-a4d1-d87a1127ecd0",
+            "interruptNodeGuid": "0da76dc4-591d-4083-974e-65580dcd649e"
         }
     ],
     "logFilter": {
@@ -167,9 +167,9 @@
         ],
         "suppressedAItates": [
             9000,
-            9010,
             9020,
-            9030
+            9030,
+            9010
         ],
         "suppressedAIObjects": []
     }

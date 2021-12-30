@@ -209,7 +209,7 @@ namespace HollowForest
 
         public void MoveLeft(float speed = -1f)
         {
-            moveSpeed = speed < 0 ? settings.moveSpeed : speed;
+            moveSpeed = speed > 0 ? speed : settings.moveSpeed;
             horizontal = HorizontalInput.Left;
             character.State.SetState(CharacterStates.IsFacingRight, false);
             character.Animator.MoveLeft();
@@ -217,7 +217,7 @@ namespace HollowForest
 
         public void MoveRight(float speed = -1f)
         {
-            moveSpeed = speed < 0 ? settings.moveSpeed : speed;
+            moveSpeed = speed > 0 ? speed : settings.moveSpeed;
             horizontal = HorizontalInput.Right;
             character.State.SetState(CharacterStates.IsFacingRight, true);
             character.Animator.MoveRight();

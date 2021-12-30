@@ -1,7 +1,7 @@
 
 namespace HollowForest.AI
 {
-    public class IdleAction : AIAction
+    public class PatrolAction : AIAction
     {
         public float moveSpeed = 5f;
         
@@ -51,11 +51,11 @@ namespace HollowForest.AI
         {
             if (isMovingRight)
             {
-                Agent.character.Physics.MoveRight();
+                Agent.character.Physics.MoveRight(moveSpeed);
             }
             else
             {
-                Agent.character.Physics.MoveLeft();
+                Agent.character.Physics.MoveLeft(moveSpeed);
             }
         }
 

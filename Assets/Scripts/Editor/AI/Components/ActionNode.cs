@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using Aspekt.Editors;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -121,12 +122,37 @@ namespace HollowForest.AI
             }
         }
 
-        public override void PopulateAttributeEditor(VisualElement container)
+        public override bool PopulateAttributeEditor(VisualElement container)
         {
-            // var serializedObject = new SerializedObject(Action);
-            // var propField = new PropertyField(serializedObject.GetIterator());
-            // propField.Bind(serializedObject);
-            // container.Add(propField);
+            var attributeEditorLabel = new Label($"{Action.DisplayName} Attributes");
+            attributeEditorLabel.AddToClassList("inspector-header");
+            container.Add(attributeEditorLabel);
+            
+            var scrollView = new ScrollView(ScrollViewMode.Vertical);
+            container.Add(scrollView);
+
+            var hasAttributes = false;
+            var propInfo = Action.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            var serializedObject = new SerializedObject(Action);
+            var iterator = serializedObject.GetIterator();
+            while (iterator.NextVisible(true))
+            {
+                if (propInfo.Any(p => p.Name == iterator.name))
+                {
+                    var propField = new PropertyField(iterator);
+                    scrollView.Add(propField);
+                    propField.Bind(serializedObject);
+                    hasAttributes = true;
+                }
+            }
+
+            if (!hasAttributes)
+            {
+                var noAttributesMessage = new Label("This action has no modifiable attributes");
+                scrollView.Add(noAttributesMessage);
+            }
+
+            return true;
         }
 
         ~ActionNode()
