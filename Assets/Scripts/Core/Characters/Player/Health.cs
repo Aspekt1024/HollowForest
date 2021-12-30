@@ -52,16 +52,20 @@ namespace HollowForest
             character.State.SetState(CharacterStates.IsAlive, true);
         }
 
-        public void TakeDamage(HitDetails details)
+        public bool TakeDamage(HitDetails details)
         {
-            if (CurrentHealth <= 0) return;
+            if (CurrentHealth <= 0) return false;
             
             CurrentHealth = Mathf.Min(CurrentHealth - details.damage, MaxHealth);
             damageObservers.ForEach(o => o.OnDamageTaken(details));
             if (CurrentHealth <= 0)
             {
                 character.State.SetState(CharacterStates.IsAlive, false);
+                character.Director.StopMoving();
+                character.Director.BlockInputs();
             }
+
+            return true;
         }
 
         public void Heal(int health)

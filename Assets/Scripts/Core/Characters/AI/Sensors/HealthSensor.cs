@@ -11,7 +11,6 @@ namespace HollowForest.AI
         
         public void OnDamageTaken(HitDetails hitDetails)
         {
-            agent.character.Director.StopMoving();
             agent.character.Director.BlockInputs(0.8f);
             if (hitDetails.source != null)
             {

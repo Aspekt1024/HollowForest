@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0c092d46f5544f3ab51fdf5d09bd3772, type: 3}
-  m_Name: SpikeyEnemy
+  m_Name: SpikyEnemy
   m_EditorClassIdentifier: 
   moduleGuid: f8645608-6d1f-4bdb-a625-57ef95dc901e
   defaultActionGuid: c29149d6-9100-4191-bf99-dd87682bf84f

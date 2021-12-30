@@ -25,7 +25,10 @@ namespace HollowForest.Effects
             this.settings = settings;
             body = character.Rigidbody;
 
-            settings.dashEffect.emitting = false;
+            if (settings.dashEffect != null)
+            {
+                settings.dashEffect.emitting = false;
+            }
         }
 
         public void OnGroundHit(Vector3 hitPosition, float fallHeight)
@@ -70,7 +73,10 @@ namespace HollowForest.Effects
 
         public void EndDash()
         {
-            settings.dashEffect.emitting = false;
+            if (settings.dashEffect != null)
+            {
+                settings.dashEffect.emitting = false;
+            }
         }
     }
 }

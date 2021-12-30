@@ -1,7 +1,7 @@
 {
-    "currentPage": "Log",
+    "currentPage": "Diagnostics",
     "selectedModule": {
-        "instanceID": 19960
+        "instanceID": -74620
     },
     "moduleDataSets": [
         {
@@ -161,61 +161,6 @@
             "moduleGuid": "af396387-ff52-4e32-8c8f-6db2bb0d723e",
             "nodes": [
                 {
-                    "serializableGuid": "d0f69332-da7f-42b3-bc7b-6a8e53e540ac",
-                    "position": {
-                        "x": 260.0,
-                        "y": 40.0
-                    },
-                    "size": {
-                        "x": 60.0,
-                        "y": 40.0
-                    }
-                },
-                {
-                    "serializableGuid": "f8efa113-56ee-43fc-a1f7-a3016d76f8e5",
-                    "position": {
-                        "x": 120.0,
-                        "y": 150.0
-                    },
-                    "size": {
-                        "x": 80.0,
-                        "y": 40.0
-                    }
-                },
-                {
-                    "serializableGuid": "8df003db-209d-482d-b905-61a849af83d9",
-                    "position": {
-                        "x": 240.0,
-                        "y": 150.0
-                    },
-                    "size": {
-                        "x": 100.0,
-                        "y": 40.0
-                    }
-                },
-                {
-                    "serializableGuid": "44330ab0-c55a-42e0-9eac-464dc39a0949",
-                    "position": {
-                        "x": 240.0,
-                        "y": 250.0
-                    },
-                    "size": {
-                        "x": 100.0,
-                        "y": 40.0
-                    }
-                },
-                {
-                    "serializableGuid": "01d46596-0b89-444d-a084-34028d9e4313",
-                    "position": {
-                        "x": 390.0,
-                        "y": 250.0
-                    },
-                    "size": {
-                        "x": 100.0,
-                        "y": 40.0
-                    }
-                },
-                {
                     "serializableGuid": "cce88d01-65b7-4dbd-ba29-872f8ee900de",
                     "position": {
                         "x": 0.0,
@@ -269,6 +214,61 @@
                         "x": 100.0,
                         "y": 40.0
                     }
+                },
+                {
+                    "serializableGuid": "d0f69332-da7f-42b3-bc7b-6a8e53e540ac",
+                    "position": {
+                        "x": 260.0,
+                        "y": 40.0
+                    },
+                    "size": {
+                        "x": 60.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "f8efa113-56ee-43fc-a1f7-a3016d76f8e5",
+                    "position": {
+                        "x": 120.0,
+                        "y": 150.0
+                    },
+                    "size": {
+                        "x": 80.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "8df003db-209d-482d-b905-61a849af83d9",
+                    "position": {
+                        "x": 240.0,
+                        "y": 150.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "44330ab0-c55a-42e0-9eac-464dc39a0949",
+                    "position": {
+                        "x": 240.0,
+                        "y": 250.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "01d46596-0b89-444d-a084-34028d9e4313",
+                    "position": {
+                        "x": 390.0,
+                        "y": 250.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
                 }
             ],
             "entryNodeGuid": "d0f69332-da7f-42b3-bc7b-6a8e53e540ac",
@@ -277,10 +277,10 @@
     ],
     "logFilter": {
         "suppressedCharStates": [
-            7,
             6,
             0,
-            2
+            2,
+            7
         ],
         "suppressedAItates": [
             9000,
