@@ -28,3 +28,11 @@
 .action-running {
     border-color: #f6ff8d;
 }
+
+.action-inspector-header {
+    -unity-font-style: bold;
+    border-bottom-width: 1px;
+    border-color: dimgrey;
+    margin-bottom: 4px;
+    color: #cbd4f1;
+}

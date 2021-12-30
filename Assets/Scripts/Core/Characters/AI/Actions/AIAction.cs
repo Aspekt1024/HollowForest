@@ -14,6 +14,7 @@ namespace HollowForest.AI
             public List<AIState> nConditions;
             public string actionGuid;
             public int priority;
+            public bool requiresActionCompletion;
 
             public Transition(string actionGuid)
             {
@@ -27,10 +28,12 @@ namespace HollowForest.AI
         public string guid;
         public List<Transition> transitions = new List<Transition>();
         
-        public event Action Started = delegate { };
-        public event Action Stopped = delegate { };
+        public event Action OnStarted = delegate { };
+        public event Action OnStopped = delegate { };
+        public event Action OnComplete = delegate { };
         
         public bool IsRunning { get; private set; }
+        public bool IsComplete { get; private set; }
 
         protected AIAgent Agent { get; private set; }
         protected Character Character => Agent.character;
@@ -43,7 +46,10 @@ namespace HollowForest.AI
         public void Init(AIAgent agent)
         {
             Agent = agent;
+            OnInit();
         }
+        
+        protected virtual void OnInit() {}
 
         public virtual bool CanRun()
         {
@@ -53,15 +59,17 @@ namespace HollowForest.AI
         public void Start()
         {
             OnStart();
-            Started?.Invoke();
+            OnStarted?.Invoke();
             IsRunning = true;
+            IsComplete = IsComplete;
         }
 
         public void Stop()
         {
             IsRunning = false;
+            IsComplete = false;
             OnStop();
-            Stopped?.Invoke();
+            OnStopped?.Invoke();
         }
 
         public void Tick()
@@ -80,6 +88,11 @@ namespace HollowForest.AI
             preconditions.Add(precondition, value);
         }
 
+        protected void ActionComplete()
+        {
+            IsComplete = true;
+        }
+        
         protected void ActionFailure()
         {
             Debug.LogError("Action failed");

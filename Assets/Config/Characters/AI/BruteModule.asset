@@ -1,0 +1,114 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7827596223301006586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c94d61646f5457e87e8d1b362d97d60, type: 3}
+  m_Name: PauseAction
+  m_EditorClassIdentifier: 
+  guid: 59b5116d-3e33-42bb-a5ce-03edd6e4f8f1
+  transitions:
+  - pConditions: 
+    nConditions: 
+    actionGuid: 13b37765-2505-478f-a525-53e66a6b7327
+    priority: 1
+    requiresActionCompletion: 1
+  pauseDuration: 2.7
+--- !u!114 &-2605722942930408051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133fa971dc79438593a34deb328c0545, type: 3}
+  m_Name: FollowThreatAction
+  m_EditorClassIdentifier: 
+  guid: 13b37765-2505-478f-a525-53e66a6b7327
+  transitions:
+  - pConditions: b0040000
+    nConditions: 
+    actionGuid: ce992f55-d16d-41be-84c7-a22777aa2255
+    priority: 1
+    requiresActionCompletion: 0
+  followSpeed: 3.7
+  followDistance: 2
+  canDash: 0
+  canJump: 0
+--- !u!114 &-2434876551492837406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41120ac0d981439c8a723e4050917331, type: 3}
+  m_Name: ChargeAttackAction
+  m_EditorClassIdentifier: 
+  guid: ce992f55-d16d-41be-84c7-a22777aa2255
+  transitions:
+  - pConditions: 
+    nConditions: 
+    actionGuid: 59b5116d-3e33-42bb-a5ce-03edd6e4f8f1
+    priority: 1
+    requiresActionCompletion: 1
+  chargeDistance: 4
+  chargeSpeed: 9
+  attackDist: 2
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c092d46f5544f3ab51fdf5d09bd3772, type: 3}
+  m_Name: BruteModule
+  m_EditorClassIdentifier: 
+  moduleGuid: a14b790f-2456-479a-8d71-f428711f45b9
+  defaultActionGuid: 6f5571de-1afd-45d3-a5b3-6031cc6330b2
+  interrupts:
+  - pConditions: 
+    nConditions: e8030000
+    actionGuid: 6f5571de-1afd-45d3-a5b3-6031cc6330b2
+    priority: 1
+    requiresActionCompletion: 0
+  actions:
+  - {fileID: 1010352441305012061}
+  - {fileID: -2434876551492837406}
+  - {fileID: -2605722942930408051}
+  - {fileID: -7827596223301006586}
+--- !u!114 &1010352441305012061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f77697353a354f7aa9fb9ab53f7d954f, type: 3}
+  m_Name: DawdleAction
+  m_EditorClassIdentifier: 
+  guid: 6f5571de-1afd-45d3-a5b3-6031cc6330b2
+  transitions:
+  - pConditions: e8030000
+    nConditions: 
+    actionGuid: 13b37765-2505-478f-a525-53e66a6b7327
+    priority: 1
+    requiresActionCompletion: 0
+  moveSpeed: 2
+  moveDuration: 2.3
+  pauseDuration: 4.7

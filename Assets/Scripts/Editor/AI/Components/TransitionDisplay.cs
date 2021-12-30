@@ -22,6 +22,19 @@ namespace HollowForest.AI
                 display.Add(new Label($"{action.DisplayName} ({action.guid.Substring(0, 8)}...)"));
             }
 
+            var requireActionCompleteToggle = new Toggle("Requires Action Completion")
+            {
+                value = transition.requiresActionCompletion,
+            };
+            requireActionCompleteToggle.RegisterValueChangedCallback(e =>
+            {
+                updateCallback?.Invoke(
+                    () => transition.requiresActionCompletion = e.newValue,
+                    "Modify action completion condition"
+                );
+            });
+            display.Add(requireActionCompleteToggle);
+
             var numConditions = transition.nConditions.Count + transition.pConditions.Count;
             if (numConditions > 0)
             {

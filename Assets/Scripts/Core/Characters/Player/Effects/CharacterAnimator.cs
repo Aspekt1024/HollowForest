@@ -19,6 +19,7 @@ namespace HollowForest.Effects
             public string walking;
             public string running;
             public string falling;
+            public string charging;
             
             [Header("Animation Triggers")]
             public string lightAttack;
@@ -45,6 +46,7 @@ namespace HollowForest.Effects
         private readonly int walkBool;
         private readonly int runBool;
         private readonly int fallBool;
+        private readonly int chargeBool;
 
         public CharacterAnimator(Character character, Settings settings, Transform model)
         {
@@ -59,6 +61,7 @@ namespace HollowForest.Effects
             walkBool = GetAnimationHash(settings.walking);
             runBool = GetAnimationHash(settings.running);
             fallBool = GetAnimationHash(settings.falling);
+            chargeBool = GetAnimationHash(settings.charging);
             
             lightAttackTrigger = GetAnimationHash(settings.lightAttack);
             heavyAttackTrigger = GetAnimationHash(settings.heavyAttack);
@@ -131,6 +134,11 @@ namespace HollowForest.Effects
         public void Dash()
         {
             SetTrigger(dashTrigger);
+        }
+
+        public void SetCharging(bool isCharging)
+        {
+            SetBool(chargeBool, isCharging);
         }
 
         public void StopMoving()

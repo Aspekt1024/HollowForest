@@ -20,6 +20,7 @@ namespace HollowForest.UI
 
         private void SetHealth(int health)
         {
+            health = Mathf.Max(health, 0);
             for (int i = 0; i < health; i++)
             {
                 if (i >= healthIcons.Count)

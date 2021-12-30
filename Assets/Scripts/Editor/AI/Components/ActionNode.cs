@@ -21,8 +21,8 @@ namespace HollowForest.AI
             this.modulePage = modulePage;
             Action = action;
 
-            Action.Started += OnActionStarted;
-            Action.Stopped += OnActionStopped;
+            Action.OnStarted += OnActionStarted;
+            Action.OnStopped += OnActionStopped;
 
             if (modulePage.CanEdit)
             {
@@ -99,10 +99,6 @@ namespace HollowForest.AI
         public override void PopulateInspector(VisualElement container)
         {
             container.Clear();
-
-            var header = new Label($"{Action.DisplayName} ({Action.guid.Substring(0, 8)}...)");
-            header.AddToClassList("inspector-header");
-            container.Add(header);
             
             var transitionHeader = new Label("Transitions");
             transitionHeader.AddToClassList("inspector-header");
@@ -124,7 +120,11 @@ namespace HollowForest.AI
 
         public override bool PopulateAttributeEditor(VisualElement container, bool isPreviewOnly)
         {
-            var attributeEditorLabel = new Label($"{Action.DisplayName} Attributes");
+            var header = new Label($"{Action.DisplayName} ({Action.guid.Substring(0, 8)}...)");
+            header.AddToClassList("action-inspector-header");
+            container.Add(header);
+            
+            var attributeEditorLabel = new Label($"Attributes");
             attributeEditorLabel.AddToClassList("inspector-header");
             container.Add(attributeEditorLabel);
 
@@ -164,8 +164,8 @@ namespace HollowForest.AI
 
         ~ActionNode()
         {
-            Action.Started -= OnActionStarted;
-            Action.Stopped -= OnActionStopped;
+            Action.OnStarted -= OnActionStarted;
+            Action.OnStopped -= OnActionStopped;
         }
 
         private const string ActionRunningStyle = "action-running";

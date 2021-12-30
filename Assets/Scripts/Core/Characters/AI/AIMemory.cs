@@ -7,6 +7,7 @@ namespace HollowForest.AI
     {
         HasThreat = 1000,
         IsInAttackRange = 1100,
+        IsThreatWithinDistance = 1200,
         
         IsNearLeftEdge = 9000,
         IsNearRightEdge = 9010,
@@ -16,9 +17,10 @@ namespace HollowForest.AI
     
     public enum AIObject
     {
-        Threat,
-        PotentialThreat,
-        LockedOnThreat,
+        Threat = 1000,
+        PotentialThreat = 1100,
+        LockedOnThreat = 1200,
+        ThreatDistance = 1300,
     }
     
     public class AIMemory

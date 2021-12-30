@@ -139,7 +139,11 @@ namespace HollowForest.AI
 
         private bool IsValidTransition(AIAction.Transition transition)
         {
-            if (currentAction != null && transition.actionGuid == currentAction.guid) return false;
+            if (currentAction != null)
+            {
+                if (transition.actionGuid == currentAction.guid) return false;
+                if (transition.requiresActionCompletion && !currentAction.IsComplete) return false;
+            }
             
             var posConditionsMet = transition.pConditions.All(c => agent.memory.IsMatch(c, true));
             if (!posConditionsMet) return false;

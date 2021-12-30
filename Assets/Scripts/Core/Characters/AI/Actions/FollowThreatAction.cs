@@ -5,6 +5,7 @@ namespace HollowForest.AI
 {
     public class FollowThreatAction : AIAction
     {
+        public float followSpeed = 5f;
         public float followDistance = 2f;
         public bool canDash = true;
         public bool canJump = true;
@@ -71,11 +72,11 @@ namespace HollowForest.AI
             {
                 if (dist.x > 0)
                 {
-                    Character.Physics.MoveRight();
+                    Character.Physics.MoveRight(followSpeed);
                 }
                 else
                 {
-                    Character.Physics.MoveLeft();
+                    Character.Physics.MoveLeft(followSpeed);
                 }
 
                 if (canDash && Mathf.Abs(dist.x) > 5f && HasLineOfSight()) // TODO check if dashing will get us across gaps
@@ -84,18 +85,7 @@ namespace HollowForest.AI
                 }
             }
         }
-
-        private bool HasLineOfSight()
-        {
-            var origin = Agent.character.transform.position;
-            var threatPos = threat.Transform.position;
-
-            var distVector = threatPos - origin;
-            var mask = Layers.GetLayerMask(Layers.World);
-            var hit = Physics2D.Raycast(origin, distVector, distVector.magnitude, mask);
-            return hit.collider == null;
-        }
-
+        
         private void OnNearWallStateChanged(bool isNearWall)
         {
             canMove = !isNearWall;
@@ -116,6 +106,11 @@ namespace HollowForest.AI
             {
                 Agent.character.Director.JumpReleased();
             }
+        }
+
+        private bool HasLineOfSight()
+        {
+            return AIUtil.IsInLineOfSight(Agent.character.transform.position, threat.Transform.position);
         }
     }
 }

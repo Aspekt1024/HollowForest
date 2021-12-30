@@ -12,7 +12,6 @@ namespace HollowForest.Effects
             public ParticleSystem landedEffect;
             public ParticleSystem wallAttachEffect;
             public TrailRenderer dashEffect;
-            public SpriteRenderer slashEffect;
         }
 
         private readonly Character character;
