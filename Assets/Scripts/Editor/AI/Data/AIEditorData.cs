@@ -49,6 +49,7 @@ namespace HollowForest.AI
 
         public bool SetModule(AIModule module)
         {
+            
             if (module == null)
             {
                 if (selectedModule == null) return false;

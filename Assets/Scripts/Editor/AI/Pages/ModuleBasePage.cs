@@ -39,7 +39,7 @@ namespace HollowForest.AI
             var entryNode = new EntryNode(Editor.Data.GetEntryNodeGuid());
             var interruptNode = new InterruptNode(this, Editor.Data.GetInterruptNodeGuid());
 
-            var actions = Application.isPlaying ? Module.runningActions : GetValidatedModuleActions(Module);
+            var actions = GetValidatedModuleActions(Module);
             foreach (var action in actions)
             {
                 actionNodes.Add(new ActionNode(this, action));
@@ -101,6 +101,8 @@ namespace HollowForest.AI
 
         private List<AIAction> GetValidatedModuleActions(AIModule module)
         {
+            if (module.IsRuntimeInstance) return module.runningActions;
+            
             if (module.actions.All(a => a != null)) return module.actions;
             var assets = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(Module));
             module.actions = new List<AIAction>();

@@ -122,11 +122,18 @@ namespace HollowForest.AI
             }
         }
 
-        public override bool PopulateAttributeEditor(VisualElement container)
+        public override bool PopulateAttributeEditor(VisualElement container, bool isPreviewOnly)
         {
             var attributeEditorLabel = new Label($"{Action.DisplayName} Attributes");
             attributeEditorLabel.AddToClassList("inspector-header");
             container.Add(attributeEditorLabel);
+
+            if (isPreviewOnly)
+            {
+                var previewWarning = new Label("Warning: Changes made here are not permanently changed in the editor");
+                previewWarning.AddToClassList("attribute-preview-warning");
+                container.Add(previewWarning);
+            }
             
             var scrollView = new ScrollView(ScrollViewMode.Vertical);
             container.Add(scrollView);

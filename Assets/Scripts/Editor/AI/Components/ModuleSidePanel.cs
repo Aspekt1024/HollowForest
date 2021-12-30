@@ -61,7 +61,7 @@ namespace HollowForest.AI
             
             if (node != null)
             {
-                var isPopulated = node.PopulateAttributeEditor(nodeAttributes);
+                var isPopulated = node.PopulateAttributeEditor(nodeAttributes, false);
                 if (isPopulated)
                 {
                     nodeAttributes.AddToClassList("inspector");
@@ -81,13 +81,7 @@ namespace HollowForest.AI
         {
             moduleList.Clear();
 
-            var currentModule = page.Module;
-            if (!modules.Contains(currentModule))
-            {
-                // Occurs in runtime when the current module is set as a clone from the Diagnostics page
-                currentModule = modules.FirstOrDefault(m => currentModule.moduleGuid == m.moduleGuid);
-            }
-            var dropdown = new PopupField<AIModule>(modules, currentModule,
+            var dropdown = new PopupField<AIModule>(modules, page.Module,
             m =>
             {
                 page.SelectModule(m);

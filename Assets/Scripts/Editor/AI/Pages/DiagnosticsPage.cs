@@ -24,7 +24,7 @@ namespace HollowForest.AI
         {
             if (Application.isPlaying)
             {
-                SelectModule(Editor.Data.selectedModule);
+                SelectAgent(Editor.Data.selectedAgent);
                 
                 var agents = Object.FindObjectsOfType<Enemy>()
                     .Where(e => e.GetAI() != null)

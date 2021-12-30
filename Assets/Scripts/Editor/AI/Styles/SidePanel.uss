@@ -41,3 +41,12 @@
     color: #fa4646;
 }
 
+.attribute-preview-warning {
+    padding: 5px;
+    border-width: 1px;
+    border-color: dimgrey;
+    border-radius: 4px;
+    margin: 4px;
+    background-color: beige;
+    color: #460404;
+}

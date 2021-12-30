@@ -74,7 +74,7 @@ namespace Aspekt.Editors
         protected virtual void Populate(VisualElement element) {}
         public virtual void PopulateInspector(VisualElement container) {}
 
-        public virtual bool PopulateAttributeEditor(VisualElement container) { return false; }
+        public virtual bool PopulateAttributeEditor(VisualElement container, bool isPreviewOnly) { return false; }
         
         public virtual bool CreateDependency(Node dependency) { return false; }
         public virtual bool RemoveDependency(Node dependency) { return false; }

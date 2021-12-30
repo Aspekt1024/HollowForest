@@ -80,3 +80,4 @@ MonoBehaviour:
     nConditions: 
     actionGuid: 75c2a659-c331-49b7-8da8-3e79ab7edda7
     priority: 1
+  moveSpeed: 2

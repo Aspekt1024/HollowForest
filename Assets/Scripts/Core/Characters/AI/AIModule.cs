@@ -12,10 +12,12 @@ namespace HollowForest.AI
         public List<AIAction.Transition> interrupts = new List<AIAction.Transition>();
         public List<AIAction> actions = new List<AIAction>();
 
+        public bool IsRuntimeInstance { get; private set; }
         [NonSerialized] public readonly List<AIAction> runningActions = new List<AIAction>();
         
         public void Init()
         {
+            IsRuntimeInstance = true;
             foreach (var action in actions)
             {
                 runningActions.Add(Instantiate(action));

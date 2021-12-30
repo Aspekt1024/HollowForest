@@ -18,6 +18,7 @@ namespace HollowForest.AI
 
         private readonly VisualElement agentList;
         private readonly VisualElement nodeDetails;
+        private readonly VisualElement nodeAttributes;
         private readonly VisualElement logFilterDetails;
 
         private readonly VisualElement agentDetails;
@@ -40,6 +41,9 @@ namespace HollowForest.AI
 
             agentList = new VisualElement();
             topSection.Add(agentList);
+            
+            nodeAttributes = new VisualElement();
+            topSection.Add(nodeAttributes);
 
             nodeDetails = new VisualElement();
             nodeDetails.AddToClassList("inspector");
@@ -72,6 +76,7 @@ namespace HollowForest.AI
         public void PopulateOffline()
         {
             agentList.Clear();
+            nodeAttributes.Clear();
             nodeDetails.Clear();
             nodeDetails.Add(new Label("Agent list only available during runtime"));
         }
@@ -90,13 +95,25 @@ namespace HollowForest.AI
         public void OnNodeSelected(Node node)
         {
             nodeDetails.Clear();
+            nodeAttributes.Clear();
+            nodeAttributes.ClearClassList();
             selectedNode = node;
-            node?.PopulateInspector(nodeDetails);
+
+            if (node != null)
+            {
+                var isPopulated = node.PopulateAttributeEditor(nodeAttributes, true);
+                if (isPopulated)
+                {
+                    nodeAttributes.AddToClassList("inspector");
+                }
+                node.PopulateInspector(nodeDetails);
+            }
         }
 
         public void OnNodeUnselected(Node node)
         {
             nodeDetails.Clear();
+            nodeAttributes.Clear();
             selectedNode = null;
         }
 
@@ -118,6 +135,13 @@ namespace HollowForest.AI
 
             agentList.Clear();
             agentList.Add(dropdown);
+
+            if (selectedAgent != null)
+            {
+                var module = selectedAgent.GetRunningModule();
+                var moduleName = module != null ? module.name.Replace("(Clone)", "") : "None";
+                agentList.Add(new Label($"AI Module: {moduleName}"));
+            }
         }
 
         private void RegisterAgentObservations(AIAgent agent)
