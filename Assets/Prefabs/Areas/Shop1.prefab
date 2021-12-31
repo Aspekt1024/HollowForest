@@ -53,7 +53,7 @@ MonoBehaviour:
   indicatorPos: {fileID: 0}
   isAutomatic: 1
   areaReference:
-    m_AssetGUID: 7292ef3407aa86541b28993c26d64da3
+    m_AssetGUID: 37388e024f41cdf419afe38b810a5d19
     m_SubObjectName: 
     m_SubObjectType: 
   targetZoneArea:
@@ -289,6 +289,7 @@ MonoBehaviour:
     walking: 
     running: 
     falling: 
+    charging: 
     lightAttack: 
     heavyAttack: 
     cancelAttack: 

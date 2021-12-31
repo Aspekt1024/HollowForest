@@ -12,18 +12,23 @@ namespace HollowForest.World
         private Area currentArea;
         private AsyncOperationHandle<GameObject> currentHandle;
 
-        private void Awake()
+        public void InitAwake()
         {
             currentArea = GetComponentInChildren<Area>();
             if (currentArea != null)
             {
                 Destroy(currentArea.gameObject);
                 currentArea = null;
-                LoadArea(startArea, area =>
-                {
-                    area.Setup();
-                });
             }
+        }
+
+        public void Setup(Character character)
+        {
+            LoadArea(startArea, area =>
+            {
+                area.Setup();
+                area.SetAtSpawnPoint(character, null);
+            });
         }
         
         public void LoadArea(AssetReference assetReference, Action<Area> callback)

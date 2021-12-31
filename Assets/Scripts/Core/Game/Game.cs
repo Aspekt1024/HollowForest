@@ -63,6 +63,7 @@ namespace HollowForest
             inputManager.InitAwake(ui);
             dialogue.InitAwake(data.Config.dialogue, data.GameData.dialogue, ui);
             cameraManager.InitAwake(ui);
+            world.InitAwake();
         }
 
         private void Start()
@@ -70,6 +71,7 @@ namespace HollowForest
             inputManager.SetCharacter(player);
             characters.RegisterCharacter(player);
             cameraManager.Follow(player.transform);
+            world.Setup(player);
         }
 
         private void FixedUpdate()

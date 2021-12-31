@@ -33,14 +33,36 @@ namespace HollowForest.World
 
         public void SetAtSpawnPoint(Character character, ZoneAreaReference zoneAreaReference)
         {
+            if (zoneAreaReference == null)
+            {
+                var spawnPoints = GetComponentsInChildren<SpawnPoint>().ToList();
+                if (!spawnPoints.Any())
+                {
+                    Debug.LogError("Failed to find default spawn point");
+                    return;
+                }
+
+                var defaultSpawn = spawnPoints.FirstOrDefault(p => p.isDefaultSpawnPoint);
+                if (defaultSpawn != null)
+                {
+                    defaultSpawn.SetAtSpawnPoint(character);
+                }
+                else
+                {
+                    spawnPoints[0].SetAtSpawnPoint(character);
+                }
+
+                return;
+            }
+            
             var zoneArea = zoneAreas.FirstOrDefault(a => a.id.zoneAreaID == zoneAreaReference.zoneAreaID);
             if (zoneArea == null)
             {
                 Debug.LogError($"Failed to find zone area: {zoneAreaReference.zoneAreaName}");
                 return;
             }
-            character.transform.position = zoneArea.spawnPoint.transform.position;
-            character.Physics.SetOnGround();
+            
+            character.Physics.SetOnGround(zoneArea.spawnPoint.transform.position);
         }
     }
 }

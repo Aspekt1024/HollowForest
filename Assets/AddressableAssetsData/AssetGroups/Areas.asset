@@ -21,14 +21,26 @@ MonoBehaviour:
     m_Address: Area/FirstWorld
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 2977236595379437749, guid: 7292ef3407aa86541b28993c26d64da3, type: 3}
-    m_TargetAsset: {fileID: 2977236595379437749, guid: 7292ef3407aa86541b28993c26d64da3, type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 5ae5d62560e5ed04894470db21da3c91
     m_Address: Area/Shop1
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 5448206085442008629, guid: 5ae5d62560e5ed04894470db21da3c91, type: 3}
-    m_TargetAsset: {fileID: 5448206085442008629, guid: 5ae5d62560e5ed04894470db21da3c91, type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 37388e024f41cdf419afe38b810a5d19
+    m_Address: Area/StartingArea
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 2977236595379437749, guid: 37388e024f41cdf419afe38b810a5d19, type: 3}
+    m_TargetAsset: {fileID: 2977236595379437749, guid: 37388e024f41cdf419afe38b810a5d19, type: 3}
+  - m_GUID: 76e81342a7db04f4bbcb792d2f78284d
+    m_Address: Area/FirstWilds
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 2977236595379437749, guid: 76e81342a7db04f4bbcb792d2f78284d, type: 3}
+    m_TargetAsset: {fileID: 2977236595379437749, guid: 76e81342a7db04f4bbcb792d2f78284d, type: 3}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8c34be893099f8445bb91eb050a7b28b, type: 2}
   m_SchemaSet:

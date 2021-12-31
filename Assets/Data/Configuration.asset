@@ -55,6 +55,13 @@ MonoBehaviour:
   - zoneAreaID: 10002
     zoneAreaName: Shop 1 Inside
     description: The inside of the first shop
+  - zoneAreaID: 10003
+    zoneAreaName: First WIlds Town
+    description: The entrance to the first wilds, from the starting area
+  - zoneAreaID: 10004
+    zoneAreaName: FIrst Wilds Town Inside
+    description: The entrance inside the First Wilds when entering from the starting
+      area
   items:
   - id: 10000
     name: Lucky Coin

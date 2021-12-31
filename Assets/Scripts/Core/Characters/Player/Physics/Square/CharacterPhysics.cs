@@ -62,6 +62,7 @@ namespace HollowForest
         private bool isVerticalSpeedOverridden;
         
         public CollisionSensor Collision { get; }
+        private Rigidbody2D body;
 
         public CharacterPhysics(Character character, Settings settings)
         {
@@ -69,6 +70,7 @@ namespace HollowForest
             this.settings = settings;
 
             Collision = new CollisionSensor(character);
+            body = character.GetComponent<Rigidbody2D>();
             jump = new JumpPhysics(character, settings.jumpSettings, Collision);
             dash = new DashPhysics(character, settings.dashSettings, Collision);
             wall = new WallPhysics(character, settings.wallSettings, Collision);
@@ -91,6 +93,13 @@ namespace HollowForest
         private void CancelMovementOverride() => timeHorizontalVelocityOverrideEnds = Time.time - 0.1f;
         private void CancelMovementOverride(Vector3 wallPos, Surface surface) => CancelMovementOverride();
 
+        public void SetOnGround(Vector3 position)
+        {
+            character.transform.position = position;
+            body.MovePosition(position);
+            SetOnGround();
+        }
+        
         public void SetOnGround()
         {
             var extent = character.Collider.bounds.extents.y;
