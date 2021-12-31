@@ -19,7 +19,7 @@ MonoBehaviour:
     actionGuid: 13b37765-2505-478f-a525-53e66a6b7327
     priority: 1
     requiresActionCompletion: 1
-  pauseDuration: 2.7
+  pauseDuration: 1.8
 --- !u!114 &-2605722942930408051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
     actionGuid: 59b5116d-3e33-42bb-a5ce-03edd6e4f8f1
     priority: 1
     requiresActionCompletion: 1
-  chargeDistance: 4
+  maxChargeDistance: 4
   chargeSpeed: 9
   attackDist: 2
 --- !u!114 &11400000

@@ -1,7 +1,7 @@
 {
-    "currentPage": "Diagnostics",
+    "currentPage": "Modules",
     "selectedModule": {
-        "instanceID": -148924
+        "instanceID": -27402
     },
     "moduleDataSets": [
         {
@@ -346,6 +346,68 @@
             ],
             "entryNodeGuid": "4a4a30e9-2da2-4f59-932f-3762bcddb0c7",
             "interruptNodeGuid": "f457f6f2-50df-42af-9050-d6da2a0e5818"
+        },
+        {
+            "moduleGuid": "3914f5cc-1796-438a-a349-a307f157df14",
+            "nodes": [
+                {
+                    "serializableGuid": "550ee53a-c464-4699-acea-1dffe8305c22",
+                    "position": {
+                        "x": 210.0,
+                        "y": 30.0
+                    },
+                    "size": {
+                        "x": 60.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "ff1d6cc5-1efc-49b5-bc70-35098275a130",
+                    "position": {
+                        "x": 60.0,
+                        "y": 130.0
+                    },
+                    "size": {
+                        "x": 80.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "2334595d-8db7-464f-8f14-14f46d59e12f",
+                    "position": {
+                        "x": 190.0,
+                        "y": 130.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "182f298a-09c1-4af1-880b-ce688cc61ef3",
+                    "position": {
+                        "x": 190.0,
+                        "y": 220.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "fdd740d5-425f-4280-9679-fb322c3fe193",
+                    "position": {
+                        "x": 340.0,
+                        "y": 220.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                }
+            ],
+            "entryNodeGuid": "550ee53a-c464-4699-acea-1dffe8305c22",
+            "interruptNodeGuid": "ff1d6cc5-1efc-49b5-bc70-35098275a130"
         }
     ],
     "logFilter": {

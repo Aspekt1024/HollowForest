@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4435745896751259378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c94d61646f5457e87e8d1b362d97d60, type: 3}
+  m_Name: PauseAction
+  m_EditorClassIdentifier: 
+  guid: fdd740d5-425f-4280-9679-fb322c3fe193
+  transitions:
+  - pConditions: 
+    nConditions: 
+    actionGuid: 2334595d-8db7-464f-8f14-14f46d59e12f
+    priority: 1
+    requiresActionCompletion: 1
+  pauseDuration: 2
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c092d46f5544f3ab51fdf5d09bd3772, type: 3}
+  m_Name: JumpingEnemyModule
+  m_EditorClassIdentifier: 
+  moduleGuid: 3914f5cc-1796-438a-a349-a307f157df14
+  defaultActionGuid: 2334595d-8db7-464f-8f14-14f46d59e12f
+  interrupts: []
+  actions:
+  - {fileID: 7575494638580471831}
+  - {fileID: 4822290818662742382}
+  - {fileID: -4435745896751259378}
+--- !u!114 &4822290818662742382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b304a55ae2734484a300312c58d07a22, type: 3}
+  m_Name: JumpAttackAction
+  m_EditorClassIdentifier: 
+  guid: 182f298a-09c1-4af1-880b-ce688cc61ef3
+  transitions:
+  - pConditions: 
+    nConditions: 
+    actionGuid: fdd740d5-425f-4280-9679-fb322c3fe193
+    priority: 1
+    requiresActionCompletion: 1
+  horizontalSpeed: 4.4
+--- !u!114 &7575494638580471831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f77697353a354f7aa9fb9ab53f7d954f, type: 3}
+  m_Name: DawdleAction
+  m_EditorClassIdentifier: 
+  guid: 2334595d-8db7-464f-8f14-14f46d59e12f
+  transitions:
+  - pConditions: e8030000
+    nConditions: 
+    actionGuid: 182f298a-09c1-4af1-880b-ce688cc61ef3
+    priority: 1
+    requiresActionCompletion: 0
+  moveSpeed: 1
+  moveDuration: 2.3
+  pauseDuration: 3.4

@@ -17,5 +17,16 @@ namespace HollowForest.AI
             var hit = Physics2D.Raycast(origin2D, distVector2D, distVector2D.magnitude, mask);
             return hit.collider == null;
         }
+
+        public static bool IsThreatToTheRight(AIAgent agent)
+        {
+            var target = agent.memory.GetObject<Character>(AIObject.Threat);
+            if (target == null)
+            {
+                Debug.LogError("Null threat on direction check.");
+                return true;
+            }
+            return agent.character.transform.position.x < target.transform.position.x;
+        }
     }
 }
