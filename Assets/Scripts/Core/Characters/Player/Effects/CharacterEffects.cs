@@ -59,9 +59,12 @@ namespace HollowForest.Effects
         {
             settings.model.rotation = Quaternion.identity;
             body.angularVelocity = 0f;
-            
-            settings.wallAttachEffect.transform.position = hitPosition;
-            settings.wallAttachEffect.Play();
+
+            if (settings.wallAttachEffect != null)
+            {
+                settings.wallAttachEffect.transform.position = hitPosition;
+                settings.wallAttachEffect.Play();
+            }
         }
 
         public void BeginDash()

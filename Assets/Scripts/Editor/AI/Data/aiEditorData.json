@@ -1,7 +1,7 @@
 {
     "currentPage": "Modules",
     "selectedModule": {
-        "instanceID": -27402
+        "instanceID": 7664
     },
     "moduleDataSets": [
         {
@@ -408,6 +408,46 @@
             ],
             "entryNodeGuid": "550ee53a-c464-4699-acea-1dffe8305c22",
             "interruptNodeGuid": "ff1d6cc5-1efc-49b5-bc70-35098275a130"
+        },
+        {
+            "moduleGuid": "32b5d58c-335a-4985-89bf-220b1afa9b05",
+            "nodes": [
+                {
+                    "serializableGuid": "179e15c9-a444-45a7-9362-dead09300739",
+                    "position": {
+                        "x": 210.0,
+                        "y": 30.0
+                    },
+                    "size": {
+                        "x": 60.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "b73c4c60-ac42-4d62-bf9e-676385c781a6",
+                    "position": {
+                        "x": 30.0,
+                        "y": 140.0
+                    },
+                    "size": {
+                        "x": 80.0,
+                        "y": 40.0
+                    }
+                },
+                {
+                    "serializableGuid": "76a85501-6388-4b78-b5aa-340097f424ad",
+                    "position": {
+                        "x": 190.0,
+                        "y": 140.0
+                    },
+                    "size": {
+                        "x": 100.0,
+                        "y": 40.0
+                    }
+                }
+            ],
+            "entryNodeGuid": "179e15c9-a444-45a7-9362-dead09300739",
+            "interruptNodeGuid": "b73c4c60-ac42-4d62-bf9e-676385c781a6"
         }
     ],
     "logFilter": {

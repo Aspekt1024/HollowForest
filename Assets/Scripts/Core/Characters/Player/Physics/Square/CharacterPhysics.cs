@@ -58,6 +58,8 @@ namespace HollowForest
         private float horizontalVelocityOverride;
 
         private float moveSpeed;
+        private float verticalSpeed;
+        private bool isVerticalSpeedOverridden;
         
         public CollisionSensor Collision { get; }
 
@@ -117,6 +119,12 @@ namespace HollowForest
             horizontalVelocityOverride = xVelocity;
         }
 
+        public void SetVerticalMovement(float speed)
+        {
+            isVerticalSpeedOverridden = true;
+            verticalSpeed = speed;
+        }
+
         private Vector3 CalculateVelocity()
         {
             velocity = CalculateHorizontalInfluencedVelocity(character.Rigidbody.velocity);
@@ -149,9 +157,16 @@ namespace HollowForest
             }
             else if (!wall.IsAttachedToWall)
             {
-                if (velocity.y > 0) velocity.y = 0;
-                velocity.y += settings.gravity * Time.fixedDeltaTime;
-                velocity.y = Mathf.Max(settings.maxFallSpeed, velocity.y);
+                if (isVerticalSpeedOverridden)
+                {
+                    velocity.y = verticalSpeed;
+                }
+                else
+                {
+                    if (velocity.y > 0) velocity.y = 0;
+                    velocity.y += settings.gravity * Time.fixedDeltaTime;
+                    velocity.y = Mathf.Max(settings.maxFallSpeed, velocity.y);
+                }
                 pos.y += velocity.y * Time.fixedDeltaTime;
             }
 
@@ -227,6 +242,7 @@ namespace HollowForest
         {
             horizontal = HorizontalInput.None;
             character.Animator.StopMoving();
+            isVerticalSpeedOverridden = false;
         }
 
         public void JumpPressed() => jump.JumpRequested();
