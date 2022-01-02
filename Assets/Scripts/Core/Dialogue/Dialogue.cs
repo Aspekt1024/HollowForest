@@ -24,7 +24,7 @@ namespace HollowForest.Dialogue
             ui.GetUI<DialogueUI>().RegisterObserver(this);
         }
 
-        public void InitiateDialogue(Character interactingCharacter, CharacterProfile characterInteractedWith, Action onDialogueCompleteCallback)
+        public void InitiateDialogue(Character interactingCharacter, CharacterRef characterInteractedWith, Action onDialogueCompleteCallback)
         {
             this.onDialogueCompleteCallback = onDialogueCompleteCallback;
             config.GetConversationAsync(interactingCharacter, characterInteractedWith, (conversationSet, conversation) =>

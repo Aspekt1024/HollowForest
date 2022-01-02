@@ -52,7 +52,7 @@ namespace HollowForest.Dialogue
             data.Config.dialogue.ConversationSets.Sort((s1, s2) => s2.priority.CompareTo(s1.priority));
         }
         
-        public async void GetConversationAsync(Character interactingCharacter, CharacterProfile characterInteractedWith, Action<ConversationSet, Conversation> callback)
+        public async void GetConversationAsync(Character interactingCharacter, CharacterRef characterInteractedWith, Action<ConversationSet, Conversation> callback)
         {
             var info = await GetConversation(interactingCharacter, characterInteractedWith);
             callback?.Invoke(info.set, info.conversation);
@@ -64,7 +64,7 @@ namespace HollowForest.Dialogue
             public Conversation conversation;
         }
 
-        private Task<ConversationInfo> GetConversation(Character interactingCharacter, CharacterProfile characterInteractedWith)
+        private Task<ConversationInfo> GetConversation(Character interactingCharacter, CharacterRef characterInteractedWith)
         {
             // Conversations are already sorted by priority at this point, so we can return
             // on the first set that meets the current game conditions
@@ -81,7 +81,7 @@ namespace HollowForest.Dialogue
             return Task.FromResult(new ConversationInfo());
         }
 
-        private Conversation DetermineConversation(ConversationSet set, CharacterProfile characterInteractedWith)
+        private Conversation DetermineConversation(ConversationSet set, CharacterRef characterInteractedWith)
         {
             var conversation = data.GameData.dialogue.GetCurrentConversation(set);
             if (conversation == null)
@@ -146,7 +146,7 @@ namespace HollowForest.Dialogue
             return true;
         }
 
-        private bool IsConditionsMet(Conversation conversation, CharacterProfile characterInteractedWith)
+        private bool IsConditionsMet(Conversation conversation, CharacterRef characterInteractedWith)
         {
             if (conversation.character.guid != characterInteractedWith.guid) return false;
             

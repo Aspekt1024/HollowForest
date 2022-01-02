@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Enemies
+  m_EditorClassIdentifier: 
+  m_GroupName: Enemies
+  m_Data:
+    m_SerializedData: []
+  m_GUID: ebf3c32979e957140935ea83ed046847
+  m_SerializeEntries:
+  - m_GUID: c35f756c9a88eeb4997fe7047ccaa891
+    m_Address: Enemy/Brute
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 2606581264760616217, guid: c35f756c9a88eeb4997fe7047ccaa891, type: 3}
+    m_TargetAsset: {fileID: 2606581264760616217, guid: c35f756c9a88eeb4997fe7047ccaa891, type: 3}
+  - m_GUID: 7585f984d93668b4abad1e61a9d59a8b
+    m_Address: Enemy/FlyingBouncing
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 6026081784505825654, guid: 7585f984d93668b4abad1e61a9d59a8b, type: 3}
+    m_TargetAsset: {fileID: 6026081784505825654, guid: 7585f984d93668b4abad1e61a9d59a8b, type: 3}
+  - m_GUID: a8b21c24dc2f82a448c063fca4cd2fa0
+    m_Address: Enemy/Jumping
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 987293164047313710, guid: a8b21c24dc2f82a448c063fca4cd2fa0, type: 3}
+    m_TargetAsset: {fileID: 987293164047313710, guid: a8b21c24dc2f82a448c063fca4cd2fa0, type: 3}
+  - m_GUID: ea09361c130265342be571bf1f015def
+    m_Address: Enemy/Spiky
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 3622887869524720441, guid: ea09361c130265342be571bf1f015def, type: 3}
+    m_TargetAsset: {fileID: 3622887869524720441, guid: ea09361c130265342be571bf1f015def, type: 3}
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 8c34be893099f8445bb91eb050a7b28b, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: fbf00e4c81c1b5a479245f0efc92c035, type: 2}
+    - {fileID: 11400000, guid: 610060176c575d9409ff0e8cd022068b, type: 2}

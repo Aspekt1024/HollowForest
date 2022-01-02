@@ -35,3 +35,7 @@
 
 .event-button {
 }
+
+.label-remove {
+    margin-left: -100px;
+}

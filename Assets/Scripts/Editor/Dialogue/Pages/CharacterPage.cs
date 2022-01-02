@@ -1,7 +1,11 @@
 using System;
 using System.Linq;
 using Aspekt.Editors;
+using HollowForest.Data;
 using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
 namespace HollowForest.Dialogue.Pages
@@ -22,10 +26,13 @@ namespace HollowForest.Dialogue.Pages
             
             if (Editor.Config == null || Editor.Config.characterProfiles == null) return;
             
-            var profiles = Editor.Config.characterProfiles;
-            foreach (var profile in profiles)
+            var serializedObject = new SerializedObject(Editor.Config);
+            var profilesProp = serializedObject.FindProperty(nameof(Configuration.characterProfiles));
+            for (int i = 0; i < profilesProp.arraySize; i++)
             {
-                charactersContainer.Add(CreateProfileDisplay(profile));
+                var profileProp = profilesProp.GetArrayElementAtIndex(i);
+                var profile = Editor.Config.characterProfiles[i];
+                charactersContainer.Add(CreateProfileDisplay(profile, profileProp));
             }
 
             var createButton = new Button() {text = "Create New Character"};
@@ -45,7 +52,7 @@ namespace HollowForest.Dialogue.Pages
             UpdateContents();
         }
 
-        private VisualElement CreateProfileDisplay(CharacterProfile profile)
+        private VisualElement CreateProfileDisplay(CharacterProfile profile, SerializedProperty profileProp)
         {
             var profileElement = new VisualElement();
             profileElement.AddToClassList("profile");
@@ -63,8 +70,19 @@ namespace HollowForest.Dialogue.Pages
             
             var profileDescription = new TextField() {value = profile.description};
             profileDescription.AddToClassList("profile-description");
-            profileDescription.RegisterValueChangedCallback(e => EventDescriptionUpdated(profile, e.newValue));
+            profileDescription.RegisterValueChangedCallback(e => ProfileDescriptionUpdated(profile, e.newValue));
             profileDetails.Add(profileDescription);
+
+            var profileCategory = new EnumField(profile.category);
+            profileCategory.AddToClassList("profile-category");
+            profileCategory.RegisterValueChangedCallback(e => ProfileCategoryUpdated(profile, e.newValue));
+            profileDetails.Add(profileCategory);
+
+            var assetProp = profileProp.FindPropertyRelative(nameof(profile.asset));
+            var assetField = new PropertyField(assetProp, " ");
+            assetField.AddToClassList("profile-asset");
+            assetField.Bind(assetProp.serializedObject);
+            profileDetails.Add(assetField);
             
             profileContents.Add(profileDetails);
             profileElement.Add(profileContents);
@@ -83,10 +101,17 @@ namespace HollowForest.Dialogue.Pages
             profile.characterName = newName;
         }
 
-        private void EventDescriptionUpdated(CharacterProfile profile, string newDescription)
+        private void ProfileDescriptionUpdated(CharacterProfile profile, string newDescription)
         {
             Editor.RecordUndo(Editor.Config, "Change character description");
             profile.description = newDescription;
+        }
+
+        private void ProfileCategoryUpdated(CharacterProfile profile, Enum newCategory)
+        {
+            var category = (CharacterCategory) newCategory;
+            Editor.RecordUndo(Editor.Config, "Change character category");
+            profile.category = category;
         }
 
         private void CreateCharacterProfile()

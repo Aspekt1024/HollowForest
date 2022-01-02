@@ -39,12 +39,54 @@ MonoBehaviour:
     eventName: CompleteArena1
     description: Defeat the crystal enemy in arena 1
   characterProfiles:
-  - guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
+  - category: 2000
+    guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
     characterName: Test character
     description: A test character who asks for a lucky coin
-  - guid: ebbf3a3d-71ee-4ffd-b4b4-01e59d4bea45
+    asset:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+  - category: 2000
+    guid: ebbf3a3d-71ee-4ffd-b4b4-01e59d4bea45
     characterName: Second character
     description: Another test character on a separate questline
+    asset:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+  - category: 1000
+    guid: 8f543277-0eb1-4fa6-830f-de59ebc1bf17
+    characterName: Spiky
+    description: A spiky enemy that deals damage when touched
+    asset:
+      m_AssetGUID: ea09361c130265342be571bf1f015def
+      m_SubObjectName: 
+      m_SubObjectType: 
+  - category: 1000
+    guid: 20523f16-b7b0-43a5-b7fe-58778bbbd848
+    characterName: Brute
+    description: A large, slow enemy with a heavy attack
+    asset:
+      m_AssetGUID: c35f756c9a88eeb4997fe7047ccaa891
+      m_SubObjectName: 
+      m_SubObjectType: 
+  - category: 1000
+    guid: 6074666a-8d34-4c5f-8453-c2cb7b7d0320
+    characterName: Jumping
+    description: An enemy that jumps towards the player when in range
+    asset:
+      m_AssetGUID: a8b21c24dc2f82a448c063fca4cd2fa0
+      m_SubObjectName: 
+      m_SubObjectType: 
+  - category: 1000
+    guid: 8da63129-755f-4499-ae0d-e013682095e9
+    characterName: Flying Bouncing
+    description: Flying enemy that travels in a straight line and bounces off walls
+    asset:
+      m_AssetGUID: 7585f984d93668b4abad1e61a9d59a8b
+      m_SubObjectName: 
+      m_SubObjectType: 
   zoneAreaReferences:
   - zoneAreaID: 10000
     zoneAreaName: Start

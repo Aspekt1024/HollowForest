@@ -84,9 +84,9 @@ namespace HollowForest
             character.Effects.OnGroundHit(hitPos, fallHeight);
         }
 
-        private void OnInteractedWith(Character interactingCharacter, CharacterProfile characterIDInteractedWith)
+        private void OnInteractedWith(Character interactingCharacter, CharacterRef characterInteractedWith)
         {
-            game.dialogue.InitiateDialogue(interactingCharacter, characterIDInteractedWith, null);
+            game.dialogue.InitiateDialogue(interactingCharacter, characterInteractedWith, null);
         }
     }
 }

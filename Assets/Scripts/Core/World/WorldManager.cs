@@ -43,25 +43,11 @@ namespace HollowForest.World
                 }
             }
             
-            currentHandle = assetReference.InstantiateAsync(transform);
-            currentHandle.Completed += op =>
+            AssetUtil.LoadAsset<Area>(assetReference, area =>
             {
-                if (op.Status == AsyncOperationStatus.Succeeded)
-                {
-                    var area = op.Result.GetComponent<Area>();
-                    if (area == null)
-                    {
-                        Debug.LogError($"Area was loaded, but has no {nameof(Area)} component");
-                    }
-                    currentArea = area;
-                    callback?.Invoke(area);
-                }
-                else
-                {
-                    Debug.LogError("Failed to load area: " + assetReference.AssetGUID);
-                    callback?.Invoke(null);
-                }
-            };
+                currentArea = area;
+                callback?.Invoke(area);
+            });
         }
     }
 }

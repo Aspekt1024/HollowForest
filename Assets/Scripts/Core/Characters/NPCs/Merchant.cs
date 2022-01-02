@@ -8,7 +8,7 @@ namespace HollowForest
         
         public override void OnInteract(Character character)
         {
-            Game.Dialogue.InitiateDialogue(character, profile, () =>
+            Game.Dialogue.InitiateDialogue(character, characterRef, () =>
             {
                 Game.UI.GetUI<ShopUI>().Open(itemList.items);
             });

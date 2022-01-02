@@ -25,3 +25,11 @@
 
 .profile-button {
 }
+
+.profile-category {
+    width: 150px;
+}
+
+.profile-asset {
+    width: 300px;
+}

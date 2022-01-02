@@ -8,6 +8,7 @@ namespace HollowForest.World
     public class Area : MonoBehaviour
     {
         private List<ZoneArea> zoneAreas;
+        private List<EnemySpawn> enemySpawns;
         
         public void Setup()
         {
@@ -24,11 +25,18 @@ namespace HollowForest.World
             }
 
             zoneAreas = GetComponentsInChildren<ZoneArea>().ToList();
+            enemySpawns = GetComponentsInChildren<EnemySpawn>().ToList();
+
+            foreach (var enemySpawn in enemySpawns)
+            {
+                enemySpawn.LoadEnemy(null);
+            }
         }
 
         public void TearDown()
         {
             Game.Characters.UnregisterNPCs();
+            enemySpawns.ForEach(e => e.UnloadEnemy());
         }
 
         public void SetAtSpawnPoint(Character character, ZoneAreaReference zoneAreaReference)

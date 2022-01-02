@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using HollowForest.Effects;
 using HollowForest.Interactivity;
 using UnityEngine;
@@ -7,20 +8,26 @@ namespace HollowForest
 {
     public class NPC : MonoBehaviour, IInteractive
     {
-        public CharacterProfile profile;
+        public CharacterRef characterRef;
         public CharacterAnimator.Settings animatorSettings;
         public Transform model;
         public Transform indicatorPos;
-
         private CharacterAnimator anim;
+
+        private CharacterProfile profile;
 
         private Character observedCharacter;
         
-        public event Action<Character, CharacterProfile> OnInteractedWith = delegate { };
+        public event Action<Character, CharacterRef> OnInteractedWith = delegate { };
 
         private void Awake()
         {
             anim = new CharacterAnimator(null, animatorSettings, model);
+        }
+
+        private void Start()
+        {
+            profile = Game.Data.Config.characterProfiles.FirstOrDefault(p => p.guid == characterRef.guid);
         }
 
         private void Update()
@@ -44,7 +51,7 @@ namespace HollowForest
 
         public virtual void OnInteract(Character character)
         {
-            OnInteractedWith?.Invoke(character, profile);
+            OnInteractedWith?.Invoke(character, characterRef);
         }
 
         public virtual void OnOverlap(Character character)
