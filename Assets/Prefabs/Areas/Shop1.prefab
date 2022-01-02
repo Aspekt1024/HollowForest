@@ -243,7 +243,7 @@ GameObject:
   - component: {fileID: 2471425249916914526}
   - component: {fileID: 104194356997673092}
   m_Layer: 7
-  m_Name: TestNPC
+  m_Name: Test character Spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -277,10 +277,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb90ad4f8ec45cc9d675590ff971820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile:
+  characterRef:
     guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
-    characterName: Test character
-    description: A test character who asks for a lucky coin
   animatorSettings:
     animator: {fileID: 7569924334196537186}
     groundHitLight: 

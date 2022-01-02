@@ -8,7 +8,7 @@ namespace HollowForest
 {
     public class NPC : MonoBehaviour, IInteractive
     {
-        public CharacterRef characterRef;
+        [CharacterCategory(CharacterCategory.NPC)] public CharacterRef characterRef;
         public CharacterAnimator.Settings animatorSettings;
         public Transform model;
         public Transform indicatorPos;

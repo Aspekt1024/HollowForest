@@ -19,7 +19,10 @@ namespace HollowForest
 
             var category = GetCategoryAttribute(property);
 
-            var charProfiles = config.characterProfiles.Where(p => p.category == category).ToList();
+            var charProfiles = category == CharacterCategory.None
+                ? config.characterProfiles
+                : config.characterProfiles.Where(p => p.category == category).ToList();
+            
             if (!charProfiles.Any())
             {
                 Debug.LogWarning($"No character profiles found for category {category} but an asset requires it!");

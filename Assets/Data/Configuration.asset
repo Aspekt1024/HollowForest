@@ -41,16 +41,16 @@ MonoBehaviour:
   characterProfiles:
   - category: 2000
     guid: 49b703f1-6115-4efc-91dc-871f03bcdd31
-    characterName: Test character
-    description: A test character who asks for a lucky coin
+    characterName: Shop 1 Merchant
+    description: The merchant of shop 1
     asset:
       m_AssetGUID: 
       m_SubObjectName: 
       m_SubObjectType: 
   - category: 2000
     guid: ebbf3a3d-71ee-4ffd-b4b4-01e59d4bea45
-    characterName: Second character
-    description: Another test character on a separate questline
+    characterName: Yellow Crystal
+    description: A yellow crystal NPC
     asset:
       m_AssetGUID: 
       m_SubObjectName: 
