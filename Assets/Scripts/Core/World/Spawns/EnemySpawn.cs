@@ -85,6 +85,7 @@ namespace HollowForest.World
             
             AssetUtil.LoadAsset<Enemy>(enemyData.asset, e =>
             {
+                if (e == null) return; // If we leave the room before the enemy is spawned, the enemy will be null
                 SetupEnemy(e);
                 callback?.Invoke(e);
             });

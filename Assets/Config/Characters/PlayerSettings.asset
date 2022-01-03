@@ -60,10 +60,11 @@ MonoBehaviour:
   healthSettings:
     baseHealth: 3
     mitigation: 0
-    invincibilityDurationAfterHit: 0
+    invincibilityDurationAfterHit: 0.83
   combatSettings:
     lightAttackCooldown: 0.33
     heavyAttackCooldown: 0.95
     heavyAttackLockTime: 0.6
     lightAttackBaseDamage: 1
     heavyAttackBaseDamage: 2
+    lockPositionForLightAttack: 0

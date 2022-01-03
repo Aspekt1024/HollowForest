@@ -18907,10 +18907,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1773606691725576322, guid: 74c7716169c302948b87366d4089f499, type: 3}
-      propertyPath: settings
-      value: 
-      objectReference: {fileID: 11400000, guid: b3be64ad963736a4fae4df910bf1d84e, type: 2}
     - target: {fileID: 1773606691725576326, guid: 74c7716169c302948b87366d4089f499, type: 3}
       propertyPath: m_Name
       value: CrystalChar
