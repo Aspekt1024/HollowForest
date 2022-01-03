@@ -26,11 +26,6 @@ namespace HollowForest.World
 
             zoneAreas = GetComponentsInChildren<ZoneArea>().ToList();
             enemySpawns = GetComponentsInChildren<EnemySpawn>().ToList();
-
-            foreach (var enemySpawn in enemySpawns)
-            {
-                enemySpawn.LoadEnemy(null);
-            }
         }
 
         public void TearDown()

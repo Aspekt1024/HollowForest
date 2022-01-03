@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using HollowForest.AI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -13,11 +13,14 @@ namespace HollowForest.World
         public bool isOneTime;
         public bool isAlwaysPresent;
 
+        private bool canLoad;
         private Enemy enemy;
 
-        public void LoadEnemy(Action<Enemy> callback)
+        private bool isLoadRequested;
+
+        private void Start()
         {
-            if (isAlwaysPresent)
+            if (!isAlwaysPresent)
             {
                 // TODO check if guid is registered as defeated in session data
             }
@@ -26,6 +29,51 @@ namespace HollowForest.World
             {
                 // TODO check if guid is registered as defeated in game data
             }
+
+            canLoad = true;
+        }
+
+        private void Update()
+        {
+            if (!canLoad) return;
+            
+            var dist = transform.position - Game.Camera.mainCamera.transform.position;
+            dist.z = 0f;
+            var sqrMagnitude = dist.sqrMagnitude;
+            const float spawnDist = 20f;
+            const float despawnDist = 25f;
+            
+            if (sqrMagnitude >= despawnDist * despawnDist)
+            {
+                if (CanDespawn())
+                {
+                    enemy.gameObject.SetActive(false);
+                }
+            }
+            else if (sqrMagnitude < spawnDist * spawnDist)
+            {
+                if (enemy == null)
+                {
+                    LoadEnemy(null);
+                }
+                else
+                {
+                    enemy.gameObject.SetActive(true);
+                }
+            }
+        }
+
+        private bool CanDespawn()
+        {
+            if (enemy == null) return false;
+            if (enemy.GetAI().memory.IsTrue(AIState.HasThreat)) return false;
+            return enemy.State.GetState(CharacterStates.IsAlive);
+        }
+
+        private void LoadEnemy(Action<Enemy> callback)
+        {
+            if (isLoadRequested) return;
+            isLoadRequested = true;
             
             var enemyData = Game.Data.Config.characterProfiles.FirstOrDefault(p => p.guid == enemyType.guid);
             if (enemyData == null)
