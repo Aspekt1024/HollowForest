@@ -64,8 +64,19 @@ namespace HollowForest.World
                 Debug.LogError($"Failed to find zone area: {zoneAreaReference.zoneAreaName}");
                 return;
             }
-            
-            character.Physics.SetOnGround(zoneArea.spawnPoint.transform.position);
+
+            var spawnPos = zoneArea.spawnPoint.transform.position;
+            character.Physics.SetOnGround(spawnPos);
+
+            var isFacingRight = spawnPos.x > zoneArea.transform.position.x;
+            if (isFacingRight)
+            {
+                character.Animator.LookRight();
+            }
+            else
+            {
+                character.Animator.LookLeft();
+            }
         }
     }
 }

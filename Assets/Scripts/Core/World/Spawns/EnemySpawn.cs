@@ -13,6 +13,7 @@ namespace HollowForest.World
         public bool isOneTime;
         public bool isAlwaysPresent;
         public bool engageBeforeSpawn;
+        public bool beginFacingRight;
 
         private bool canLoad;
         private Enemy enemy;
@@ -134,6 +135,15 @@ namespace HollowForest.World
             if (isEngaged)
             {
                 enemy.Engage(engagedCharacter, isThreatLocked);
+            }
+            
+            if (beginFacingRight)
+            {
+                enemy.Animator.LookRight();
+            }
+            else
+            {
+                enemy.Animator.LookLeft();
             }
         }
 

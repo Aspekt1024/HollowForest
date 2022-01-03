@@ -56,14 +56,12 @@ MonoBehaviour:
       wallJumpHorizontalVelocity: 10
       wallJumpDuration: 0.12
   afflictionSettings:
-    fallRecoveryTime: 0.2
+    fallRecoveryTime: 0
   healthSettings:
     baseHealth: 3
     mitigation: 0
     invincibilityDurationAfterHit: 0
   combatSettings:
-    lightAttackCooldown: 0.33
-    heavyAttackCooldown: 0.95
     heavyAttackLockTime: 0.6
     lightAttackBaseDamage: 1
     heavyAttackBaseDamage: 2

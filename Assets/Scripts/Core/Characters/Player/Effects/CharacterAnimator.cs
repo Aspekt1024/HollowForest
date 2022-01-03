@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using HollowForest.Combat;
 using UnityEngine;
 
 namespace HollowForest.Effects
@@ -24,6 +25,7 @@ namespace HollowForest.Effects
             
             [Header("Animation Triggers")]
             public string lightAttack;
+            public string lightAttackCombo;
             public string heavyAttack;
             public string cancelAttack;
             public string dashing;
@@ -32,11 +34,12 @@ namespace HollowForest.Effects
 
         private readonly Animator animator;
         private readonly Transform model;
-        private readonly AnimationEventListener animEvents;
+        private readonly CombatAnimationHandler combatAnim;
 
         private readonly int groundHitLightAnim;
         private readonly int groundHitHeavyAnim;
         private readonly int lightAttackTrigger;
+        private readonly int lightComboTrigger;
         private readonly int heavyAttackTrigger;
         private readonly int cancelAttackTrigger;
         
@@ -53,7 +56,7 @@ namespace HollowForest.Effects
         {
             animator = settings.animator;
             this.model = model;
-            animEvents = animator.GetComponentInChildren<AnimationEventListener>();
+            combatAnim = animator.GetComponentInChildren<CombatAnimationHandler>();
 
             groundHitLightAnim = GetAnimationHash(settings.groundHitLight);
             groundHitHeavyAnim = GetAnimationHash(settings.groundHitHeavy);
@@ -65,6 +68,7 @@ namespace HollowForest.Effects
             chargeBool = GetAnimationHash(settings.charging);
             
             lightAttackTrigger = GetAnimationHash(settings.lightAttack);
+            lightComboTrigger = GetAnimationHash(settings.lightAttackCombo);
             heavyAttackTrigger = GetAnimationHash(settings.heavyAttack);
             cancelAttackTrigger = GetAnimationHash(settings.cancelAttack);
             jumpTrigger = GetAnimationHash(settings.jumping);
@@ -148,14 +152,23 @@ namespace HollowForest.Effects
 
         public void LightAttack(Action actionAttackCallback)
         {
-            SetTrigger(lightAttackTrigger);
-            animEvents.Attacked = actionAttackCallback;
+            if (combatAnim.IsComboAvailable)
+            {
+                SetTrigger(lightComboTrigger);
+                combatAnim.OnAttack = actionAttackCallback;
+            }
+            else
+            {
+                ClearTrigger(lightComboTrigger);
+                SetTrigger(lightAttackTrigger);
+                combatAnim.OnAttack = actionAttackCallback;
+            }
         }
 
         public void HeavyAttack(Action actionAttackCallback)
         {
             SetTrigger(heavyAttackTrigger);
-            animEvents.Attacked = actionAttackCallback;
+            combatAnim.OnAttack = actionAttackCallback;
         }
 
         public void CancelAttack()
@@ -192,6 +205,12 @@ namespace HollowForest.Effects
         {
             if (hash == 0) return;
             animator.SetTrigger(hash);
+        }
+
+        private void ClearTrigger(int hash)
+        {
+            if (hash == 0) return;
+            animator.ResetTrigger(hash);
         }
     }
 }

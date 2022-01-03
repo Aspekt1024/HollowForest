@@ -292,10 +292,6 @@ namespace HollowForest
             {
                 var fallHeight = character.State.GetState(CharacterStates.IsFalling) ? fallStartHeight - character.Transform.position.y : 0f;
                 OnGoundHit?.Invoke(Collision.CurrentGroundPoint, fallHeight);
-                if (fallHeight > 6f)
-                {
-                    character.Afflictions.BeginFallRecovery();
-                }
             }
             
             UpdateFallingState(character.State.GetState(CharacterStates.IsJumping), isGrounded);

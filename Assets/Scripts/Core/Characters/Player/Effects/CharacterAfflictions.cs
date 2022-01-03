@@ -26,9 +26,12 @@ namespace HollowForest.Effects
 
         public void BeginFallRecovery()
         {
-            character.State.SetState(CharacterStates.IsRecovering, true);
-            isRecovering = true;
-            recoveryStartTime = Time.time;
+            if (settings.fallRecoveryTime > 0f)
+            {
+                character.State.SetState(CharacterStates.IsRecovering, true);
+                isRecovering = true;
+                recoveryStartTime = Time.time;
+            }
         }
 
         public void Tick()

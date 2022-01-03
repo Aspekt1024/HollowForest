@@ -9,8 +9,6 @@ namespace HollowForest
         [Serializable]
         public class Settings
         {
-            public float lightAttackCooldown = 0.33f;
-            public float heavyAttackCooldown = 0.95f;
             public float heavyAttackLockTime = 0.6f;
 
             public int lightAttackBaseDamage = 1;
@@ -30,7 +28,8 @@ namespace HollowForest
         private readonly Settings settings;
         private readonly CollisionSettings collisions;
 
-        private float timeNextAttackAvailable;
+        private readonly CombatAnimationHandler combatAnim;
+
         private float timeAttackLockEnds;
         private bool isLockedForAttack;
         
@@ -39,8 +38,7 @@ namespace HollowForest
             this.character = character;
             this.settings = settings;
             this.collisions = collisions;
-
-            timeNextAttackAvailable = -1000f;
+            combatAnim = character.GetComponentInChildren<CombatAnimationHandler>();
         }
 
         public void Tick()
@@ -54,12 +52,11 @@ namespace HollowForest
         
         public void AttackLightRequested()
         {
-            if (!CanAttack()) return;
+            if (!combatAnim.CanAttack) return;
             character.State.SetState(CharacterStates.IsLockedForAttack, settings.lockPositionForLightAttack);
-            timeNextAttackAvailable = Time.time + settings.lightAttackCooldown;
             character.Animator.LightAttack(() =>
             {
-                character.State.SetState(CharacterStates.IsLockedForAttack, false);
+                character.State.SetState(CharacterStates.IsLockedForAttack, false); // TODO setup completion callback
                 collisions.lightAttackCollider.ActionAttack((c, dir) =>
                 {
                     var details = new HitDetails
@@ -80,9 +77,8 @@ namespace HollowForest
         
         public void AttackHeavyRequested()
         {
-            if (!CanAttack()) return;
+            if (!combatAnim.CanAttack) return;
             isLockedForAttack = true;
-            timeNextAttackAvailable = Time.time + settings.heavyAttackCooldown;
             timeAttackLockEnds = Time.time + settings.heavyAttackLockTime;
             character.State.SetState(CharacterStates.IsLockedForAttack, true);
             character.Animator.HeavyAttack(() =>
@@ -111,11 +107,6 @@ namespace HollowForest
             character.Animator.CancelAttack();
             isLockedForAttack = false;
             character.State.SetState(CharacterStates.IsLockedForAttack, false);
-        }
-
-        private bool CanAttack()
-        {
-            return Time.time >= timeNextAttackAvailable;
         }
     }
 }

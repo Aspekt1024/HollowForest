@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36fb83d11b5f4212af5f4af1a1808531, type: 3}
-  m_Name: RogueCharacterSettings
+  m_Name: PlayerSettings
   m_EditorClassIdentifier: 
   physicsSettings:
     moveSpeed: 10
@@ -18,7 +18,7 @@ MonoBehaviour:
     gravity: -60
     maxFallSpeed: -50
     jumpSettings:
-      maxJumpHeight: 4.2
+      maxJumpHeight: 4
       jumpCurve:
         serializedVersion: 2
         m_Curve:
@@ -60,11 +60,11 @@ MonoBehaviour:
   healthSettings:
     baseHealth: 3
     mitigation: 0
-    invincibilityDurationAfterHit: 1.2
+    invincibilityDurationAfterHit: 0.83
   combatSettings:
-    lightAttackCooldown: 0.33
+    lightAttackCooldown: 0.2
     heavyAttackCooldown: 0.95
     heavyAttackLockTime: 0.6
     lightAttackBaseDamage: 1
     heavyAttackBaseDamage: 2
-    lockPositionForLightAttack: 1
+    lockPositionForLightAttack: 0

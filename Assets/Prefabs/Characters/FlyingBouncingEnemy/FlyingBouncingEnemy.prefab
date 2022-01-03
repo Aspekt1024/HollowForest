@@ -144,6 +144,7 @@ MonoBehaviour:
     falling: 
     charging: 
     lightAttack: 
+    lightAttackCombo: 
     heavyAttack: 
     cancelAttack: 
     dashing: 
@@ -153,6 +154,7 @@ MonoBehaviour:
     landedEffect: {fileID: 0}
     wallAttachEffect: {fileID: 0}
     dashEffect: {fileID: 0}
+    hasLandedEffect: 0
   combatCollisionSettings:
     lightAttackCollider: {fileID: 0}
     heavyAttackCollider: {fileID: 0}

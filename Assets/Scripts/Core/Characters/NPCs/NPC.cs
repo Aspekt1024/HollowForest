@@ -12,6 +12,8 @@ namespace HollowForest
         public CharacterAnimator.Settings animatorSettings;
         public Transform model;
         public Transform indicatorPos;
+        public bool beginFacingRight;
+        
         private CharacterAnimator anim;
 
         private CharacterProfile profile;
@@ -23,6 +25,14 @@ namespace HollowForest
         private void Awake()
         {
             anim = new CharacterAnimator(null, animatorSettings, model);
+            if (beginFacingRight)
+            {
+                anim.LookRight();
+            }
+            else
+            {
+                anim.LookLeft();
+            }
         }
 
         private void Start()

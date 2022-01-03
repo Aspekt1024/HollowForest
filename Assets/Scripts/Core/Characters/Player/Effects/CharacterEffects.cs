@@ -13,6 +13,7 @@ namespace HollowForest.Effects
             public ParticleSystem landedEffect;
             public ParticleSystem wallAttachEffect;
             public TrailRenderer dashEffect;
+            public bool hasLandedEffect = true;
         }
 
         private readonly Character character;
@@ -33,8 +34,10 @@ namespace HollowForest.Effects
             character.Physics.OnGoundHit += OnGroundHit;
         }
 
-        public void OnGroundHit(Vector3 hitPos, float fallHeight)
+        private void OnGroundHit(Vector3 hitPos, float fallHeight)
         {
+            if (!settings.hasLandedEffect) return;
+            
             if (fallHeight > 2f)
             {
                 settings.model.rotation = Quaternion.identity;
@@ -52,6 +55,7 @@ namespace HollowForest.Effects
                 {
                     character.Animator.GroundHitHeavy();
                     Game.Camera.Shake(CameraShake.Intensity.Medium, 0.2f);
+                    character.Afflictions.BeginFallRecovery();
                 }
                 else
                 {
