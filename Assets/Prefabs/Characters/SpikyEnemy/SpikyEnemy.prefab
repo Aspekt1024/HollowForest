@@ -113,6 +113,7 @@ Transform:
   m_Children:
   - {fileID: 3622887870366953919}
   - {fileID: 3622887871166243221}
+  - {fileID: 4299280039821644412}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -137,6 +138,7 @@ MonoBehaviour:
     walking: 
     running: 
     falling: 
+    charging: 
     lightAttack: 
     heavyAttack: 
     cancelAttack: 
@@ -147,7 +149,6 @@ MonoBehaviour:
     landedEffect: {fileID: 0}
     wallAttachEffect: {fileID: 0}
     dashEffect: {fileID: 0}
-    slashEffect: {fileID: 0}
   combatCollisionSettings:
     lightAttackCollider: {fileID: 0}
     heavyAttackCollider: {fileID: 0}
@@ -1197,7 +1198,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3622887871166243221}
-  - component: {fileID: 3622887871166243220}
   m_Layer: 0
   m_Name: Sensors
   m_TagString: Untagged
@@ -1221,18 +1221,6 @@ Transform:
   m_Father: {fileID: 3622887869524720445}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3622887871166243220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3622887871166243218}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e347b5c1a03422487027029517e9f6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3622887871268789832
 GameObject:
   m_ObjectHideFlags: 0
@@ -1396,3 +1384,57 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &7782129446149228358
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4299280039821644412}
+  - component: {fileID: 9078639170813626871}
+  m_Layer: 10
+  m_Name: Effects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4299280039821644412
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7782129446149228358}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3622887869524720445}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9078639170813626871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7782129446149228358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 682eccdea4504885b69b7a444a2e15b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effect: {fileID: 0}
+  hasTimeDilation: 1
+  timeScale: 0.8
+  dilationDuration: 0.2
+  hasScreenShake: 1
+  shakeIntensity: 1000
+  shakeDuration: 0.1
+  canKnockback: 1
+  knockbackDuration: 0.05
+  verticalKnockbackFactor: 1
+  horizontalKnockbackFactor: 20

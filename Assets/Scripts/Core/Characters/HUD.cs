@@ -15,7 +15,12 @@ namespace HollowForest.UI
         public void SetupCharacter(Character character)
         {
             SetHealth(character.Health.CurrentHealth);
-            character.Health.HealthModified += SetHealth;
+            character.Health.HealthModified += OnHealthModified;
+        }
+
+        private void OnHealthModified(int oldHealth, int newHealth)
+        {
+            SetHealth(newHealth);
         }
 
         private void SetHealth(int health)

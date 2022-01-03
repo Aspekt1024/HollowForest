@@ -1,8 +1,9 @@
+using HollowForest.Combat;
 using UnityEngine;
 
 namespace HollowForest.AI
 {
-    public class ThreatSensor : AISensor
+    public class ThreatSensor : AISensor, Health.IDamageObserver
     {
         public float threatLostDistance = 10f;
         
@@ -13,6 +14,7 @@ namespace HollowForest.AI
         {
             agent.memory.RegisterObjectObserver(AIObject.PotentialThreat, OnPotentialThreatUpdated);
             agent.memory.RegisterObjectObserver(AIObject.LockedOnThreat, OnLockedOnThreatUpdated);
+            agent.character.Health.RegisterObserver(this);
         }
 
         private void Update()
@@ -80,6 +82,14 @@ namespace HollowForest.AI
         private void OnLockedOnThreatUpdated(object other)
         {
             RegisterThreat(other as Character, true);
+        }
+
+        public void OnDamageTaken(HitDetails details)
+        {
+            if (details.source != null)
+            {
+                agent.memory.SetObject(AIObject.PotentialThreat, details.source);
+            }
         }
     }
 }

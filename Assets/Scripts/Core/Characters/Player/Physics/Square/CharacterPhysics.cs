@@ -44,7 +44,7 @@ namespace HollowForest
         private Vector2 velocity;
         private float fallStartHeight;
 
-        public event Action<Character, Vector3, float> OnGoundHit = delegate { }; 
+        public event Action<Vector3, float> OnGoundHit = delegate { }; 
 
         private readonly Character character;
         private readonly Settings settings;
@@ -54,6 +54,9 @@ namespace HollowForest
         private readonly WallPhysics wall;
         private readonly RollingPhysics rolling;
 
+        private float timeVelocityOverrideEnds;
+        private Vector3 velocityOverride;
+        
         private float timeHorizontalVelocityOverrideEnds;
         private float horizontalVelocityOverride;
 
@@ -122,6 +125,12 @@ namespace HollowForest
             }
         }
 
+        public void OverrideVelocity(Vector3 velocityOverride, float duration)
+        {
+            this.velocityOverride = velocityOverride;
+            timeVelocityOverrideEnds = Time.time + duration;
+        }
+
         public void SetHorizontalVelocity(float xVelocity, float duration)
         {
             timeHorizontalVelocityOverrideEnds = Time.time + duration;
@@ -136,6 +145,12 @@ namespace HollowForest
 
         private Vector3 CalculateVelocity()
         {
+            if (Time.time < timeVelocityOverrideEnds)
+            {
+                velocity = velocityOverride;
+                return velocity;
+            }
+            
             velocity = CalculateHorizontalInfluencedVelocity(character.Rigidbody.velocity);
             
             if (dash.IsDashing)
@@ -275,7 +290,7 @@ namespace HollowForest
             if (isGrounded)
             {
                 var fallHeight = character.State.GetState(CharacterStates.IsFalling) ? fallStartHeight - character.Transform.position.y : 0f;
-                OnGoundHit?.Invoke(character, Collision.CurrentGroundPoint, fallHeight);
+                OnGoundHit?.Invoke(Collision.CurrentGroundPoint, fallHeight);
                 if (fallHeight > 6f)
                 {
                     character.Afflictions.BeginFallRecovery();

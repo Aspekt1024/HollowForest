@@ -18,16 +18,18 @@ namespace HollowForest
         private readonly Character character;
         private readonly Settings settings;
 
+        private float timeLastDamaged;
+
         private int currentHealth;
-        public event Action<int> HealthModified = delegate { };
+        public event Action<int, int> HealthModified = delegate { };
         
         public int CurrentHealth
         {
             get => currentHealth;
             set
             {
+                HealthModified?.Invoke(currentHealth, value);
                 currentHealth = value;
-                HealthModified?.Invoke(currentHealth);
             }
         }
         
@@ -52,10 +54,11 @@ namespace HollowForest
             character.State.SetState(CharacterStates.IsAlive, true);
         }
 
-        public bool TakeDamage(HitDetails details)
+        public void TakeDamage(HitDetails details)
         {
-            if (CurrentHealth <= 0) return false;
-            
+            if (CurrentHealth <= 0 || Time.time < timeLastDamaged + settings.invincibilityDurationAfterHit) return;
+
+            timeLastDamaged = Time.time;
             CurrentHealth = Mathf.Min(CurrentHealth - details.damage, MaxHealth);
             damageObservers.ForEach(o => o.OnDamageTaken(details));
             if (CurrentHealth <= 0)
@@ -64,8 +67,6 @@ namespace HollowForest
                 character.Director.StopMoving();
                 character.Director.BlockInputs();
             }
-
-            return true;
         }
 
         public void Heal(int health)

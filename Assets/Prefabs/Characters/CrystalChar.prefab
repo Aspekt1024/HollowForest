@@ -5323,6 +5323,7 @@ MonoBehaviour:
     walking: isMovingSlow
     running: isMovingFast
     falling: isFalling
+    charging: 
     lightAttack: attackLight
     heavyAttack: attackHeavy
     cancelAttack: 
@@ -5333,7 +5334,6 @@ MonoBehaviour:
     landedEffect: {fileID: 1773606691529433800}
     wallAttachEffect: {fileID: 1773606692697575631}
     dashEffect: {fileID: 1220760089}
-    slashEffect: {fileID: 819028650}
   combatCollisionSettings:
     lightAttackCollider: {fileID: 819028652}
     heavyAttackCollider: {fileID: 0}
@@ -5553,6 +5553,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1773606692278629221}
+  - component: {fileID: 2983783073008304233}
   m_Layer: 0
   m_Name: Effects
   m_TagString: Untagged
@@ -5577,6 +5578,29 @@ Transform:
   m_Father: {fileID: 1773606691725576327}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2983783073008304233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1773606692278629220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 682eccdea4504885b69b7a444a2e15b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effect: {fileID: 0}
+  hasTimeDilation: 1
+  timeScale: 0.04
+  dilationDuration: 0.4
+  hasScreenShake: 1
+  shakeIntensity: 3000
+  shakeDuration: 0.1
+  canKnockback: 1
+  knockbackDuration: 0.075
+  verticalKnockbackFactor: 15
+  horizontalKnockbackFactor: 35
 --- !u!1 &1773606692697575628
 GameObject:
   m_ObjectHideFlags: 0

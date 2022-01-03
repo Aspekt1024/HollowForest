@@ -1,3 +1,4 @@
+using HollowForest.Cam;
 using HollowForest.Data;
 using HollowForest.Events;
 using HollowForest.UI;
@@ -69,7 +70,7 @@ namespace HollowForest
         private void Start()
         {
             inputManager.SetCharacter(player);
-            characters.RegisterCharacter(player);
+            characters.RegisterPlayerCharacter(player);
             cameraManager.Follow(player.transform);
             world.Setup(player);
         }

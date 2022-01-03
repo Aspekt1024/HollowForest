@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace HollowForest
+namespace HollowForest.Effects
 {
     public class CharacterAfflictions
     {

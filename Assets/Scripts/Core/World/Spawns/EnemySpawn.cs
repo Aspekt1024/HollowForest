@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -45,6 +47,7 @@ namespace HollowForest.World
             if (enemy == null) return;
 
             Addressables.ReleaseInstance(enemy.gameObject);
+            enemy = null;
         }
 
         private void SetupEnemy(Enemy e)
@@ -59,8 +62,14 @@ namespace HollowForest.World
         {
             if (!isAlive)
             {
-                UnloadEnemy();
+                DeathTask();
             }
+        }
+
+        private async void DeathTask()
+        {
+            await Task.Delay(2500);
+            UnloadEnemy();
         }
     }
 }

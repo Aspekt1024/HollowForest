@@ -1,4 +1,5 @@
 using System;
+using HollowForest.Cam;
 using UnityEngine;
 
 namespace HollowForest.Effects
@@ -28,16 +29,21 @@ namespace HollowForest.Effects
             {
                 settings.dashEffect.emitting = false;
             }
+
+            character.Physics.OnGoundHit += OnGroundHit;
         }
 
-        public void OnGroundHit(Vector3 hitPosition, float fallHeight)
+        public void OnGroundHit(Vector3 hitPos, float fallHeight)
         {
             if (fallHeight > 2f)
             {
                 settings.model.rotation = Quaternion.identity;
                 body.angularVelocity = 0f;
-                settings.landedEffect.transform.position = hitPosition;
-                settings.landedEffect.Play();
+                if (settings.landedEffect != null)
+                {
+                    settings.landedEffect.transform.position = hitPos;
+                    settings.landedEffect.Play();
+                }
             }
             
             if (fallHeight > 3f)
@@ -45,7 +51,7 @@ namespace HollowForest.Effects
                 if (fallHeight > 6f)
                 {
                     character.Animator.GroundHitHeavy();
-                    Game.Camera.Shake(1f, 0.2f);
+                    Game.Camera.Shake(CameraShake.Intensity.Medium, 0.2f);
                 }
                 else
                 {
