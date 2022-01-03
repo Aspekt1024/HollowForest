@@ -103,14 +103,14 @@ namespace HollowForest
             SetOnGround();
         }
         
-        public void SetOnGround()
+        private void SetOnGround()
         {
             var extent = character.Collider.bounds.extents.y;
             var pos = character.Transform.position;
             var hit = Physics2D.Raycast(pos, Vector2.down, 10f, 1 << LayerMask.NameToLayer("World"));
             if (hit.collider != null)
             {
-                pos.y = hit.point.y + extent;
+                pos.y = hit.point.y + extent - character.Collider.offset.y;
                 character.Transform.position = pos;
             }
             velocity = Vector2.zero;
@@ -148,16 +148,17 @@ namespace HollowForest
             if (Time.time < timeVelocityOverrideEnds)
             {
                 velocity = velocityOverride;
-                return velocity;
             }
-            
-            velocity = CalculateHorizontalInfluencedVelocity(character.Rigidbody.velocity);
-            
-            if (dash.IsDashing)
+            else
             {
-                velocity = dash.CalculateVelocity(velocity);
+                velocity = CalculateHorizontalInfluencedVelocity(character.Rigidbody.velocity);
+            
+                if (dash.IsDashing)
+                {
+                    velocity = dash.CalculateVelocity(velocity);
+                }
             }
-
+            
             var startPos = character.Rigidbody.position;
             var pos = startPos;
             pos.x += velocity.x * Time.fixedDeltaTime;

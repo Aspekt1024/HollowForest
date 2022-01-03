@@ -8,6 +8,7 @@ namespace HollowForest.Physics
     {
         private readonly int worldLayer;
         private readonly Vector2 colliderExtents;
+        private readonly Vector2 colliderOffset;
         private readonly Character character;
 
         public event Action OnCeilingHit = delegate { };
@@ -30,6 +31,7 @@ namespace HollowForest.Physics
         {
             this.character = character;
             colliderExtents = character.Collider.bounds.extents;
+            colliderOffset = character.Collider.offset;
             worldLayer = 1 << LayerMask.NameToLayer("World");
         }
 
@@ -74,7 +76,7 @@ namespace HollowForest.Physics
             CurrentGradient = groundHit.gradient;
             if (groundHit.isGrounded)
             {
-                pos.y = groundHit.height + colliderExtents.y;
+                pos.y = groundHit.height - colliderOffset.y + colliderExtents.y;
                 CurrentGroundPoint = groundHit.groundPoint;
             }
             SetGroundedState(groundHit.isGrounded);
@@ -84,7 +86,7 @@ namespace HollowForest.Physics
                 var hitAbove = Physics2D.Raycast(pos, Vector2.up, colliderExtents.y + diff.y, worldLayer);
                 if (hitAbove.collider != null)
                 {
-                    pos.y = hitAbove.point.y - colliderExtents.y;
+                    pos.y = hitAbove.point.y - colliderOffset.y - colliderExtents.y;
                     OnCeilingHit?.Invoke();
                 }
             }
@@ -97,7 +99,7 @@ namespace HollowForest.Physics
             var pos = currentPos;
             pos.x += diff.x;
             
-            var raycastDist = colliderExtents.y + Mathf.Abs(diff.y);
+            var raycastDist = colliderExtents.y - colliderOffset.y + Mathf.Abs(diff.y);
             
             var hitCentre = Physics2D.Raycast(pos, Vector2.down, raycastDist, worldLayer);
             
