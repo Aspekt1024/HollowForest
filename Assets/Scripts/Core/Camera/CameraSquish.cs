@@ -13,18 +13,19 @@ namespace HollowForest.Cam
 
         private readonly Settings settings;
         private readonly Camera camera;
+        
+        private float squishIntensity = 1f;
+        private float squishStartTime;
+        private float squishEndTime;
+        
+        private readonly float fieldOfView;
 
         public CameraSquish(Settings settings, Camera camera)
         {
             this.settings = settings;
             this.camera = camera;
-            originalOrthSize = camera.orthographicSize;
+            fieldOfView = camera.fieldOfView;
         }
-        
-        private float squishIntensity = 1f;
-        private float squishStartTime;
-        private float squishEndTime;
-        private float originalOrthSize;
 
         public void Begin(float intensity, float duration)
         {
@@ -38,7 +39,9 @@ namespace HollowForest.Cam
             if (Time.time < squishEndTime)
             {
                 var squishTimeRatio = (Time.time - squishStartTime) / (squishEndTime - squishStartTime);
-                camera.orthographicSize = originalOrthSize * squishIntensity * settings.squishCurve.Evaluate(squishTimeRatio);
+                var fov = fieldOfView * squishIntensity * settings.squishCurve.Evaluate(squishTimeRatio);;
+                Debug.Log(squishTimeRatio + " : " + fov);
+                camera.fieldOfView = fov;
             }
         }
     }
