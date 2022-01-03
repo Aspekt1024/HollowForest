@@ -49,7 +49,11 @@ namespace HollowForest
             Interaction = new Interaction(this);
             
             SetBaseAbilities();
+            
+            PostAwake();
         }
+
+        protected virtual void PostAwake() { }
 
         protected virtual void Update()
         {

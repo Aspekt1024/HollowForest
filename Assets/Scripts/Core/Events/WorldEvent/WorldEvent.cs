@@ -7,6 +7,7 @@ namespace HollowForest.Events
     {
         public WorldEventTriggerPoint triggerPoint;
         public GameplayEvent startGameplayEvent;
+        public GameplayEvent endGameplayEvent;
         public bool hasCinematic;
         public float cinematicDuration;
         public bool centerCameraInZone;
@@ -78,6 +79,11 @@ namespace HollowForest.Events
             foreach (var eventBehaviour in events)
             {
                 eventBehaviour.OnWorldEventComplete();
+            }
+
+            if (endGameplayEvent.eventID >= 0)
+            {
+                Game.Events.EventAchieved(endGameplayEvent);
             }
         }
         

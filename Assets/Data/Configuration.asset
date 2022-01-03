@@ -14,30 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue: {fileID: 11400000, guid: b3233afc3aca6c543ab54d1819fe4a95, type: 2}
   events:
-  - eventID: 10000
-    eventName: Get Lucky Coin
-    description: Find and collect the lucky coin
-  - eventID: 10001
-    eventName: Get Valuable Coin
-    description: Find and collect the valuable coin
-  - eventID: 10002
-    eventName: Test event
-    description: A test event
-  - eventID: 10003
-    eventName: My Event
-    description: This is my event for testing
-  - eventID: 10004
-    eventName: EnterStickyRoom
-    description: Enter the sticky room for the first time
-  - eventID: 10005
-    eventName: CompleteStickyRoom
-    description: Obtain the item at the end of the sticky room
-  - eventID: 10006
-    eventName: EnterArena
-    description: Enter the arena for the first time
-  - eventID: 10007
-    eventName: CompleteArena1
-    description: Defeat the crystal enemy in arena 1
+  - eventID: 10008
+    eventName: The Warrior
+    description: Defeat the Warrior of the First Wilds
   characterProfiles:
   - category: 2000
     guid: 49b703f1-6115-4efc-91dc-871f03bcdd31

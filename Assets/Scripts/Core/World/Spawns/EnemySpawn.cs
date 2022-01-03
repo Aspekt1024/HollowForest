@@ -12,11 +12,19 @@ namespace HollowForest.World
         [CharacterCategory(CharacterCategory.Enemy)] public CharacterRef enemyType;
         public bool isOneTime;
         public bool isAlwaysPresent;
+        public bool engageBeforeSpawn;
 
         private bool canLoad;
         private Enemy enemy;
 
         private bool isLoadRequested;
+        private bool isUnloadRequested;
+
+        private bool isEngaged;
+        private Character engagedCharacter;
+        private bool isThreatLocked;
+
+        public event Action<EnemySpawn> OnDefeated = delegate { };
 
         private void Start()
         {
@@ -63,6 +71,18 @@ namespace HollowForest.World
             }
         }
 
+        public void Engage(Character character, bool lockOn)
+        {
+            isEngaged = true;
+            isThreatLocked = lockOn;
+            engagedCharacter = character;
+
+            if (enemy != null)
+            {
+                enemy.Engage(character, lockOn);
+            }
+        }
+
         private bool CanDespawn()
         {
             if (enemy == null) return false;
@@ -72,7 +92,7 @@ namespace HollowForest.World
 
         private void LoadEnemy(Action<Enemy> callback)
         {
-            if (isLoadRequested) return;
+            if (isLoadRequested || engageBeforeSpawn && !isEngaged) return;
             isLoadRequested = true;
             
             var enemyData = Game.Data.Config.characterProfiles.FirstOrDefault(p => p.guid == enemyType.guid);
@@ -85,7 +105,11 @@ namespace HollowForest.World
             
             AssetUtil.LoadAsset<Enemy>(enemyData.asset, e =>
             {
-                if (e == null) return; // If we leave the room before the enemy is spawned, the enemy will be null
+                if (isUnloadRequested)
+                {
+                    Addressables.ReleaseInstance(e.gameObject);
+                    return;
+                }
                 SetupEnemy(e);
                 callback?.Invoke(e);
             });
@@ -93,6 +117,7 @@ namespace HollowForest.World
 
         public void UnloadEnemy()
         {
+            isUnloadRequested = true;
             if (enemy == null) return;
 
             Addressables.ReleaseInstance(enemy.gameObject);
@@ -105,12 +130,18 @@ namespace HollowForest.World
             enemy.Physics.SetOnGround(transform.position);
             
             enemy.State.RegisterStateObserver(CharacterStates.IsAlive, OnAliveStateChanged);
+
+            if (isEngaged)
+            {
+                enemy.Engage(engagedCharacter, isThreatLocked);
+            }
         }
 
         private void OnAliveStateChanged(bool isAlive)
         {
             if (!isAlive)
             {
+                OnDefeated?.Invoke(this);
                 DeathTask();
             }
         }

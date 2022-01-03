@@ -29,7 +29,7 @@ namespace HollowForest.Dialogue
         public class Conversation
         {
             public string dialogueGuid;
-            public CharacterProfile character;
+            public CharacterRef character;
             public bool isOneTime;
             public List<int> requiredEvents = new List<int>();
             public List<int> invalidatingEvents = new List<int>();

@@ -1,5 +1,8 @@
 namespace HollowForest.Events
 {
+    /// <summary>
+    /// Watches for an event to be triggered (e.g. from collecting an item)
+    /// </summary>
     public class GameEventTrigger : EventBehaviour
     {
         public GameplayEvent endGameplayEvent;

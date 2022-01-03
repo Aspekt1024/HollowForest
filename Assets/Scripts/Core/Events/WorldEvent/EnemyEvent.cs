@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
+using HollowForest.World;
 using UnityEngine;
 
 namespace HollowForest.Events
 {
     public class EnemyEvent : EventBehaviour
     {
-        public List<Enemy> enemies;
+        public List<EnemySpawn> enemies;
         public float threatDelay;
 
         private WorldEvent worldEvent;
-        private readonly HashSet<Enemy> defeatedEnemy = new HashSet<Enemy>();
+        private readonly HashSet<EnemySpawn> defeatedEnemy = new HashSet<EnemySpawn>();
 
         private bool isAwaitingThreatTrigger;
         private float threatTriggerTime;
@@ -23,7 +24,7 @@ namespace HollowForest.Events
 
             foreach (var enemy in enemies)
             {
-                enemy.Defeated += OnEnemyDefeated;
+                enemy.OnDefeated += OnEnemyDefeated;
             }
         }
 
@@ -51,10 +52,10 @@ namespace HollowForest.Events
             
         }
 
-        private void OnEnemyDefeated(Enemy enemy)
+        private void OnEnemyDefeated(EnemySpawn spawn)
         {
-            defeatedEnemy.Add(enemy);
-            enemy.Defeated -= OnEnemyDefeated;
+            defeatedEnemy.Add(spawn);
+            spawn.OnDefeated -= OnEnemyDefeated;
             if (defeatedEnemy.Count == enemies.Count)
             {
                 worldEvent.Complete();

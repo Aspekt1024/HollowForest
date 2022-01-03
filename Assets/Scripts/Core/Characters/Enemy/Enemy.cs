@@ -13,7 +13,7 @@ namespace HollowForest
 
         public AIAgent GetAI() => ai;
 
-        private void Start()
+        protected override void PostAwake()
         {
             ai = new AIAgent(this);
             var sensors = GetComponentsInChildren<AISensor>();
@@ -21,8 +21,11 @@ namespace HollowForest
             {
                 ai.RegisterSensor(sensor);
             }
-            
             State.RegisterStateObserver(CharacterStates.IsAlive, OnAliveStateChanged);
+        }
+
+        private void Start()
+        {
             ai.Run(module);
         }
 

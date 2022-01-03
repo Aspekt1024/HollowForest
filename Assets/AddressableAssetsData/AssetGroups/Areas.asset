@@ -17,12 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d4566d99585161f4d8ec6e75be5d5de9
   m_SerializeEntries:
-  - m_GUID: 7292ef3407aa86541b28993c26d64da3
-    m_Address: Area/FirstWorld
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
   - m_GUID: 5ae5d62560e5ed04894470db21da3c91
     m_Address: Area/Shop1
     m_ReadOnly: 0
