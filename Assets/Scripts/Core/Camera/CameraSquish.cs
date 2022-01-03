@@ -39,9 +39,7 @@ namespace HollowForest.Cam
             if (Time.time < squishEndTime)
             {
                 var squishTimeRatio = (Time.time - squishStartTime) / (squishEndTime - squishStartTime);
-                var fov = fieldOfView * squishIntensity * settings.squishCurve.Evaluate(squishTimeRatio);;
-                Debug.Log(squishTimeRatio + " : " + fov);
-                camera.fieldOfView = fov;
+                camera.fieldOfView = fieldOfView * squishIntensity * settings.squishCurve.Evaluate(squishTimeRatio);
             }
         }
     }

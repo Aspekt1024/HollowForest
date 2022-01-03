@@ -5592,8 +5592,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effect: {fileID: 0}
   hasTimeDilation: 1
-  timeScale: 0.04
-  dilationDuration: 0.4
+  timeScale: 0.02
+  dilationDuration: 0.3
   hasScreenShake: 1
   shakeIntensity: 3000
   shakeDuration: 0.1
