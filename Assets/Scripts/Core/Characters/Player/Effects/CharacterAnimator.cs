@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace HollowForest.Effects
@@ -15,7 +16,7 @@ namespace HollowForest.Effects
             public string groundHitHeavy;
 
             [Header("Animation Booleans")]
-            public string alive;
+            public string dead;
             public string walking;
             public string running;
             public string falling;
@@ -42,7 +43,7 @@ namespace HollowForest.Effects
         private readonly int dashTrigger;
         private readonly int jumpTrigger;
 
-        private readonly int aliveBool;
+        private readonly int deadBool;
         private readonly int walkBool;
         private readonly int runBool;
         private readonly int fallBool;
@@ -57,7 +58,7 @@ namespace HollowForest.Effects
             groundHitLightAnim = GetAnimationHash(settings.groundHitLight);
             groundHitHeavyAnim = GetAnimationHash(settings.groundHitHeavy);
 
-            aliveBool = GetAnimationHash(settings.alive);
+            deadBool = GetAnimationHash(settings.dead);
             walkBool = GetAnimationHash(settings.walking);
             runBool = GetAnimationHash(settings.running);
             fallBool = GetAnimationHash(settings.falling);
@@ -75,8 +76,6 @@ namespace HollowForest.Effects
                 character.State.RegisterStateObserver(CharacterStates.IsJumping, OnJumpStateChanged);
                 character.State.RegisterStateObserver(CharacterStates.IsAlive, OnAliveStateChanged);
             }
-            
-            SetBool(aliveBool, true);
         }
 
         public void GroundHitLight()
@@ -117,7 +116,7 @@ namespace HollowForest.Effects
 
         private void OnAliveStateChanged(bool isAlive)
         {
-            SetBool(aliveBool, isAlive);
+            SetBool(deadBool, !isAlive);
         }
 
         private void OnJumpStateChanged(bool isJumping)
@@ -164,10 +163,17 @@ namespace HollowForest.Effects
             SetTrigger(cancelAttackTrigger);
         }
         
-        private static int GetAnimationHash(string name)
+        private int GetAnimationHash(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return 0;
-            return Animator.StringToHash(name);
+            var hash = Animator.StringToHash(name);
+            if (animator.parameters.Any(p => p.nameHash == hash))
+            {
+                return hash;
+            }
+            
+            Debug.LogWarning($"{animator.GetComponentInParent<Character>().name} has no animation parameter: {name}");
+            return 0;
         }
 
         private void PlayAnimation(int hash, int layer = 0)

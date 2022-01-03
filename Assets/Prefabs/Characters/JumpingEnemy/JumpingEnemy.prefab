@@ -5409,7 +5409,7 @@ MonoBehaviour:
     animator: {fileID: 987293163928334508}
     groundHitLight: 
     groundHitHeavy: 
-    alive: isAlive
+    dead: isDead
     walking: isMovingSlow
     running: isMovingFast
     falling: isFalling

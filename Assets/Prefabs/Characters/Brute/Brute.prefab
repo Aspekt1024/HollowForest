@@ -268,7 +268,7 @@ MonoBehaviour:
     animator: {fileID: 2606581265269927871}
     groundHitLight: 
     groundHitHeavy: 
-    alive: isAlive
+    dead: isDead
     walking: isMovingSlow
     running: isMovingFast
     falling: isFalling

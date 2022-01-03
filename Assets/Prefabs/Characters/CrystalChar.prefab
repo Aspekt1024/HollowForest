@@ -5314,12 +5314,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a887daf820b9ded4cad064ad31478b30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settings: {fileID: 11400000, guid: 0e6fc1e8965d3c7419e1d92a6137c1a7, type: 2}
+  settings: {fileID: 11400000, guid: b3be64ad963736a4fae4df910bf1d84e, type: 2}
   animatorSettings:
     animator: {fileID: 1773606692048047725}
     groundHitLight: 
     groundHitHeavy: 
-    alive: isAlive
+    dead: isDead
     walking: isMovingSlow
     running: isMovingFast
     falling: isFalling
@@ -5371,7 +5371,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.05}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5382,7 +5382,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 1}
+  m_Size: {x: 0.8, y: 0.9}
   m_EdgeRadius: 0
 --- !u!1 &1773606691768857326
 GameObject:
