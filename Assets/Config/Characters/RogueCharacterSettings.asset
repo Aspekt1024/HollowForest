@@ -18,7 +18,7 @@ MonoBehaviour:
     gravity: -60
     maxFallSpeed: -50
     jumpSettings:
-      maxJumpHeight: 4
+      maxJumpHeight: 4.2
       jumpCurve:
         serializedVersion: 2
         m_Curve:
@@ -57,6 +57,14 @@ MonoBehaviour:
       wallJumpDuration: 0.12
   afflictionSettings:
     fallRecoveryTime: 0.2
+  healthSettings:
+    baseHealth: 3
+    mitigation: 0
+    invincibilityDurationAfterHit: 0
   combatSettings:
     lightAttackCooldown: 0.33
     heavyAttackCooldown: 0.95
+    heavyAttackLockTime: 0.6
+    lightAttackBaseDamage: 1
+    heavyAttackBaseDamage: 2
+    lockPositionForLightAttack: 1
