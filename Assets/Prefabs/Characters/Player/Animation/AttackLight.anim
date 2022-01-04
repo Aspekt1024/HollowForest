@@ -862,7 +862,7 @@ AnimationClip:
     functionName: AttackBegin
     data: 
     objectReferenceParameter: {fileID: 0}
-    floatParameter: 0.5
+    floatParameter: 0.3
     intParameter: 0
     messageOptions: 0
   - time: 0.033333335
@@ -876,6 +876,6 @@ AnimationClip:
     functionName: ComboWindowOpened
     data: 
     objectReferenceParameter: {fileID: 0}
-    floatParameter: 0.3
+    floatParameter: 0.2
     intParameter: 0
     messageOptions: 0

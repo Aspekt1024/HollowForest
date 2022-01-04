@@ -300,10 +300,11 @@ MonoBehaviour:
     dashing: dash
     jumping: jump
   effectsSettings:
-    model: {fileID: 0}
+    model: {fileID: 1594815394267932183}
     landedEffect: {fileID: 2606581264760616220}
     wallAttachEffect: {fileID: 2606581264760616221}
     dashEffect: {fileID: 2606581264760616222}
+    hasLandedEffect: 1
   combatCollisionSettings:
     lightAttackCollider: {fileID: 2606581264760616216}
     heavyAttackCollider: {fileID: 2606581265658664974}
